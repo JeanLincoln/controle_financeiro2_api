@@ -24,7 +24,11 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "husky",
     "lint-staged": "lint-staged",
-    "docker:up": "docker compose up --build -d"
+    "docker:up": "docker compose up --build -d",
+    "typeorm:ts": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:create": "pnpm typeorm:ts migration:create ./typeorm/migrations/Migrate",
+    "migration:up": "pnpm typeorm:ts migration:run -d ./typeorm/data-source.ts",
+    "migration:down": "pnpm typeorm:ts migration:revert -d ./typeorm/data-source.ts"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",
