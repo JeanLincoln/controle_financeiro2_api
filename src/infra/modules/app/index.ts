@@ -1,10 +1,15 @@
-import { HelloWorldController } from "@infra/controllers/hello-world";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { UserModule } from "../user";
+import { UserController } from "@infra/controllers/user";
+import { DatabaseModule } from "../database";
+
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
     TypeOrmModule.forRoot({
       type: "postgres",
       host: process.env.POSTGRES_HOST,
@@ -13,10 +18,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       synchronize: process.env.ENV === "DEV",
-      entities: [__dirname + "/../../../entities/*.entity.ts"]
-    })
+      entities: [__dirname, "dist/src/domain/entities/*{.ts,.js}"]
+    }),
+    DatabaseModule,
+    UserModule
   ],
-  controllers: [HelloWorldController],
+  controllers: [UserController],
   providers: []
 })
 export class AppModule {}

@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity("users")
 export class User {
   @PrimaryGeneratedColumn({
     type: "int",
@@ -46,7 +46,7 @@ export class User {
 
   @Column({
     type: "timestamp",
-    default: () => null
+    default: null
   })
   updatedAt: Date;
 }
