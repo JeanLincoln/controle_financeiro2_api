@@ -7,6 +7,7 @@ import {
   IsStrongPassword,
   IsDate
 } from "class-validator";
+import { Transform } from "class-transformer";
 
 export class CreateUserDto {
   @ApiProperty({ example: "John" })
@@ -34,7 +35,8 @@ export class CreateUserDto {
   })
   password: string;
 
-  @ApiProperty({ example: "1990-01-01" })
+  @ApiProperty({ example: new Date("1990-01-01") })
+  @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
   @IsOptional()
   birthDate: Date;

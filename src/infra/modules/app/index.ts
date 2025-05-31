@@ -4,6 +4,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "../user";
 import { UserController } from "@infra/controllers/user";
 import { DatabaseModule } from "../database";
+import { ExceptionsModule } from "../exceptions";
+import { CryptographyModule } from "../cryptography";
 
 @Module({
   imports: [
@@ -21,7 +23,9 @@ import { DatabaseModule } from "../database";
       entities: [__dirname, "dist/src/domain/entities/*{.ts,.js}"]
     }),
     DatabaseModule,
-    UserModule
+    UserModule,
+    ExceptionsModule,
+    CryptographyModule
   ],
   controllers: [UserController],
   providers: []

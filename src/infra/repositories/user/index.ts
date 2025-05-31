@@ -16,17 +16,21 @@ export class TypeOrmUserRepository implements UserRepository {
     return this.userRepository.find();
   }
 
-  async findById(id: number): Promise<User> {
-    return this.userRepository.findOneOrFail({ where: { id } });
+  async findById(id: number): Promise<User | null> {
+    return this.userRepository.findOne({ where: { id } });
   }
 
-  async create(user: CreateOrUpdatePutUserProps): Promise<User> {
-    return this.userRepository.save(user);
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { email } });
   }
 
-  async update(id: number, user: CreateOrUpdatePutUserProps): Promise<User> {
+  async create(user: CreateOrUpdatePutUserProps): Promise<void> {
+    await this.userRepository.save(user);
+  }
+
+  async update(id: number, user: CreateOrUpdatePutUserProps): Promise<void> {
     await this.userRepository.update(id, user);
-    return this.findById(id);
+    await this.findById(id);
   }
 
   async delete(id: number): Promise<void> {

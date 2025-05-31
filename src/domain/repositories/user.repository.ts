@@ -7,8 +7,9 @@ export type CreateOrUpdatePutUserProps = Omit<
 
 export abstract class UserRepository {
   abstract findAll(): Promise<User[]>;
-  abstract findById(id: number): Promise<User>;
-  abstract create(user: CreateOrUpdatePutUserProps): Promise<User>;
-  abstract update(id: number, user: CreateOrUpdatePutUserProps): Promise<User>;
+  abstract findById(id: number): Promise<User | null>;
+  abstract findByEmail(email: string): Promise<User | null>;
+  abstract create(user: CreateOrUpdatePutUserProps): Promise<void>;
+  abstract update(id: number, user: CreateOrUpdatePutUserProps): Promise<void>;
   abstract delete(id: number): Promise<void>;
 }
