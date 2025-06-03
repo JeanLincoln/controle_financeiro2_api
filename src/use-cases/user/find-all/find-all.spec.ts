@@ -12,7 +12,7 @@ describe("FindAllUserUseCase", () => {
     sut = new FindAllUserUseCase(userRepository);
   });
 
-  const USERS_MOCK: User[] = [
+  const USERS_MOCK: Omit<User, "transactions">[] = [
     {
       id: 1,
       firstName: "John",

@@ -1,6 +1,6 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions";
 import {
-  CreateOrUpdatePutUserProps,
+  CreateOrUpdateAllUserProps,
   UserRepository
 } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
@@ -12,7 +12,7 @@ export class UpdateUserUseCase {
     private readonly exceptionsAdapter: ExceptionsAdapter
   ) {}
 
-  async execute(id: number, user: CreateOrUpdatePutUserProps): Promise<void> {
+  async execute(id: number, user: CreateOrUpdateAllUserProps): Promise<void> {
     const userExists = await this.userRepository.findById(id);
 
     if (!userExists) {

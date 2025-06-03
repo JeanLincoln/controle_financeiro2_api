@@ -1,6 +1,6 @@
 import { User } from "@domain/entities/user.entity";
 import {
-  CreateOrUpdatePutUserProps,
+  CreateOrUpdateAllUserProps,
   UserRepository
 } from "@domain/repositories/user.repository";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -24,11 +24,11 @@ export class TypeOrmUserRepository implements UserRepository {
     return this.userRepository.findOne({ where: { email } });
   }
 
-  async create(user: CreateOrUpdatePutUserProps): Promise<void> {
+  async create(user: CreateOrUpdateAllUserProps): Promise<void> {
     await this.userRepository.save(user);
   }
 
-  async update(id: number, user: CreateOrUpdatePutUserProps): Promise<void> {
+  async update(id: number, user: CreateOrUpdateAllUserProps): Promise<void> {
     await this.userRepository.update(id, user);
     await this.findById(id);
   }

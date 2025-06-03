@@ -1,14 +1,16 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions";
 import { JwtAdapter } from "@domain/adapters/jwt";
-import { UserRepository } from "@domain/repositories/user.repository";
-import { User } from "@domain/entities/user.entity";
+import {
+  UserRepository,
+  type OnlyUserProps
+} from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
 
 export interface AuthenticatedRequest extends Request {
   cookies: {
     authentication?: string;
   };
-  user?: User;
+  user?: OnlyUserProps;
 }
 
 @Injectable()

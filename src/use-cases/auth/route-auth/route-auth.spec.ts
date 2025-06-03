@@ -33,7 +33,7 @@ describe("RouteAuthUseCase", () => {
     }
   } as AuthenticatedRequest;
 
-  const USER_MOCK: User = {
+  const USER_MOCK: Omit<User, "transactions"> = {
     id: 1,
     firstName: "John",
     lastName: "Doe",

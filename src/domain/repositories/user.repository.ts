@@ -1,15 +1,17 @@
 import { User } from "../entities/user.entity";
 
-export type CreateOrUpdatePutUserProps = Omit<
+export type CreateOrUpdateAllUserProps = Omit<
   User,
-  "id" | "createdAt" | "updatedAt"
+  "id" | "createdAt" | "updatedAt" | "transactions"
 >;
 
+export type OnlyUserProps = Omit<User, "transactions">;
+
 export abstract class UserRepository {
-  abstract findAll(): Promise<User[]>;
-  abstract findById(id: number): Promise<User | null>;
-  abstract findByEmail(email: string): Promise<User | null>;
-  abstract create(user: CreateOrUpdatePutUserProps): Promise<void>;
-  abstract update(id: number, user: CreateOrUpdatePutUserProps): Promise<void>;
+  abstract findAll(): Promise<OnlyUserProps[]>;
+  abstract findById(id: number): Promise<OnlyUserProps | null>;
+  abstract findByEmail(email: string): Promise<OnlyUserProps | null>;
+  abstract create(user: CreateOrUpdateAllUserProps): Promise<void>;
+  abstract update(id: number, user: CreateOrUpdateAllUserProps): Promise<void>;
   abstract delete(id: number): Promise<void>;
 }

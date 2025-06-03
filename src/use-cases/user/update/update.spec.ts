@@ -1,7 +1,7 @@
 import { UpdateUserUseCase } from ".";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import {
-  CreateOrUpdatePutUserProps,
+  CreateOrUpdateAllUserProps,
   UserRepository
 } from "@domain/repositories/user.repository";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions";
@@ -19,7 +19,7 @@ describe("UpdateUserUseCase", () => {
     sut = new UpdateUserUseCase(userRepository, exceptionsAdapter);
   });
 
-  const REQUEST_PARAMS: CreateOrUpdatePutUserProps = {
+  const REQUEST_PARAMS: CreateOrUpdateAllUserProps = {
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@example.com",
@@ -27,7 +27,7 @@ describe("UpdateUserUseCase", () => {
     birthDate: new Date()
   };
 
-  const USER_MOCK: User = {
+  const USER_MOCK: Omit<User, "transactions"> = {
     id: 1,
     firstName: "John",
     lastName: "Doe",

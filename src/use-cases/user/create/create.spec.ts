@@ -1,6 +1,6 @@
 import {
   UserRepository,
-  type CreateOrUpdatePutUserProps
+  type CreateOrUpdateAllUserProps
 } from "@domain/repositories/user.repository";
 import { CreateUserUseCase } from ".";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
@@ -27,7 +27,7 @@ describe("CreateUserUseCase", () => {
     );
   });
 
-  const USER_MOCK: User = {
+  const USER_MOCK: Omit<User, "transactions"> = {
     id: 1,
     firstName: "John",
     lastName: "Doe",
@@ -38,7 +38,7 @@ describe("CreateUserUseCase", () => {
     updatedAt: new Date()
   };
 
-  const REQUEST_PARAMS: CreateOrUpdatePutUserProps = {
+  const REQUEST_PARAMS: CreateOrUpdateAllUserProps = {
     firstName: "John",
     lastName: "Doe",
     email: "john.doe@example.com",
