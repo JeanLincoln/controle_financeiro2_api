@@ -30,9 +30,8 @@ describe("RouteAuthUseCase", () => {
   } as AuthenticatedRequest;
 
   const INVALID_TOKEN_MOCK = {
-    ...REQUEST_MOCK,
-    cookies: {
-      authentication: ""
+    headers: {
+      cookie: undefined
     }
   } as AuthenticatedRequest;
 
