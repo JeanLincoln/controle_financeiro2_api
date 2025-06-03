@@ -1,4 +1,4 @@
-import { JwtAdapter } from "@domain/adapters/jwt";
+import { JwtAdapter } from "@domain/adapters/jwt.adapter";
 
 export class JwtAdapterStub extends JwtAdapter {
   async generateToken(): Promise<string> {

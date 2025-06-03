@@ -1,10 +1,10 @@
-import { UpdateUserUseCase } from ".";
+import { UpdateUserUseCase } from "./update.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import {
   CreateOrUpdateAllUserProps,
   UserRepository
 } from "@domain/repositories/user.repository";
-import { ExceptionsAdapter } from "@domain/adapters/exceptions";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { User } from "@domain/entities/user.entity";
 

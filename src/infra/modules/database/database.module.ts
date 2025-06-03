@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmUserRepository } from "../../repositories/user";
+import { TypeOrmUserRepository } from "../../repositories/user/user.repository";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "@domain/entities/user.entity";

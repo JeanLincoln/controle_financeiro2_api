@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
-import { CreateUserUseCase } from "@use-cases/user/create";
+import { CreateUserUseCase } from "@use-cases/user/create/create.use-case";
 import { CreateUserDto } from "./dto/create.dto";
-import { AuthGuard } from "@infra/commons/guards/auth";
+import { AuthGuard } from "@infra/commons/guards/auth/auth.guard";
 import { ApiCookieAuth, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Users")

@@ -2,12 +2,12 @@ import {
   UserRepository,
   type CreateOrUpdateAllUserProps
 } from "@domain/repositories/user.repository";
-import { CreateUserUseCase } from ".";
+import { CreateUserUseCase } from "./create.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
-import type { ExceptionsAdapter } from "@domain/adapters/exceptions";
+import type { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import type { User } from "@domain/entities/user.entity";
-import type { CryptographyAdapter } from "@domain/adapters/cryptography";
+import type { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 import { CryptographyAdapterStub } from "@test/stubs/adapters/cryptography.stub";
 
 describe("CreateUserUseCase", () => {

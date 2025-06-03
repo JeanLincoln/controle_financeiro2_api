@@ -1,15 +1,17 @@
-import { ExceptionsAdapter } from "@domain/adapters/exceptions";
-import { JwtAdapter } from "@domain/adapters/jwt";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { JwtAdapter } from "@domain/adapters/jwt.adapter";
 import {
   UserRepository,
   type OnlyUserProps
 } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
 
+export interface AuthenticatedHeaders extends Headers {
+  cookie?: string;
+}
+
 export interface AuthenticatedRequest extends Request {
-  cookies: {
-    authentication?: string;
-  };
+  headers: AuthenticatedHeaders;
   user?: OnlyUserProps;
 }
 
@@ -22,12 +24,14 @@ export class RouteAuthUseCase {
   ) {}
 
   async execute(request: AuthenticatedRequest) {
-    const token = request.cookies?.authentication;
+    const authorization = request.headers.cookie;
 
-    if (!token) {
+    if (!authorization) {
       this.exceptionAdapter.unauthorized();
       return false;
     }
+
+    const [, token] = authorization.split("=");
 
     const userPayload = await this.jwtAdapter.verifyToken(token);
 

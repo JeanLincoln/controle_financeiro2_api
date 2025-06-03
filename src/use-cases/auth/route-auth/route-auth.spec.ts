@@ -1,6 +1,9 @@
-import type { JwtAdapter } from "@domain/adapters/jwt";
-import { RouteAuthUseCase, type AuthenticatedRequest } from ".";
-import type { ExceptionsAdapter } from "@domain/adapters/exceptions";
+import type { JwtAdapter } from "@domain/adapters/jwt.adapter";
+import {
+  RouteAuthUseCase,
+  type AuthenticatedRequest
+} from "./route-auth.use-case";
+import type { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import type { UserRepository } from "@domain/repositories/user.repository";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
@@ -21,8 +24,8 @@ describe("RouteAuthUseCase", () => {
   });
 
   const REQUEST_MOCK = {
-    cookies: {
-      authentication: "token"
+    headers: {
+      cookie: "authentication=token"
     }
   } as AuthenticatedRequest;
 

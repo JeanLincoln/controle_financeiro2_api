@@ -1,5 +1,5 @@
-import { CryptographyAdapter } from "@domain/adapters/cryptography";
-import { ExceptionsAdapter } from "@domain/adapters/exceptions";
+import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import {
   CreateOrUpdateAllUserProps,
   UserRepository

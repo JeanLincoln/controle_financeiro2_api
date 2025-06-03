@@ -9,7 +9,7 @@ import {
 import {
   ExceptionsAdapter,
   ExceptionParams
-} from "@domain/adapters/exceptions";
+} from "@domain/adapters/exceptions.adapter";
 import { WrongCredentialsException } from "./custom-exceptions/wrong-credentials";
 
 @Injectable()

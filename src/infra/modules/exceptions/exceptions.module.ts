@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { ExceptionsAdapter } from "@domain/adapters/exceptions";
-import { ExceptionsIntegration } from "@infra/integrations/exceptions";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { ExceptionsIntegration } from "@infra/integrations/exceptions/exceptions.integration";
 
 @Module({
   providers: [

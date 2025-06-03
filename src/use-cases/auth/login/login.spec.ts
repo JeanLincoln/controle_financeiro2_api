@@ -1,11 +1,11 @@
-import { JwtAdapter } from "@domain/adapters/jwt";
-import { LoginUseCase } from "./index";
+import { JwtAdapter } from "@domain/adapters/jwt.adapter";
+import { LoginUseCase } from "./login.use-case";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { JwtAdapterStub } from "@test/stubs/adapters/jwt.stub";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
-import type { ExceptionsAdapter } from "@domain/adapters/exceptions";
+import type { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
-import { CryptographyAdapter } from "@domain/adapters/cryptography";
+import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 import { CryptographyAdapterStub } from "@test/stubs/adapters/cryptography.stub";
 import type { User } from "@domain/entities/user.entity";
 

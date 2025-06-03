@@ -1,11 +1,11 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UserModule } from "../user";
-import { DatabaseModule } from "../database";
-import { ExceptionsModule } from "../exceptions";
-import { CryptographyModule } from "../cryptography";
-import { AuthModule } from "../auth";
+import { UserModule } from "../user/user.module";
+import { DatabaseModule } from "../database/database.module";
+import { ExceptionsModule } from "../exceptions/exceptions.module";
+import { CryptographyModule } from "../cryptography/cryptography.module";
+import { AuthModule } from "../auth/auth.module";
 import { JwtModule } from "@nestjs/jwt";
 
 @Module({

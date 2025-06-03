@@ -1,4 +1,4 @@
-import { CryptographyAdapter } from "@domain/adapters/cryptography";
+import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 import { Injectable } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 

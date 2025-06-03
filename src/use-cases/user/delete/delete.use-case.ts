@@ -1,4 +1,4 @@
-import { ExceptionsAdapter } from "@domain/adapters/exceptions";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
 

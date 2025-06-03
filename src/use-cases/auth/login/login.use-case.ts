@@ -1,6 +1,6 @@
-import { CryptographyAdapter } from "@domain/adapters/cryptography";
-import { ExceptionsAdapter } from "@domain/adapters/exceptions";
-import { JwtAdapter } from "@domain/adapters/jwt";
+import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { JwtAdapter } from "@domain/adapters/jwt.adapter";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
 

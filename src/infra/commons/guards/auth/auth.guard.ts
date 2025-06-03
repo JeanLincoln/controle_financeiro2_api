@@ -1,5 +1,5 @@
 import { Injectable, type ExecutionContext, CanActivate } from "@nestjs/common";
-import { RouteAuthUseCase } from "@use-cases/auth/route-auth";
+import { RouteAuthUseCase } from "@use-cases/auth/route-auth/route-auth.use-case";
 
 @Injectable()
 export class AuthGuard implements CanActivate {

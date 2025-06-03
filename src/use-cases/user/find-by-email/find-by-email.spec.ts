@@ -1,5 +1,5 @@
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
-import { FindByEmailUserUseCase } from ".";
+import { FindByEmailUserUseCase } from "./find-by-email.use-case";
 import type { UserRepository } from "@domain/repositories/user.repository";
 import type { User } from "@domain/entities/user.entity";
 

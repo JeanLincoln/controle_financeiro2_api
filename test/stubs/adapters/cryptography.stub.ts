@@ -1,4 +1,4 @@
-import { CryptographyAdapter } from "@domain/adapters/cryptography";
+import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 
 export class CryptographyAdapterStub implements CryptographyAdapter {
   async hash(): Promise<string> {
