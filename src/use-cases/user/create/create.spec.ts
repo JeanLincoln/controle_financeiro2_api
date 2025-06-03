@@ -5,7 +5,7 @@ import {
 import { CreateUserUseCase } from ".";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import type { ExceptionsAdapter } from "@domain/adapters/exceptions";
-import { ExceptionsStub } from "@test/stubs/adapters/exceptions.stub";
+import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import type { User } from "@domain/entities/user.entity";
 import type { CryptographyAdapter } from "@domain/adapters/cryptography";
 import { CryptographyAdapterStub } from "@test/stubs/adapters/cryptography.stub";
@@ -18,7 +18,7 @@ describe("CreateUserUseCase", () => {
 
   beforeEach(async () => {
     userRepository = new UserRepositoryStub();
-    exceptionsAdapter = new ExceptionsStub();
+    exceptionsAdapter = new ExceptionsAdapterStub();
     cryptographyAdapter = new CryptographyAdapterStub();
     sut = new CreateUserUseCase(
       userRepository,

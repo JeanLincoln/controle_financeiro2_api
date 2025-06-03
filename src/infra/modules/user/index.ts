@@ -8,9 +8,12 @@ import { DeleteUserUseCase } from "@use-cases/user/delete";
 import { FindAllUserUseCase } from "@use-cases/user/find-all";
 import { ExceptionsModule } from "../exceptions";
 import { CryptographyModule } from "../cryptography";
+import { UserController } from "@infra/controllers/user";
+import { AuthModule } from "../auth";
 
 @Module({
-  imports: [DatabaseModule, ExceptionsModule, CryptographyModule],
+  imports: [DatabaseModule, ExceptionsModule, CryptographyModule, AuthModule],
+  controllers: [UserController],
   providers: [
     CreateUserUseCase,
     FindByEmailUserUseCase,

@@ -1,6 +1,6 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions";
 
-export class ExceptionsStub implements ExceptionsAdapter {
+export class ExceptionsAdapterStub implements ExceptionsAdapter {
   badRequest(): void {
     return;
   }

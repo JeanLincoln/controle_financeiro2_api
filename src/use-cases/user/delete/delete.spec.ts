@@ -2,7 +2,7 @@ import { DeleteUserUseCase } from ".";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import type { UserRepository } from "@domain/repositories/user.repository";
 import type { ExceptionsAdapter } from "@domain/adapters/exceptions";
-import { ExceptionsStub } from "@test/stubs/adapters/exceptions.stub";
+import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import type { User } from "@domain/entities/user.entity";
 
 describe("DeleteUserUseCase", () => {
@@ -12,7 +12,7 @@ describe("DeleteUserUseCase", () => {
 
   beforeEach(async () => {
     userRepository = new UserRepositoryStub();
-    exceptionsAdapter = new ExceptionsStub();
+    exceptionsAdapter = new ExceptionsAdapterStub();
     sut = new DeleteUserUseCase(userRepository, exceptionsAdapter);
   });
 

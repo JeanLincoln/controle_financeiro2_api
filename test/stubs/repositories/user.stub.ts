@@ -1,4 +1,4 @@
-import type { User } from "@domain/entities/user.entity";
+import { User } from "@domain/entities/user.entity";
 import { UserRepository } from "@domain/repositories/user.repository";
 
 export class UserRepositoryStub implements UserRepository {

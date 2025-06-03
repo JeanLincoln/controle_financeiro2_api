@@ -1,12 +1,12 @@
 import { UpdateUserUseCase } from ".";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
-import type {
+import {
   CreateOrUpdatePutUserProps,
   UserRepository
 } from "@domain/repositories/user.repository";
-import type { ExceptionsAdapter } from "@domain/adapters/exceptions";
-import { ExceptionsStub } from "@test/stubs/adapters/exceptions.stub";
-import type { User } from "@domain/entities/user.entity";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions";
+import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
+import { User } from "@domain/entities/user.entity";
 
 describe("UpdateUserUseCase", () => {
   let sut: UpdateUserUseCase;
@@ -15,7 +15,7 @@ describe("UpdateUserUseCase", () => {
 
   beforeEach(async () => {
     userRepository = new UserRepositoryStub();
-    exceptionsAdapter = new ExceptionsStub();
+    exceptionsAdapter = new ExceptionsAdapterStub();
     sut = new UpdateUserUseCase(userRepository, exceptionsAdapter);
   });
 

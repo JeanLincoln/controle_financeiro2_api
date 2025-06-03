@@ -1,6 +1,6 @@
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { FindByIdUserUseCase } from ".";
-import { ExceptionsStub } from "@test/stubs/adapters/exceptions.stub";
+import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import type { ExceptionsAdapter } from "@domain/adapters/exceptions";
 import type { UserRepository } from "@domain/repositories/user.repository";
 import type { User } from "@domain/entities/user.entity";
@@ -12,7 +12,7 @@ describe("FindByIdUserUseCase", () => {
 
   beforeEach(async () => {
     userRepository = new UserRepositoryStub();
-    exceptionsAdapter = new ExceptionsStub();
+    exceptionsAdapter = new ExceptionsAdapterStub();
     sut = new FindByIdUserUseCase(userRepository, exceptionsAdapter);
   });
 

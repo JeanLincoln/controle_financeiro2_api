@@ -2,10 +2,11 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "../user";
-import { UserController } from "@infra/controllers/user";
 import { DatabaseModule } from "../database";
 import { ExceptionsModule } from "../exceptions";
 import { CryptographyModule } from "../cryptography";
+import { AuthModule } from "../auth";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
   imports: [
@@ -23,11 +24,11 @@ import { CryptographyModule } from "../cryptography";
       entities: [__dirname, "dist/src/domain/entities/*{.ts,.js}"]
     }),
     DatabaseModule,
-    UserModule,
+    CryptographyModule,
     ExceptionsModule,
-    CryptographyModule
-  ],
-  controllers: [UserController],
-  providers: []
+    JwtModule,
+    AuthModule,
+    UserModule
+  ]
 })
 export class AppModule {}
