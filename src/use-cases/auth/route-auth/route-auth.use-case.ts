@@ -1,9 +1,7 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { JwtAdapter } from "@domain/adapters/jwt.adapter";
-import {
-  UserRepository,
-  type OnlyUserProps
-} from "@domain/repositories/user.repository";
+import { UserRepository } from "@domain/repositories/user.repository";
+import type { User } from "@domain/entities/user.entity";
 import { Injectable } from "@nestjs/common";
 
 export interface AuthenticatedHeaders extends Headers {
@@ -12,7 +10,7 @@ export interface AuthenticatedHeaders extends Headers {
 
 export interface AuthenticatedRequest extends Request {
   headers: AuthenticatedHeaders;
-  user?: OnlyUserProps;
+  user: User;
 }
 
 @Injectable()

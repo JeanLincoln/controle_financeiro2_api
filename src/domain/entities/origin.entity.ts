@@ -3,11 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  JoinColumn
+  UpdateDateColumn
 } from "typeorm";
-import { User } from "./user.entity";
 
 @Entity("origins")
 export class Origin {
@@ -43,13 +40,24 @@ export class Origin {
   })
   icon: string;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: "user_id" })
-  user: User;
+  @Column({
+    type: "int",
+    unsigned: true,
+    name: "user_id"
+  })
+  userId: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    name: "created_at",
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP"
+  })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    name: "updated_at",
+    type: "timestamp",
+    default: null
+  })
   updatedAt: Date;
 }

@@ -3,7 +3,7 @@ import type { Category } from "@domain/entities/category.entity";
 export type CreateOrUpdateAllCategoryProps = Omit<
   Category,
   "id" | "createdAt" | "updatedAt"
->;
+> & { userId: number };
 
 export abstract class CategoryRepository {
   abstract findAll(): Promise<Category[]>;

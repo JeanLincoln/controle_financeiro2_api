@@ -3,15 +3,10 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
-import { User } from "./user.entity";
-import { Category } from "./category.entity";
-import { SubCategory } from "./sub-category.entity";
 import { Origin } from "./origin.entity";
 
 @Entity("transactions")
@@ -65,41 +60,24 @@ export class Transaction {
   })
   endDate: Date;
 
-  @CreateDateColumn()
+  @Column({
+    type: "int",
+    unsigned: true,
+    name: "user_id"
+  })
+  userId: number;
+
+  @CreateDateColumn({
+    name: "created_at",
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP"
+  })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    name: "updated_at",
+    type: "timestamp",
+    default: null
+  })
   updatedAt: Date;
-
-  @ManyToOne(() => User)
-  @JoinColumn({ name: "user_id" })
-  user: User;
-
-  @ManyToMany(() => Category)
-  @JoinTable({
-    name: "transactions_categories",
-    joinColumn: {
-      name: "transaction_id",
-      referencedColumnName: "id"
-    },
-    inverseJoinColumn: {
-      name: "category_id",
-      referencedColumnName: "id"
-    }
-  })
-  categories: Category[];
-
-  @ManyToMany(() => SubCategory)
-  @JoinTable({
-    name: "transactions_sub_categories",
-    joinColumn: {
-      name: "transaction_id",
-      referencedColumnName: "id"
-    },
-    inverseJoinColumn: {
-      name: "sub_category_id",
-      referencedColumnName: "id"
-    }
-  })
-  subCategories: SubCategory[];
 }

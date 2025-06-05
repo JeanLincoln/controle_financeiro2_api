@@ -1,8 +1,6 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import {
-  UserRepository,
-  type OnlyUserProps
-} from "@domain/repositories/user.repository";
+import { UserRepository } from "@domain/repositories/user.repository";
+import type { User } from "@domain/entities/user.entity";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -12,7 +10,7 @@ export class FindByIdUserUseCase {
     private readonly exceptionsAdapter: ExceptionsAdapter
   ) {}
 
-  async execute(id: number): Promise<OnlyUserProps | void> {
+  async execute(id: number): Promise<User | void> {
     const user = await this.userRepository.findById(id);
 
     if (!user) {

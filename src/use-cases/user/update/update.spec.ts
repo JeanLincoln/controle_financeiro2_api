@@ -1,12 +1,10 @@
 import { UpdateUserUseCase } from "./update.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
-import {
-  CreateOrUpdateAllUserProps,
-  UserRepository
-} from "@domain/repositories/user.repository";
+import { UserRepository } from "@domain/repositories/user.repository";
+import type { CreateOrUpdateAllUserProps } from "@domain/repositories/user.repository";
+import type { User } from "@domain/entities/user.entity";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
-import { User } from "@domain/entities/user.entity";
 
 describe("UpdateUserUseCase", () => {
   let sut: UpdateUserUseCase;
@@ -27,7 +25,7 @@ describe("UpdateUserUseCase", () => {
     birthDate: new Date()
   };
 
-  const USER_MOCK: Omit<User, "transactions"> = {
+  const USER_MOCK: User = {
     id: 1,
     firstName: "John",
     lastName: "Doe",

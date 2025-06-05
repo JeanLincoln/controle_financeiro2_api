@@ -60,6 +60,11 @@ export class Migrate1748990613836 implements MigrationInterface {
             name: "updated_at",
             type: "timestamp",
             default: "CURRENT_TIMESTAMP"
+          },
+          {
+            name: "user_id",
+            type: "int",
+            unsigned: true
           }
         ]
       })
@@ -243,6 +248,16 @@ export class Migrate1748990613836 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
+      "categories",
+      new TableForeignKey({
+        columnNames: ["user_id"],
+        referencedColumnNames: ["id"],
+        referencedTableName: "users",
+        onDelete: "CASCADE"
+      })
+    );
+
+    await queryRunner.createForeignKey(
       "transactions",
       new TableForeignKey({
         columnNames: ["user_id"],
@@ -301,6 +316,14 @@ export class Migrate1748990613836 implements MigrationInterface {
     );
 
     await queryRunner.createIndex(
+      "categories",
+      new TableIndex({
+        name: "IDX_categories_user",
+        columnNames: ["user_id"]
+      })
+    );
+
+    await queryRunner.createIndex(
       "transactions",
       new TableIndex({
         name: "IDX_transactions_user",
@@ -327,6 +350,7 @@ export class Migrate1748990613836 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropIndex("categories", "IDX_categories_type");
+    await queryRunner.dropIndex("categories", "IDX_categories_user");
     await queryRunner.dropIndex("transactions", "IDX_transactions_user");
     await queryRunner.dropIndex("transactions", "IDX_transactions_start_date");
     await queryRunner.dropIndex(
@@ -336,7 +360,6 @@ export class Migrate1748990613836 implements MigrationInterface {
 
     await queryRunner.dropTable("transactions_sub_categories");
     await queryRunner.dropTable("transactions_categories");
-
     await queryRunner.dropTable("transactions");
     await queryRunner.dropTable("sub_categories");
     await queryRunner.dropTable("categories");

@@ -16,7 +16,7 @@ describe("DeleteUserUseCase", () => {
     sut = new DeleteUserUseCase(userRepository, exceptionsAdapter);
   });
 
-  const USER_MOCK: Omit<User, "transactions"> = {
+  const USER_MOCK: User = {
     id: 1,
     firstName: "John",
     lastName: "Doe",

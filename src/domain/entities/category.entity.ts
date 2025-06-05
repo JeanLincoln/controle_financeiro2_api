@@ -3,16 +3,12 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-  ManyToMany
+  UpdateDateColumn
 } from "typeorm";
-import { SubCategory } from "./sub-category.entity";
-import { Transaction } from "./transaction.entity";
 
 export enum CategoryType {
-  INCOME,
-  EXPENSE
+  INCOME = "INCOME",
+  EXPENSE = "EXPENSE"
 }
 
 @Entity("categories")
@@ -55,15 +51,24 @@ export class Category {
   })
   icon: string;
 
-  @OneToMany(() => SubCategory, (subCategory) => subCategory.category)
-  subCategories: SubCategory[];
+  @Column({
+    type: "int",
+    unsigned: true,
+    name: "user_id"
+  })
+  userId: number;
 
-  @ManyToMany(() => Transaction, (transaction) => transaction.categories)
-  transactions: Transaction[];
-
-  @CreateDateColumn()
+  @CreateDateColumn({
+    name: "created_at",
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP"
+  })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    name: "updated_at",
+    type: "timestamp",
+    default: null
+  })
   updatedAt: Date;
 }

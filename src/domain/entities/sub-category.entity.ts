@@ -3,13 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
-  ManyToMany
+  UpdateDateColumn
 } from "typeorm";
-import { Category } from "./category.entity";
-import { Transaction } from "./transaction.entity";
 
 @Entity("sub_categories")
 export class SubCategory {
@@ -45,16 +40,24 @@ export class SubCategory {
   })
   icon: string;
 
-  @ManyToOne(() => Category, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "category_id" })
-  category: Category;
+  @Column({
+    type: "int",
+    unsigned: true,
+    name: "category_id"
+  })
+  categoryId: number;
 
-  @ManyToMany(() => Transaction, (transaction) => transaction.subCategories)
-  transactions: Transaction[];
-
-  @CreateDateColumn()
+  @CreateDateColumn({
+    name: "created_at",
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP"
+  })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    name: "updated_at",
+    type: "timestamp",
+    default: null
+  })
   updatedAt: Date;
 }

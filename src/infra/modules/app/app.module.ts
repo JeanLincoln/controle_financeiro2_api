@@ -7,6 +7,7 @@ import { ExceptionsModule } from "../exceptions/exceptions.module";
 import { CryptographyModule } from "../cryptography/cryptography.module";
 import { AuthModule } from "../auth/auth.module";
 import { JwtModule } from "@nestjs/jwt";
+import { CategoryModule } from "../category/category.module";
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { JwtModule } from "@nestjs/jwt";
     ExceptionsModule,
     JwtModule,
     AuthModule,
-    UserModule
+    UserModule,
+    CategoryModule
   ]
 })
 export class AppModule {}

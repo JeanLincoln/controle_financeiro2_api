@@ -34,7 +34,7 @@ describe("LoginUseCase", () => {
     password: "Password123!"
   };
 
-  const USER_MOCK: Omit<User, "transactions"> = {
+  const USER_MOCK: Omit<User, "transactions" | "categories"> = {
     id: 1,
     firstName: "John",
     lastName: "Doe",
