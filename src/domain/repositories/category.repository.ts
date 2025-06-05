@@ -1,4 +1,4 @@
-import type { Category } from "@domain/entities/category.entity";
+import { Category } from "@domain/entities/category.entity";
 
 export type CreateOrUpdateAllCategoryProps = Omit<
   Category,
@@ -6,12 +6,16 @@ export type CreateOrUpdateAllCategoryProps = Omit<
 > & { userId: number };
 
 export abstract class CategoryRepository {
-  abstract findAll(): Promise<Category[]>;
-  abstract findById(id: number): Promise<Category | null>;
-  abstract create(category: CreateOrUpdateAllCategoryProps): Promise<void>;
+  abstract findAll(userId: number): Promise<Category[]>;
+  abstract findById(userId: number, id: number): Promise<Category | null>;
+  abstract create(
+    userId: number,
+    category: CreateOrUpdateAllCategoryProps
+  ): Promise<void>;
   abstract update(
+    userId: number,
     id: number,
     category: CreateOrUpdateAllCategoryProps
   ): Promise<void>;
-  abstract delete(id: number): Promise<void>;
+  abstract delete(userId: number, id: number): Promise<void>;
 }

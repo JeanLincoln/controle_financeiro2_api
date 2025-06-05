@@ -1,9 +1,9 @@
 import { DeleteUserUseCase } from "./delete.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
-import type { UserRepository } from "@domain/repositories/user.repository";
-import type { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { UserRepository } from "@domain/repositories/user.repository";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
-import type { User } from "@domain/entities/user.entity";
+import { User } from "@domain/entities/user.entity";
 
 describe("DeleteUserUseCase", () => {
   let sut: DeleteUserUseCase;

@@ -1,11 +1,11 @@
 import { UserRepository } from "@domain/repositories/user.repository";
-import type { CreateOrUpdateAllUserProps } from "@domain/repositories/user.repository";
-import type { User } from "@domain/entities/user.entity";
+import { CreateOrUpdateAllUserProps } from "@domain/repositories/user.repository";
+import { User } from "@domain/entities/user.entity";
 import { CreateUserUseCase } from "./create.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
-import type { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
-import type { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
+import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 import { CryptographyAdapterStub } from "@test/stubs/adapters/cryptography.stub";
 
 describe("CreateUserUseCase", () => {

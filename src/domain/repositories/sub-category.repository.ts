@@ -1,4 +1,4 @@
-import type { SubCategory } from "@domain/entities/sub-category.entity";
+import { SubCategory } from "@domain/entities/sub-category.entity";
 
 export type CreateOrUpdateAllSubCategoryProps = Omit<
   SubCategory,

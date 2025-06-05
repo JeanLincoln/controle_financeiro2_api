@@ -14,8 +14,11 @@ export class CreateCategoryUseCase {
     private readonly exceptionsAdapter: ExceptionsAdapter
   ) {}
 
-  async execute(category: CreateOrUpdateAllCategoryProps): Promise<void> {
-    const userExists = await this.userRepository.findById(category.userId);
+  async execute(
+    userId: number,
+    category: CreateOrUpdateAllCategoryProps
+  ): Promise<void> {
+    const userExists = await this.userRepository.findById(userId);
 
     if (!userExists) {
       this.exceptionsAdapter.notFound({
@@ -24,6 +27,6 @@ export class CreateCategoryUseCase {
       return;
     }
 
-    await this.categoryRepository.create(category);
+    await this.categoryRepository.create(userId, category);
   }
 }

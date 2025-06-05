@@ -1,24 +1,33 @@
-import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { CreateCategoryUseCase } from "@use-cases/category/create/create.use-case";
 import { CreateCategoryDto } from "./dto/create.dto";
 import { ApiCookieAuth } from "@nestjs/swagger";
-import type { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
+import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 import { AuthGuard } from "@infra/commons/guards/auth/auth.guard";
+import { FindAllCategoryUseCase } from "@use-cases/category/find-all/find-all.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
 @Controller("categories")
 export class CategoryController {
-  constructor(private readonly createCategoryUseCase: CreateCategoryUseCase) {}
+  constructor(
+    private readonly createCategoryUseCase: CreateCategoryUseCase,
+    private readonly findAllCategoryUseCase: FindAllCategoryUseCase
+  ) {}
 
   @Post()
   async create(
     @Req() req: AuthenticatedRequest,
-    @Body() createCategoryDto: CreateCategoryDto
+    @Body() body: CreateCategoryDto
   ) {
-    return this.createCategoryUseCase.execute({
-      ...createCategoryDto,
+    return this.createCategoryUseCase.execute(req.user.id, {
+      ...body,
       userId: req.user.id
     });
+  }
+
+  @Get()
+  async findAll(@Req() req: AuthenticatedRequest) {
+    return this.findAllCategoryUseCase.execute(req.user.id);
   }
 }

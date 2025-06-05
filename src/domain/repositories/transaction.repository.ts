@@ -1,4 +1,4 @@
-import type { Transaction } from "@domain/entities/transaction.entity";
+import { Transaction } from "@domain/entities/transaction.entity";
 
 export type CreateOrUpdateAllTransactionProps = Omit<
   Transaction,

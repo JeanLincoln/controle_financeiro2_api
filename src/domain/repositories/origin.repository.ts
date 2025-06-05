@@ -1,4 +1,4 @@
-import type { Origin } from "@domain/entities/origin.entity";
+import { Origin } from "@domain/entities/origin.entity";
 
 export type CreateOrUpdateAllOriginProps = Omit<
   Origin,

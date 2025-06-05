@@ -12,23 +12,33 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     private readonly categoryRepository: Repository<Category>
   ) {}
 
-  async findAll(): Promise<Category[]> {
-    return this.categoryRepository.find();
+  async findAll(userId: number): Promise<Category[]> {
+    return this.categoryRepository.find({ where: { userId } });
   }
 
   async findById(id: number): Promise<Category | null> {
     return this.categoryRepository.findOne({ where: { id } });
   }
 
-  async create(category: CreateOrUpdateAllCategoryProps): Promise<void> {
-    await this.categoryRepository.save(category);
+  async create(
+    userId: number,
+    category: CreateOrUpdateAllCategoryProps
+  ): Promise<void> {
+    await this.categoryRepository.save({
+      ...category,
+      userId
+    });
   }
 
   async update(
+    userId: number,
     id: number,
     category: CreateOrUpdateAllCategoryProps
   ): Promise<void> {
-    await this.categoryRepository.update(id, category);
+    await this.categoryRepository.update(id, {
+      ...category,
+      userId
+    });
     await this.findById(id);
   }
 

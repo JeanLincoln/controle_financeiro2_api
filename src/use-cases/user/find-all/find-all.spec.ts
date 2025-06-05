@@ -1,7 +1,7 @@
 import { FindAllUserUseCase } from "./find-all.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
-import type { UserRepository } from "@domain/repositories/user.repository";
-import type { User } from "@domain/entities/user.entity";
+import { UserRepository } from "@domain/repositories/user.repository";
+import { User } from "@domain/entities/user.entity";
 
 describe("FindAllUserUseCase", () => {
   let sut: FindAllUserUseCase;

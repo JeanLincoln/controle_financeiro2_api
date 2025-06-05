@@ -1,9 +1,9 @@
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { FindByIdUserUseCase } from "./find-by-id.use-case";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
-import type { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import type { UserRepository } from "@domain/repositories/user.repository";
-import type { User } from "@domain/entities/user.entity";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { UserRepository } from "@domain/repositories/user.repository";
+import { User } from "@domain/entities/user.entity";
 
 describe("FindByIdUserUseCase", () => {
   let sut: FindByIdUserUseCase;

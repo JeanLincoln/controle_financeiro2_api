@@ -1,14 +1,14 @@
-import type { JwtAdapter } from "@domain/adapters/jwt.adapter";
+import { JwtAdapter } from "@domain/adapters/jwt.adapter";
 import {
   RouteAuthUseCase,
   type AuthenticatedRequest
 } from "./route-auth.use-case";
-import type { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import type { UserRepository } from "@domain/repositories/user.repository";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { UserRepository } from "@domain/repositories/user.repository";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { JwtAdapterStub } from "@test/stubs/adapters/jwt.stub";
-import type { User } from "@domain/entities/user.entity";
+import { User } from "@domain/entities/user.entity";
 
 describe("RouteAuthUseCase", () => {
   let sut: RouteAuthUseCase;
