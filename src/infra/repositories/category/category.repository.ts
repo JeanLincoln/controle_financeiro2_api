@@ -20,25 +20,15 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     return this.categoryRepository.findOne({ where: { id } });
   }
 
-  async create(
-    userId: number,
-    category: CreateOrUpdateAllCategoryProps
-  ): Promise<void> {
-    await this.categoryRepository.save({
-      ...category,
-      userId
-    });
+  async create(category: CreateOrUpdateAllCategoryProps): Promise<void> {
+    await this.categoryRepository.save(category);
   }
 
   async update(
-    userId: number,
     id: number,
     category: CreateOrUpdateAllCategoryProps
   ): Promise<void> {
-    await this.categoryRepository.update(id, {
-      ...category,
-      userId
-    });
+    await this.categoryRepository.update(id, category);
     await this.findById(id);
   }
 

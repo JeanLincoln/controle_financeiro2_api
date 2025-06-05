@@ -53,7 +53,7 @@ describe("LoginUseCase", () => {
     await sut.execute(1, CATEGORY_MOCK);
 
     expect(userRepository.findById).toHaveBeenCalledTimes(1);
-    expect(categoryRepository.create).toHaveBeenCalledWith(1, CATEGORY_MOCK);
+    expect(categoryRepository.create).toHaveBeenCalledWith(CATEGORY_MOCK);
   });
 
   it("should not be able to create a category if user does not exist", async () => {

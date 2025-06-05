@@ -34,14 +34,14 @@ export class RouteAuthUseCase {
     const userPayload = await this.jwtAdapter.verifyToken(token);
 
     if (!userPayload) {
-      this.exceptionAdapter.forbidden();
+      this.exceptionAdapter.forbidden({ message: "Invalid token" });
       return false;
     }
 
     const user = await this.userRepository.findById(Number(userPayload.id));
 
     if (!user) {
-      this.exceptionAdapter.forbidden();
+      this.exceptionAdapter.forbidden({ message: "Invalid token" });
       return false;
     }
 

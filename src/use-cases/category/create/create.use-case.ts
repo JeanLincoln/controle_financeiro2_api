@@ -27,6 +27,6 @@ export class CreateCategoryUseCase {
       return;
     }
 
-    await this.categoryRepository.create(userId, category);
+    await this.categoryRepository.create(category);
   }
 }

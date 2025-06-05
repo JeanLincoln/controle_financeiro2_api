@@ -24,7 +24,7 @@ export class JwtIntegration implements JwtAdapter {
     );
 
     if (error) {
-      return this.exceptionsAdapter.forbidden();
+      return this.exceptionsAdapter.forbidden({ message: "Invalid token" });
     }
 
     return result;

@@ -5,11 +5,20 @@ import { CategoryController } from "@infra/controllers/category/category.control
 import { AuthModule } from "../auth/auth.module";
 import { ExceptionsModule } from "../exceptions/exceptions.module";
 import { FindAllCategoryUseCase } from "@use-cases/category/find-all/find-all.use-case";
+import { FindByIdCategoryUseCase } from "@use-cases/category/find-by-id/find-by-id.use-case";
 
 @Module({
   imports: [DatabaseModule, AuthModule, ExceptionsModule],
   controllers: [CategoryController],
-  providers: [CreateCategoryUseCase, FindAllCategoryUseCase],
-  exports: [CreateCategoryUseCase, FindAllCategoryUseCase]
+  providers: [
+    CreateCategoryUseCase,
+    FindAllCategoryUseCase,
+    FindByIdCategoryUseCase
+  ],
+  exports: [
+    CreateCategoryUseCase,
+    FindAllCategoryUseCase,
+    FindByIdCategoryUseCase
+  ]
 })
 export class CategoryModule {}

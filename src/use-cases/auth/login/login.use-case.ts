@@ -17,7 +17,9 @@ export class LoginUseCase {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
-      return this.exceptionAdapter.forbidden();
+      return this.exceptionAdapter.forbidden({
+        message: "Invalid credentials"
+      });
     }
 
     const isPasswordValid = await this.cryptographyAdapter.compare(
