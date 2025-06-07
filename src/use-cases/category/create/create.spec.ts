@@ -10,6 +10,7 @@ import {
   INCOME_CATEGORY_MOCK
 } from "@test/mocks/category.mock";
 import { USER_MOCK } from "@test/mocks/user.mock";
+import * as testUtils from "@test/utils/test-utils";
 
 describe("LoginUseCase", () => {
   let sut: CreateCategoryUseCase;
@@ -35,19 +36,36 @@ describe("LoginUseCase", () => {
 
     await sut.execute(1, EXPENSE_CATEGORY_MOCK);
 
-    expect(userRepository.findById).toHaveBeenCalledTimes(1);
-    expect(categoryRepository.create).toHaveBeenCalledWith(
-      EXPENSE_CATEGORY_MOCK
-    );
+    testUtils.notCalledExpectations([exceptionsAdapter.notFound]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findById,
+      calledWith: { id: 1 }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: categoryRepository.create,
+      calledWith: { category: EXPENSE_CATEGORY_MOCK }
+    });
   });
 
   it("should not be able to create a category if user does not exist", async () => {
     jest.spyOn(userRepository, "findById").mockResolvedValue(null);
+    jest.spyOn(exceptionsAdapter, "notFound");
     jest.spyOn(categoryRepository, "create");
 
     await sut.execute(1, INCOME_CATEGORY_MOCK);
 
-    expect(userRepository.findById).toHaveBeenCalledTimes(1);
-    expect(categoryRepository.create).not.toHaveBeenCalled();
+    testUtils.notCalledExpectations([categoryRepository.create]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findById,
+      calledWith: { id: 1 }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.notFound,
+      calledWith: { payload: { message: "User not found" } }
+    });
   });
 });

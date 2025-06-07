@@ -7,6 +7,7 @@ import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import { CATEGORIES_MOCK } from "@test/mocks/category.mock";
 import { USER_MOCK } from "@test/mocks/user.mock";
+import * as testUtils from "@test/utils/test-utils";
 
 describe("FindAllCategoryUseCase", () => {
   let sut: FindAllCategoryUseCase;
@@ -34,10 +35,18 @@ describe("FindAllCategoryUseCase", () => {
 
     const categories = await sut.execute(1);
 
-    expect(categoryRepository.findAll).toHaveBeenCalledTimes(1);
-    expect(userRepository.findById).toHaveBeenCalledTimes(1);
-    expect(exceptionsAdapter.notFound).not.toHaveBeenCalled();
-    expect(categories).toEqual(CATEGORIES_MOCK);
+    testUtils.resultExpectations(categories, CATEGORIES_MOCK);
+    testUtils.notCalledExpectations([exceptionsAdapter.notFound]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: categoryRepository.findAll,
+      calledWith: { id: 1 }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findById,
+      calledWith: { id: 1 }
+    });
   });
 
   it("should return an empty array if the user has no categories", async () => {
@@ -47,10 +56,18 @@ describe("FindAllCategoryUseCase", () => {
 
     const categories = await sut.execute(1);
 
-    expect(categoryRepository.findAll).toHaveBeenCalledTimes(1);
-    expect(userRepository.findById).toHaveBeenCalledTimes(1);
-    expect(exceptionsAdapter.notFound).not.toHaveBeenCalled();
-    expect(categories).toEqual([]);
+    testUtils.resultExpectations(categories, []);
+    testUtils.notCalledExpectations([exceptionsAdapter.notFound]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: categoryRepository.findAll,
+      calledWith: { id: 1 }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findById,
+      calledWith: { id: 1 }
+    });
   });
 
   it("should throw an error if the user id is not found", async () => {
@@ -58,14 +75,19 @@ describe("FindAllCategoryUseCase", () => {
     jest.spyOn(categoryRepository, "findAll");
     jest.spyOn(exceptionsAdapter, "notFound");
 
-    await sut.execute(1);
+    const result = await sut.execute(1);
 
-    expect(userRepository.findById).toHaveBeenCalledTimes(1);
-    expect(categoryRepository.findAll).not.toHaveBeenCalled();
-    expect(categoryRepository.findAll).not.toHaveBeenCalled();
-    expect(exceptionsAdapter.notFound).toHaveBeenCalledTimes(1);
-    expect(exceptionsAdapter.notFound).toHaveBeenCalledWith({
-      message: "User not found"
+    testUtils.resultExpectations(result, undefined);
+    testUtils.notCalledExpectations([categoryRepository.findAll]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findById,
+      calledWith: { id: 1 }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.notFound,
+      calledWith: { payload: { message: "User not found" } }
     });
   });
 });

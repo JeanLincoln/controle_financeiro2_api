@@ -1,10 +1,13 @@
 import { UpdateUserUseCase } from "./update.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { UserRepository } from "@domain/repositories/user.repository";
-import { CreateOrUpdateAllUserProps } from "@domain/repositories/user.repository";
-import { User } from "@domain/entities/user.entity";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
+import {
+  CREATE_OR_UPDATE_USER_PARAMS_MOCK,
+  USER_MOCK
+} from "@test/mocks/user.mock";
+import * as testUtils from "@test/utils/test-utils";
 
 describe("UpdateUserUseCase", () => {
   let sut: UpdateUserUseCase;
@@ -15,39 +18,31 @@ describe("UpdateUserUseCase", () => {
     userRepository = new UserRepositoryStub();
     exceptionsAdapter = new ExceptionsAdapterStub();
     sut = new UpdateUserUseCase(userRepository, exceptionsAdapter);
+
+    jest.spyOn(exceptionsAdapter, "notFound");
   });
-
-  const REQUEST_PARAMS: CreateOrUpdateAllUserProps = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    password: "123456",
-    birthDate: new Date()
-  };
-
-  const USER_MOCK: User = {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    password: "123456",
-    birthDate: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
 
   it("should be able to update a user", async () => {
     jest.spyOn(userRepository, "findById").mockResolvedValue(USER_MOCK);
     jest.spyOn(userRepository, "update");
-    jest.spyOn(exceptionsAdapter, "notFound");
 
-    await sut.execute(1, REQUEST_PARAMS);
+    const result = await sut.execute(1, CREATE_OR_UPDATE_USER_PARAMS_MOCK);
 
-    expect(exceptionsAdapter.notFound).not.toHaveBeenCalled();
-    expect(userRepository.findById).toHaveBeenCalledTimes(1);
-    expect(userRepository.findById).toHaveBeenCalledWith(1);
-    expect(userRepository.update).toHaveBeenCalledTimes(1);
-    expect(userRepository.update).toHaveBeenCalledWith(1, REQUEST_PARAMS);
+    testUtils.resultExpectations(result, undefined);
+    testUtils.notCalledExpectations([exceptionsAdapter.notFound]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findById,
+      calledWith: { id: 1 }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.update,
+      calledWith: {
+        id: 1,
+        user: CREATE_OR_UPDATE_USER_PARAMS_MOCK
+      }
+    });
   });
 
   it("should throw an error if the user is not found", async () => {
@@ -55,14 +50,19 @@ describe("UpdateUserUseCase", () => {
     jest.spyOn(userRepository, "update");
     jest.spyOn(exceptionsAdapter, "notFound");
 
-    await sut.execute(1, REQUEST_PARAMS);
+    const result = await sut.execute(1, CREATE_OR_UPDATE_USER_PARAMS_MOCK);
 
-    expect(exceptionsAdapter.notFound).toHaveBeenCalledTimes(1);
-    expect(exceptionsAdapter.notFound).toHaveBeenCalledWith({
-      message: "User not found"
+    testUtils.resultExpectations(result, undefined);
+    testUtils.notCalledExpectations([userRepository.update]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findById,
+      calledWith: { id: 1 }
     });
-    expect(userRepository.findById).toHaveBeenCalledTimes(1);
-    expect(userRepository.findById).toHaveBeenCalledWith(1);
-    expect(userRepository.update).not.toHaveBeenCalled();
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.notFound,
+      calledWith: { payload: { message: "User not found" } }
+    });
   });
 });

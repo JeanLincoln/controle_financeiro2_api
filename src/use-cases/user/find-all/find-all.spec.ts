@@ -1,7 +1,8 @@
 import { FindAllUserUseCase } from "./find-all.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { UserRepository } from "@domain/repositories/user.repository";
-import { User } from "@domain/entities/user.entity";
+import { USERS_MOCK } from "@test/mocks/user.mock";
+import * as testUtils from "@test/utils/test-utils";
 
 describe("FindAllUserUseCase", () => {
   let sut: FindAllUserUseCase;
@@ -12,36 +13,37 @@ describe("FindAllUserUseCase", () => {
     sut = new FindAllUserUseCase(userRepository);
   });
 
-  const USERS_MOCK: User[] = [
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      password: "123456",
-      birthDate: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Doe",
-      email: "jane.doe@example.com",
-      password: "123456",
-      birthDate: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
-  ];
-
   it("should be able to find all users", async () => {
     jest.spyOn(userRepository, "findAll").mockResolvedValue(USERS_MOCK);
 
     const users = await sut.execute();
 
-    expect(users).toEqual(USERS_MOCK);
-    expect(userRepository.findAll).toHaveBeenCalledTimes(1);
-    expect(users.length).toBe(2);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findAll,
+      calledWith: {}
+    });
+    testUtils.arrayExpectations({
+      result: users,
+      expected: USERS_MOCK,
+      length: USERS_MOCK.length
+    });
+  });
+
+  it("should return an empty array if no users are found", async () => {
+    jest.spyOn(userRepository, "findAll").mockResolvedValue([]);
+
+    const users = await sut.execute();
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findAll,
+      calledWith: {}
+    });
+    testUtils.arrayExpectations({
+      result: users,
+      expected: [],
+      length: 0
+    });
   });
 });

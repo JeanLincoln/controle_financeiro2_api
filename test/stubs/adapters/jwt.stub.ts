@@ -6,6 +6,6 @@ export class JwtAdapterStub extends JwtAdapter {
   }
 
   async verifyToken(): Promise<Record<string, string> | void> {
-    return {};
+    return;
   }
 }

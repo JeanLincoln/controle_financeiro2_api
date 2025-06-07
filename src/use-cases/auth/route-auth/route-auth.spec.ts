@@ -1,15 +1,15 @@
 import { JwtAdapter } from "@domain/adapters/jwt.adapter";
-import {
-  RouteAuthUseCase,
-  type AuthenticatedRequest
-} from "./route-auth.use-case";
+import { RouteAuthUseCase } from "./route-auth.use-case";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { JwtAdapterStub } from "@test/stubs/adapters/jwt.stub";
-import { User } from "@domain/entities/user.entity";
+import { USER_MOCK } from "@test/mocks/user.mock";
+import { REQUEST_MOCK } from "@test/mocks/auth.mock";
+import * as testUtils from "@test/utils/test-utils";
 
+import { INVALID_TOKEN_MOCK } from "@test/mocks/auth.mock";
 describe("RouteAuthUseCase", () => {
   let sut: RouteAuthUseCase;
   let jwtAdapter: JwtAdapter;
@@ -23,29 +23,6 @@ describe("RouteAuthUseCase", () => {
     sut = new RouteAuthUseCase(jwtAdapter, exceptionAdapter, userRepository);
   });
 
-  const REQUEST_MOCK = {
-    headers: {
-      cookie: "authentication=token"
-    }
-  } as AuthenticatedRequest;
-
-  const INVALID_TOKEN_MOCK = {
-    headers: {
-      cookie: undefined
-    }
-  } as AuthenticatedRequest;
-
-  const USER_MOCK: User = {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    password: "123456",
-    birthDate: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
-
   it("should return true if the user is authenticated", async () => {
     jest.spyOn(exceptionAdapter, "forbidden");
     jest.spyOn(exceptionAdapter, "unauthorized");
@@ -56,25 +33,67 @@ describe("RouteAuthUseCase", () => {
 
     const result = await sut.execute(REQUEST_MOCK);
 
-    expect(result).toBe(true);
-    expect(exceptionAdapter.forbidden).not.toHaveBeenCalled();
-    expect(jwtAdapter.verifyToken).toHaveBeenCalledTimes(1);
-    expect(userRepository.findById).toHaveBeenCalledWith(1);
+    testUtils.resultExpectations(result, true);
+    testUtils.notCalledExpectations([exceptionAdapter.forbidden]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: jwtAdapter.verifyToken,
+      calledWith: { token: "token" }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findById,
+      calledWith: { id: 1 }
+    });
   });
 
-  it("should return false and throw an error if the token is invalid", async () => {
+  it("should return false and throw an error if the token is not provided", async () => {
+    jest.spyOn(userRepository, "findById");
+    jest.spyOn(jwtAdapter, "verifyToken");
     jest.spyOn(exceptionAdapter, "forbidden");
     jest.spyOn(exceptionAdapter, "unauthorized");
-    jest.spyOn(jwtAdapter, "verifyToken").mockResolvedValue(undefined);
-    jest.spyOn(userRepository, "findById");
 
     const result = await sut.execute(INVALID_TOKEN_MOCK);
 
-    expect(result).toBe(false);
-    expect(exceptionAdapter.unauthorized).toHaveBeenCalledTimes(1);
-    expect(exceptionAdapter.forbidden).not.toHaveBeenCalled();
-    expect(jwtAdapter.verifyToken).not.toHaveBeenCalled();
-    expect(userRepository.findById).not.toHaveBeenCalled();
+    testUtils.resultExpectations(result, false);
+
+    testUtils.notCalledExpectations([
+      exceptionAdapter.forbidden,
+      userRepository.findById,
+      jwtAdapter.verifyToken
+    ]);
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionAdapter.unauthorized,
+      calledWith: {
+        payload: { message: "Unauthorized" }
+      }
+    });
+  });
+
+  it("should return false and throw an error if the token is invalid", async () => {
+    jest.spyOn(userRepository, "findById");
+    jest.spyOn(jwtAdapter, "verifyToken").mockResolvedValue(undefined);
+    jest.spyOn(exceptionAdapter, "forbidden");
+    jest.spyOn(exceptionAdapter, "unauthorized");
+
+    const result = await sut.execute(REQUEST_MOCK);
+
+    testUtils.resultExpectations(result, false);
+
+    testUtils.notCalledExpectations([
+      exceptionAdapter.unauthorized,
+      userRepository.findById
+    ]);
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionAdapter.forbidden,
+      calledWith: {
+        payload: { message: "Invalid token" }
+      }
+    });
   });
 
   it("should throw an error if the user is not found", async () => {
@@ -87,10 +106,24 @@ describe("RouteAuthUseCase", () => {
 
     const result = await sut.execute(REQUEST_MOCK);
 
-    expect(result).toBe(false);
-    expect(exceptionAdapter.unauthorized).not.toHaveBeenCalled();
-    expect(exceptionAdapter.forbidden).toHaveBeenCalledTimes(1);
-    expect(jwtAdapter.verifyToken).toHaveBeenCalledTimes(1);
-    expect(userRepository.findById).toHaveBeenCalledWith(1);
+    testUtils.resultExpectations(result, false);
+    testUtils.notCalledExpectations([exceptionAdapter.unauthorized]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionAdapter.forbidden,
+      calledWith: {
+        payload: { message: "Invalid token" }
+      }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: jwtAdapter.verifyToken,
+      calledWith: { token: "token" }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findById,
+      calledWith: { id: 1 }
+    });
   });
 });

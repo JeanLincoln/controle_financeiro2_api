@@ -1,4 +1,13 @@
 import { User } from "@domain/entities/user.entity";
+import type { CreateOrUpdateAllUserProps } from "@domain/repositories/user.repository";
+
+export const CREATE_OR_UPDATE_USER_PARAMS_MOCK: CreateOrUpdateAllUserProps = {
+  firstName: "John",
+  lastName: "Doe",
+  email: "john.doe@example.com",
+  password: "123456",
+  birthDate: new Date()
+};
 
 export const USERS_MOCK: User[] = Array.from({ length: 10 }, (_, index) => ({
   id: index + 1,

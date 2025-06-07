@@ -1,12 +1,15 @@
 import { UserRepository } from "@domain/repositories/user.repository";
-import { CreateOrUpdateAllUserProps } from "@domain/repositories/user.repository";
-import { User } from "@domain/entities/user.entity";
 import { CreateUserUseCase } from "./create.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 import { CryptographyAdapterStub } from "@test/stubs/adapters/cryptography.stub";
+import {
+  CREATE_OR_UPDATE_USER_PARAMS_MOCK,
+  USER_MOCK
+} from "@test/mocks/user.mock";
+import * as testUtils from "@test/utils/test-utils";
 
 describe("CreateUserUseCase", () => {
   let sut: CreateUserUseCase;
@@ -25,47 +28,36 @@ describe("CreateUserUseCase", () => {
     );
   });
 
-  const USER_MOCK: User = {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    password: "123456",
-    birthDate: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
-
-  const REQUEST_PARAMS: CreateOrUpdateAllUserProps = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    password: "123456",
-    birthDate: new Date()
-  };
-
   it("should be able to create a new user", async () => {
     jest.spyOn(userRepository, "findByEmail").mockResolvedValue(null);
     jest.spyOn(userRepository, "create");
     jest.spyOn(exceptionsAdapter, "badRequest");
     jest.spyOn(cryptographyAdapter, "hash").mockResolvedValue("hashedPassword");
 
-    await sut.execute(REQUEST_PARAMS);
+    const result = await sut.execute(CREATE_OR_UPDATE_USER_PARAMS_MOCK);
 
-    expect(exceptionsAdapter.badRequest).not.toHaveBeenCalled();
-    expect(userRepository.findByEmail).toHaveBeenCalledTimes(1);
-    expect(userRepository.findByEmail).toHaveBeenCalledWith(
-      REQUEST_PARAMS.email
-    );
-    expect(userRepository.create).toHaveBeenCalledTimes(1);
-    expect(userRepository.create).toHaveBeenCalledWith({
-      ...REQUEST_PARAMS,
-      password: "hashedPassword"
+    testUtils.resultExpectations(result, undefined);
+    testUtils.notCalledExpectations([exceptionsAdapter.badRequest]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findByEmail,
+      calledWith: { email: CREATE_OR_UPDATE_USER_PARAMS_MOCK.email }
     });
-    expect(cryptographyAdapter.hash).toHaveBeenCalledTimes(1);
-    expect(cryptographyAdapter.hash).toHaveBeenCalledWith(
-      REQUEST_PARAMS.password
-    );
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.create,
+      calledWith: {
+        payload: {
+          ...CREATE_OR_UPDATE_USER_PARAMS_MOCK,
+          password: "hashedPassword"
+        }
+      }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: cryptographyAdapter.hash,
+      calledWith: { password: CREATE_OR_UPDATE_USER_PARAMS_MOCK.password }
+    });
   });
 
   it("should throw an error if the user already exists", async () => {
@@ -74,16 +66,22 @@ describe("CreateUserUseCase", () => {
     jest.spyOn(userRepository, "create");
     jest.spyOn(cryptographyAdapter, "hash");
 
-    await sut.execute(REQUEST_PARAMS);
+    const result = await sut.execute(CREATE_OR_UPDATE_USER_PARAMS_MOCK);
 
-    expect(exceptionsAdapter.badRequest).toHaveBeenCalledWith({
-      message: "User already exists"
+    testUtils.resultExpectations(result, undefined);
+    testUtils.notCalledExpectations([
+      userRepository.create,
+      cryptographyAdapter.hash
+    ]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findByEmail,
+      calledWith: { email: CREATE_OR_UPDATE_USER_PARAMS_MOCK.email }
     });
-    expect(userRepository.findByEmail).toHaveBeenCalledTimes(1);
-    expect(userRepository.findByEmail).toHaveBeenCalledWith(
-      REQUEST_PARAMS.email
-    );
-    expect(userRepository.create).not.toHaveBeenCalled();
-    expect(cryptographyAdapter.hash).not.toHaveBeenCalled();
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.badRequest,
+      calledWith: { payload: { message: "User already exists" } }
+    });
   });
 });

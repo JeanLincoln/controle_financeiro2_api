@@ -1,6 +1,10 @@
-interface BasicExpectationsProps<mockFuncArgs, mockFuncReturn, calledWithArgs> {
+interface BasicExpectationsProps<
+  mockFuncArgs,
+  mockFuncReturn,
+  calledWithArgs extends object
+> {
   mockFunction: (
-    args: mockFuncArgs
+    ...args: mockFuncArgs[]
   ) => Promise<mockFuncReturn> | mockFuncReturn;
   calledWith: calledWithArgs;
   times: number;
@@ -14,17 +18,19 @@ interface ResultExpectationsProps<T> {
 export const timesCalledExpectations = <
   mockFuncArgs,
   mockFuncReturn,
-  calledWithArgs
+  calledWithArgs extends object
 >({
   mockFunction,
-  calledWith,
-  times
+  times,
+  calledWith
 }: BasicExpectationsProps<mockFuncArgs, mockFuncReturn, calledWithArgs>) => {
   if (times < 0) {
     throw new Error("Times must be greater than 0");
   }
 
-  expect(mockFunction).toHaveBeenCalledWith(calledWith);
+  const args = Object.values(calledWith);
+
+  expect(mockFunction).toHaveBeenCalledWith(...args);
   expect(mockFunction).toHaveBeenCalledTimes(times);
 };
 

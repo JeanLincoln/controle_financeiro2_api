@@ -52,13 +52,13 @@ describe("UpdateCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: categoryRepository.findById,
-      calledWith: EXPENSE_CATEGORY_MOCK.id,
+      calledWith: { id: EXPENSE_CATEGORY_MOCK.id },
       times: 1
     });
 
     testUtils.timesCalledExpectations({
       mockFunction: userRepository.findById,
-      calledWith: USER_MOCK.id,
+      calledWith: { id: USER_MOCK.id },
       times: 1
     });
   });
@@ -81,19 +81,21 @@ describe("UpdateCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: userRepository.findById,
-      calledWith: USER_MOCK.id,
+      calledWith: { id: USER_MOCK.id },
       times: 1
     });
 
     testUtils.timesCalledExpectations({
       mockFunction: categoryRepository.findById,
-      calledWith: EXPENSE_CATEGORY_MOCK.id,
+      calledWith: { id: EXPENSE_CATEGORY_MOCK.id },
       times: 1
     });
 
     testUtils.timesCalledExpectations({
       mockFunction: exceptionsAdapter.notFound,
-      calledWith: { message: "Category not found" },
+      calledWith: {
+        payload: { message: "Category not found" }
+      },
       times: 1
     });
   });
@@ -118,19 +120,21 @@ describe("UpdateCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: userRepository.findById,
-      calledWith: USER_MOCK.id,
+      calledWith: { id: USER_MOCK.id },
       times: 1
     });
 
     testUtils.timesCalledExpectations({
       mockFunction: categoryRepository.findById,
-      calledWith: INCOME_CATEGORY_MOCK.id,
+      calledWith: { id: INCOME_CATEGORY_MOCK.id },
       times: 1
     });
 
     testUtils.timesCalledExpectations({
       mockFunction: exceptionsAdapter.forbidden,
-      calledWith: { message: "You are not allowed to access this category" },
+      calledWith: {
+        payload: { message: "You are not allowed to access this category" }
+      },
       times: 1
     });
   });

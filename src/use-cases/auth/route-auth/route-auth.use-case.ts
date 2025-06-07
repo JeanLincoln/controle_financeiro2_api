@@ -25,7 +25,7 @@ export class RouteAuthUseCase {
     const authorization = request.headers.cookie;
 
     if (!authorization) {
-      this.exceptionAdapter.unauthorized();
+      this.exceptionAdapter.unauthorized({ message: "Unauthorized" });
       return false;
     }
 
