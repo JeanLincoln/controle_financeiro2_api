@@ -5,8 +5,8 @@ import { FindAllCategoryUseCase } from "./find-all.use-case";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
-import { CategoryType, type Category } from "@domain/entities/category.entity";
-import { User } from "@domain/entities/user.entity";
+import { CATEGORIES_MOCK } from "@test/mocks/category.mock";
+import { USER_MOCK } from "@test/mocks/user.mock";
 
 describe("FindAllCategoryUseCase", () => {
   let sut: FindAllCategoryUseCase;
@@ -24,32 +24,6 @@ describe("FindAllCategoryUseCase", () => {
       userRepository
     );
   });
-
-  const USER_MOCK: User = {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    password: "123456",
-    birthDate: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date()
-  };
-
-  const CATEGORIES_MOCK: Category[] = Array.from(
-    { length: 10 },
-    (_, index) => ({
-      id: index + 1,
-      name: `Category ${index + 1}`,
-      description: `Category ${index + 1} description`,
-      type: CategoryType.EXPENSE,
-      color: "#FF0000",
-      icon: "test-icon",
-      userId: 1,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    })
-  );
 
   it("should be able to find all categories by user id", async () => {
     jest
