@@ -21,4 +21,8 @@ export class CategoryRepositoryStub implements CategoryRepository {
   async delete(): Promise<void> {
     return Promise.resolve();
   }
+
+  async deleteByUserId(): Promise<void> {
+    return Promise.resolve();
+  }
 }

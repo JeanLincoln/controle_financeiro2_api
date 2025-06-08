@@ -1,6 +1,6 @@
-import type { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import type { CategoryRepository } from "@domain/repositories/category.repository";
-import type { UserRepository } from "@domain/repositories/user.repository";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { CategoryRepository } from "@domain/repositories/category.repository";
+import { UserRepository } from "@domain/repositories/user.repository";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";

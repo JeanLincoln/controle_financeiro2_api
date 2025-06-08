@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Put,
   Req,
@@ -20,6 +19,7 @@ import { FindByIdCategoryUseCase } from "@use-cases/category/find-by-id/find-by-
 import { UpdateCategoryDto } from "./dto/update.dto";
 import { UpdateCategoryUseCase } from "@use-cases/category/update/update.use-case";
 import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-case";
+import { IdDto } from "@infra/commons/global-dtos/id.dto";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -50,17 +50,14 @@ export class CategoryController {
   }
 
   @Get(":id")
-  async findById(
-    @Req() req: AuthenticatedRequest,
-    @Param("id", ParseIntPipe) id: number
-  ) {
+  async findById(@Req() req: AuthenticatedRequest, @Param() { id }: IdDto) {
     return this.findByIdCategoryUseCase.execute(req.user.id, id);
   }
 
   @Put(":id")
   async update(
     @Req() req: AuthenticatedRequest,
-    @Param("id", ParseIntPipe) id: number,
+    @Param() { id }: IdDto,
     @Body() body: UpdateCategoryDto
   ) {
     return this.updateCategoryUseCase.execute(req.user.id, id, {
@@ -70,10 +67,7 @@ export class CategoryController {
   }
 
   @Delete(":id")
-  async delete(
-    @Req() req: AuthenticatedRequest,
-    @Param("id", ParseIntPipe) id: number
-  ) {
+  async delete(@Req() req: AuthenticatedRequest, @Param() { id }: IdDto) {
     return this.deleteCategoryUseCase.execute(req.user.id, id);
   }
 }

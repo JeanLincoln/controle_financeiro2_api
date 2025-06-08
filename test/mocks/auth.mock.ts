@@ -1,4 +1,4 @@
-import type { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
+import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 
 export const LOGIN_PARAMS = {
   email: "john.doe@example.com",

@@ -14,4 +14,5 @@ export abstract class CategoryRepository {
     category: CreateOrUpdateAllCategoryProps
   ): Promise<void>;
   abstract delete(id: number): Promise<void>;
+  abstract deleteByUserId(userId: number): Promise<void>;
 }

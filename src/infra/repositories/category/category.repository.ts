@@ -35,4 +35,8 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
   async delete(id: number): Promise<void> {
     await this.categoryRepository.delete(id);
   }
+
+  async deleteByUserId(userId: number): Promise<void> {
+    await this.categoryRepository.delete({ userId });
+  }
 }

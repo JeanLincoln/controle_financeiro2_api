@@ -1,4 +1,5 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { CategoryRepository } from "@domain/repositories/category.repository";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
 
@@ -6,10 +7,17 @@ import { Injectable } from "@nestjs/common";
 export class DeleteUserUseCase {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly exceptionsAdapter: ExceptionsAdapter
+    private readonly exceptionsAdapter: ExceptionsAdapter,
+    private readonly categoryRepository: CategoryRepository
   ) {}
 
-  async execute(id: number): Promise<void> {
+  async execute(userId: number, id: number): Promise<void> {
+    if (userId !== id) {
+      return this.exceptionsAdapter.forbidden({
+        message: "You are not allowed to delete this user"
+      });
+    }
+
     const user = await this.userRepository.findById(id);
 
     if (!user) {
@@ -18,6 +26,7 @@ export class DeleteUserUseCase {
       });
     }
 
+    await this.categoryRepository.deleteByUserId(id);
     await this.userRepository.delete(id);
   }
 }

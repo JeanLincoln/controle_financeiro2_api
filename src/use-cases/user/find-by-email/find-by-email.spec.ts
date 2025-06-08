@@ -2,7 +2,7 @@ import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { FindByEmailUserUseCase } from "./find-by-email.use-case";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { USER_MOCK } from "@test/mocks/user.mock";
-import type { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import * as testUtils from "@test/utils/test-utils";
 
