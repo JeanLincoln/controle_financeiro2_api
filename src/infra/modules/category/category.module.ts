@@ -8,6 +8,7 @@ import { FindAllCategoryUseCase } from "@use-cases/category/find-all/find-all.us
 import { FindByIdCategoryUseCase } from "@use-cases/category/find-by-id/find-by-id.use-case";
 import { UpdateCategoryUseCase } from "@use-cases/category/update/update.use-case";
 import { UserModule } from "../user/user.module";
+import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-case";
 
 @Module({
   imports: [DatabaseModule, AuthModule, ExceptionsModule, UserModule],
@@ -16,13 +17,15 @@ import { UserModule } from "../user/user.module";
     CreateCategoryUseCase,
     FindAllCategoryUseCase,
     FindByIdCategoryUseCase,
-    UpdateCategoryUseCase
+    UpdateCategoryUseCase,
+    DeleteCategoryUseCase
   ],
   exports: [
     CreateCategoryUseCase,
     FindAllCategoryUseCase,
     FindByIdCategoryUseCase,
-    UpdateCategoryUseCase
+    UpdateCategoryUseCase,
+    DeleteCategoryUseCase
   ]
 })
 export class CategoryModule {}

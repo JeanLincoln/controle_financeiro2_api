@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -18,6 +19,7 @@ import { FindAllCategoryUseCase } from "@use-cases/category/find-all/find-all.us
 import { FindByIdCategoryUseCase } from "@use-cases/category/find-by-id/find-by-id.use-case";
 import { UpdateCategoryDto } from "./dto/update.dto";
 import { UpdateCategoryUseCase } from "@use-cases/category/update/update.use-case";
+import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -27,7 +29,8 @@ export class CategoryController {
     private readonly createCategoryUseCase: CreateCategoryUseCase,
     private readonly findAllCategoryUseCase: FindAllCategoryUseCase,
     private readonly findByIdCategoryUseCase: FindByIdCategoryUseCase,
-    private readonly updateCategoryUseCase: UpdateCategoryUseCase
+    private readonly updateCategoryUseCase: UpdateCategoryUseCase,
+    private readonly deleteCategoryUseCase: DeleteCategoryUseCase
   ) {}
 
   @Post()
@@ -64,5 +67,13 @@ export class CategoryController {
       ...body,
       userId: req.user.id
     });
+  }
+
+  @Delete(":id")
+  async delete(
+    @Req() req: AuthenticatedRequest,
+    @Param("id", ParseIntPipe) id: number
+  ) {
+    return this.deleteCategoryUseCase.execute(req.user.id, id);
   }
 }
