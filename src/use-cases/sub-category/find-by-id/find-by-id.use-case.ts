@@ -1,8 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
+import {
+  SubCategoryRepository,
+  type SubCategoryWithoutRelations
+} from "@domain/repositories/sub-category.repository";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { CategoryRepository } from "@domain/repositories/category.repository";
-import { SubCategory } from "@domain/entities/sub-category.entity";
 
 @Injectable()
 export class FindSubCategoryByIdUseCase {
@@ -15,7 +17,7 @@ export class FindSubCategoryByIdUseCase {
   async execute(
     userId: number,
     subCategoryId: number
-  ): Promise<SubCategory | void> {
+  ): Promise<SubCategoryWithoutRelations | void> {
     const subCategory =
       await this.subCategoryRepository.findById(subCategoryId);
 

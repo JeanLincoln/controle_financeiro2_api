@@ -3,8 +3,11 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn
 } from "typeorm";
+import { Category } from "./category.entity";
 
 @Entity("sub_categories")
 export class SubCategory {
@@ -60,4 +63,8 @@ export class SubCategory {
     default: null
   })
   updatedAt: Date;
+
+  @ManyToOne(() => Category)
+  @JoinColumn({ name: "category_id" })
+  category: Category;
 }

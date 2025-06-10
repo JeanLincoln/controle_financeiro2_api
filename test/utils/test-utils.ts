@@ -51,7 +51,7 @@ export const arrayExpectations = <T>({
   result,
   expected,
   length
-}: ResultExpectationsProps<T[]> & { length: number }) => {
+}: ResultExpectationsProps<T[] | void> & { length: number }) => {
   expect(result).toEqual(expected);
   expect(result).toHaveLength(length);
 };

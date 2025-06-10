@@ -17,11 +17,13 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
   }
 
   async findAllByUserId(userId: number): Promise<SubCategory[]> {
-    return await this.subCategoryRepository
-      .createQueryBuilder("subCategory")
-      .innerJoin("subCategory.category", "category")
-      .where("category.userId = :userId", { userId })
-      .getMany();
+    return await this.subCategoryRepository.find({
+      where: {
+        category: {
+          userId
+        }
+      }
+    });
   }
 
   async findById(id: number): Promise<SubCategory | null> {
