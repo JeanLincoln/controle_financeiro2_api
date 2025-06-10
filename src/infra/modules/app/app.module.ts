@@ -8,6 +8,7 @@ import { CryptographyModule } from "../cryptography/cryptography.module";
 import { AuthModule } from "../auth/auth.module";
 import { JwtModule } from "@nestjs/jwt";
 import { CategoryModule } from "../category/category.module";
+import { SubCategoryModule } from "../sub-category/sub-category.module";
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { CategoryModule } from "../category/category.module";
     JwtModule,
     AuthModule,
     UserModule,
-    CategoryModule
+    CategoryModule,
+    SubCategoryModule
   ]
 })
 export class AppModule {}

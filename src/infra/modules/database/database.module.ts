@@ -6,9 +6,12 @@ import { User } from "@domain/entities/user.entity";
 import { TypeOrmCategoryRepository } from "@infra/repositories/category/category.repository";
 import { CategoryRepository } from "@domain/repositories/category.repository";
 import { Category } from "@domain/entities/category.entity";
+import { SubCategory } from "@domain/entities/sub-category.entity";
+import { TypeOrmSubCategoryRepository } from "@infra/repositories/sub-category/sub-category.repository";
+import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Category])],
+  imports: [TypeOrmModule.forFeature([User, Category, SubCategory])],
   providers: [
     {
       useClass: TypeOrmUserRepository,
@@ -17,8 +20,12 @@ import { Category } from "@domain/entities/category.entity";
     {
       useClass: TypeOrmCategoryRepository,
       provide: CategoryRepository
+    },
+    {
+      useClass: TypeOrmSubCategoryRepository,
+      provide: SubCategoryRepository
     }
   ],
-  exports: [UserRepository, CategoryRepository]
+  exports: [UserRepository, CategoryRepository, SubCategoryRepository]
 })
 export class DatabaseModule {}

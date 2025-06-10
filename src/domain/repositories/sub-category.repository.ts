@@ -6,7 +6,7 @@ export type CreateOrUpdateAllSubCategoryProps = Omit<
 >;
 
 export abstract class SubCategoryRepository {
-  abstract findAll(): Promise<SubCategory[]>;
+  abstract findAllByUserId(userId: number): Promise<SubCategory[]>;
   abstract findById(id: number): Promise<SubCategory | null>;
   abstract create(
     subCategory: CreateOrUpdateAllSubCategoryProps
