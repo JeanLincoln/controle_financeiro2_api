@@ -8,22 +8,31 @@ import {
   USER_MOCK
 } from "@test/mocks/user.mock";
 import * as testUtils from "@test/utils/test-utils";
+import { CryptographyAdapterStub } from "@test/stubs/adapters/cryptography.stub";
+import type { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 
 describe("UpdateUserUseCase", () => {
   let sut: UpdateUserUseCase;
   let userRepository: UserRepository;
   let exceptionsAdapter: ExceptionsAdapter;
+  let cryptographyAdapter: CryptographyAdapter;
 
   beforeEach(async () => {
     userRepository = new UserRepositoryStub();
     exceptionsAdapter = new ExceptionsAdapterStub();
-    sut = new UpdateUserUseCase(userRepository, exceptionsAdapter);
+    cryptographyAdapter = new CryptographyAdapterStub();
+    sut = new UpdateUserUseCase(
+      userRepository,
+      exceptionsAdapter,
+      cryptographyAdapter
+    );
 
     jest.spyOn(exceptionsAdapter, "notFound");
   });
 
   it("should be able to update a user", async () => {
     jest.spyOn(userRepository, "findById").mockResolvedValue(USER_MOCK);
+    jest.spyOn(cryptographyAdapter, "hash").mockResolvedValue("hashedPassword");
     jest.spyOn(userRepository, "update");
 
     const result = await sut.execute(1, CREATE_OR_UPDATE_USER_PARAMS_MOCK);
@@ -37,10 +46,18 @@ describe("UpdateUserUseCase", () => {
     });
     testUtils.timesCalledExpectations({
       times: 1,
+      mockFunction: cryptographyAdapter.hash,
+      calledWith: { password: CREATE_OR_UPDATE_USER_PARAMS_MOCK.password }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
       mockFunction: userRepository.update,
       calledWith: {
         id: 1,
-        user: CREATE_OR_UPDATE_USER_PARAMS_MOCK
+        user: {
+          ...CREATE_OR_UPDATE_USER_PARAMS_MOCK,
+          password: "hashedPassword"
+        }
       }
     });
   });
@@ -49,11 +66,15 @@ describe("UpdateUserUseCase", () => {
     jest.spyOn(userRepository, "findById").mockResolvedValue(null);
     jest.spyOn(userRepository, "update");
     jest.spyOn(exceptionsAdapter, "notFound");
+    jest.spyOn(cryptographyAdapter, "hash");
 
     const result = await sut.execute(1, CREATE_OR_UPDATE_USER_PARAMS_MOCK);
 
     testUtils.resultExpectations(result, undefined);
-    testUtils.notCalledExpectations([userRepository.update]);
+    testUtils.notCalledExpectations([
+      userRepository.update,
+      cryptographyAdapter.hash
+    ]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: userRepository.findById,

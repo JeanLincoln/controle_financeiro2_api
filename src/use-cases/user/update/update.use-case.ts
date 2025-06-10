@@ -1,3 +1,4 @@
+import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import {
   CreateOrUpdateAllUserProps,
@@ -9,7 +10,8 @@ import { Injectable } from "@nestjs/common";
 export class UpdateUserUseCase {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly exceptionsAdapter: ExceptionsAdapter
+    private readonly exceptionsAdapter: ExceptionsAdapter,
+    private readonly cryptographyAdapter: CryptographyAdapter
   ) {}
 
   async execute(id: number, user: CreateOrUpdateAllUserProps): Promise<void> {
@@ -21,6 +23,8 @@ export class UpdateUserUseCase {
       });
     }
 
-    await this.userRepository.update(id, user);
+    const hashedPassword = await this.cryptographyAdapter.hash(user.password);
+
+    await this.userRepository.update(id, { ...user, password: hashedPassword });
   }
 }
