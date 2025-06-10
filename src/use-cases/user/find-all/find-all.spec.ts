@@ -2,8 +2,6 @@ import { FindAllUserUseCase } from "./find-all.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { USERS_MOCK } from "@test/mocks/user.mock";
-import * as testUtils from "@test/utils/test-utils";
-
 describe("FindAllUserUseCase", () => {
   let sut: FindAllUserUseCase;
   let userRepository: UserRepository;

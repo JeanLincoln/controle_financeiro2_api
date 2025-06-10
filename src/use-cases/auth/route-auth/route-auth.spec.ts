@@ -7,8 +7,6 @@ import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { JwtAdapterStub } from "@test/stubs/adapters/jwt.stub";
 import { USER_MOCK } from "@test/mocks/user.mock";
 import { REQUEST_MOCK } from "@test/mocks/auth.mock";
-import * as testUtils from "@test/utils/test-utils";
-
 import { INVALID_TOKEN_MOCK } from "@test/mocks/auth.mock";
 describe("RouteAuthUseCase", () => {
   let sut: RouteAuthUseCase;

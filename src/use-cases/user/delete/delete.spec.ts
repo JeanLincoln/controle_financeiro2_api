@@ -4,7 +4,6 @@ import { UserRepository } from "@domain/repositories/user.repository";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { USER_MOCK, USER_MOCK_2 } from "@test/mocks/user.mock";
-import * as testUtils from "@test/utils/test-utils";
 import { CategoryRepository } from "@domain/repositories/category.repository";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 

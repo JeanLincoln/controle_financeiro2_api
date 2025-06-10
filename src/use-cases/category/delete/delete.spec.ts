@@ -10,8 +10,6 @@ import {
   INCOME_CATEGORY_MOCK
 } from "@test/mocks/category.mock";
 import { USER_MOCK } from "@test/mocks/user.mock";
-import * as testUtils from "@test/utils/test-utils";
-
 describe("DeleteCategoryUseCase", () => {
   let sut: DeleteCategoryUseCase;
   let categoryRepository: CategoryRepository;

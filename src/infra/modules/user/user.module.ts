@@ -21,14 +21,6 @@ import { AuthModule } from "../auth/auth.module";
     UpdateUserUseCase,
     DeleteUserUseCase,
     FindAllUserUseCase
-  ],
-  exports: [
-    CreateUserUseCase,
-    FindByEmailUserUseCase,
-    FindByIdUserUseCase,
-    UpdateUserUseCase,
-    DeleteUserUseCase,
-    FindAllUserUseCase
   ]
 })
 export class UserModule {}

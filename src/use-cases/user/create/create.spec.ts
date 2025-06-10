@@ -9,8 +9,6 @@ import {
   CREATE_OR_UPDATE_USER_PARAMS_MOCK,
   USER_MOCK
 } from "@test/mocks/user.mock";
-import * as testUtils from "@test/utils/test-utils";
-
 describe("CreateUserUseCase", () => {
   let sut: CreateUserUseCase;
   let userRepository: UserRepository;

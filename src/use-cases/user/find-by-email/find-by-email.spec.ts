@@ -4,8 +4,6 @@ import { UserRepository } from "@domain/repositories/user.repository";
 import { USER_MOCK } from "@test/mocks/user.mock";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
-import * as testUtils from "@test/utils/test-utils";
-
 describe("FindByEmailUserUseCase", () => {
   let sut: FindByEmailUserUseCase;
   let userRepository: UserRepository;

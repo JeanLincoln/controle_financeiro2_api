@@ -7,8 +7,6 @@ import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import { CATEGORIES_MOCK } from "@test/mocks/category.mock";
 import { USER_MOCK } from "@test/mocks/user.mock";
-import * as testUtils from "@test/utils/test-utils";
-
 describe("FindAllCategoryUseCase", () => {
   let sut: FindAllCategoryUseCase;
   let categoryRepository: CategoryRepository;

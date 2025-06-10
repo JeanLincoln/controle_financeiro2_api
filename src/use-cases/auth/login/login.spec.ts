@@ -8,7 +8,6 @@ import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 import { CryptographyAdapterStub } from "@test/stubs/adapters/cryptography.stub";
 import { USER_MOCK } from "@test/mocks/user.mock";
-import * as testUtils from "@test/utils/test-utils";
 import { LOGIN_PARAMS } from "@test/mocks/auth.mock";
 
 describe("LoginUseCase", () => {

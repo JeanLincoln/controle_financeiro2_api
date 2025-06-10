@@ -7,9 +7,8 @@ import {
   CREATE_OR_UPDATE_USER_PARAMS_MOCK,
   USER_MOCK
 } from "@test/mocks/user.mock";
-import * as testUtils from "@test/utils/test-utils";
 import { CryptographyAdapterStub } from "@test/stubs/adapters/cryptography.stub";
-import type { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
+import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 
 describe("UpdateUserUseCase", () => {
   let sut: UpdateUserUseCase;

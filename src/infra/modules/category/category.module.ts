@@ -19,13 +19,6 @@ import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-cas
     FindByIdCategoryUseCase,
     UpdateCategoryUseCase,
     DeleteCategoryUseCase
-  ],
-  exports: [
-    CreateCategoryUseCase,
-    FindAllCategoryUseCase,
-    FindByIdCategoryUseCase,
-    UpdateCategoryUseCase,
-    DeleteCategoryUseCase
   ]
 })
 export class CategoryModule {}

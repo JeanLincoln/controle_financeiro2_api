@@ -5,7 +5,6 @@ import { CategoryRepository } from "@domain/repositories/category.repository";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
-import * as testUtils from "@test/utils/test-utils";
 import { USER_MOCK } from "@test/mocks/user.mock";
 import {
   EXPENSE_CATEGORY_MOCK,

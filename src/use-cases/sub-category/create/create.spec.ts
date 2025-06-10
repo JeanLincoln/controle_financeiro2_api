@@ -8,8 +8,6 @@ import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category
 import { CREATE_SUB_CATEGORY_MOCK } from "@test/mocks/sub-category.mock";
 import { EXPENSE_CATEGORY_MOCK } from "@test/mocks/category.mock";
 import { USER_MOCK, USER_MOCK_2 } from "@test/mocks/user.mock";
-import * as testUtils from "@test/utils/test-utils";
-
 describe("CreateSubCategoryUseCase", () => {
   let sut: CreateSubCategoryUseCase;
   let subCategoryRepository: SubCategoryRepository;
