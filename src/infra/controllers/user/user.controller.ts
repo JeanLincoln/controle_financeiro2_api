@@ -49,13 +49,16 @@ export class UserController {
     return this.findByIdUserUseCase.execute(id);
   }
 
-  @Put(":id")
-  async update(@Param() { id }: IdDto, @Body() updateUserDto: UpdateUserDto) {
-    return this.updateUserUseCase.execute(id, updateUserDto);
+  @Put()
+  async update(
+    @Req() req: AuthenticatedRequest,
+    @Body() updateUserDto: UpdateUserDto
+  ) {
+    return this.updateUserUseCase.execute(req.user.id, updateUserDto);
   }
 
-  @Delete(":id")
-  async delete(@Req() req: AuthenticatedRequest, @Param() { id }: IdDto) {
-    return this.deleteUserUseCase.execute(req.user.id, Number(id));
+  @Delete()
+  async delete(@Req() req: AuthenticatedRequest) {
+    return this.deleteUserUseCase.execute(req.user.id);
   }
 }

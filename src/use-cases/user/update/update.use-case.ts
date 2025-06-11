@@ -1,5 +1,4 @@
 import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
-import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import {
   CreateOrUpdateAllUserProps,
   UserRepository
@@ -10,21 +9,18 @@ import { Injectable } from "@nestjs/common";
 export class UpdateUserUseCase {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly exceptionsAdapter: ExceptionsAdapter,
     private readonly cryptographyAdapter: CryptographyAdapter
   ) {}
 
-  async execute(id: number, user: CreateOrUpdateAllUserProps): Promise<void> {
-    const userExists = await this.userRepository.findById(id);
-
-    if (!userExists) {
-      return this.exceptionsAdapter.notFound({
-        message: "User not found"
-      });
-    }
-
+  async execute(
+    userId: number,
+    user: CreateOrUpdateAllUserProps
+  ): Promise<void> {
     const hashedPassword = await this.cryptographyAdapter.hash(user.password);
 
-    await this.userRepository.update(id, { ...user, password: hashedPassword });
+    await this.userRepository.update(userId, {
+      ...user,
+      password: hashedPassword
+    });
   }
 }
