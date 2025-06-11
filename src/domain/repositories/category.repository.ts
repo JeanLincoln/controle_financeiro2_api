@@ -2,7 +2,7 @@ import { Category } from "@domain/entities/category.entity";
 
 export type CreateOrUpdateAllCategoryProps = Omit<
   Category,
-  "id" | "createdAt" | "updatedAt"
+  "id" | "createdAt" | "updatedAt" | "userId" | "subCategories" | "transactions"
 > & { userId: number };
 
 export abstract class CategoryRepository {

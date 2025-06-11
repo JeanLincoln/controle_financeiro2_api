@@ -2,12 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
 import { Origin } from "./origin.entity";
+import { User } from "./user.entity";
+import { Category } from "./category.entity";
+import { SubCategory } from "./sub-category.entity";
 
 @Entity("transactions")
 export class Transaction {
@@ -28,10 +32,6 @@ export class Transaction {
     length: 255
   })
   description: string;
-
-  @ManyToOne(() => Origin)
-  @JoinColumn({ name: "origin_id" })
-  origin: Origin;
 
   @Column({
     type: "decimal",
@@ -80,4 +80,34 @@ export class Transaction {
     default: null
   })
   updatedAt: Date;
+
+  @ManyToOne(() => User, (user) => user.id)
+  user: User;
+
+  @ManyToOne(() => Origin, (origin) => origin.id)
+  origin: Origin;
+
+  @ManyToMany(() => Category)
+  @JoinTable({
+    name: "transactions_categories",
+    joinColumn: {
+      name: "transaction_id",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "category_id",
+      referencedColumnName: "id"
+    }
+  })
+  categories: Category[];
+
+  @ManyToMany(() => SubCategory)
+  @JoinTable({
+    name: "transactions_sub_categories",
+    joinColumn: {
+      name: "transaction_id",
+      referencedColumnName: "id"
+    }
+  })
+  subCategories: SubCategory[];
 }

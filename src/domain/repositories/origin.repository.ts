@@ -6,7 +6,7 @@ export type CreateOrUpdateAllOriginProps = Omit<
 >;
 
 export abstract class OriginRepository {
-  abstract findAll(): Promise<Origin[]>;
+  abstract findAll(userId: number): Promise<Origin[]>;
   abstract findById(id: number): Promise<Origin | null>;
   abstract create(origin: CreateOrUpdateAllOriginProps): Promise<void>;
   abstract update(

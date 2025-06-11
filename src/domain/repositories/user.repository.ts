@@ -2,7 +2,7 @@ import { User } from "../entities/user.entity";
 
 export type CreateOrUpdateAllUserProps = Omit<
   User,
-  "id" | "createdAt" | "updatedAt"
+  "id" | "createdAt" | "updatedAt" | "transactions" | "origins" | "categories"
 >;
 
 export abstract class UserRepository {

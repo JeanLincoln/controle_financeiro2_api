@@ -3,8 +3,12 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  ManyToOne,
+  OneToMany
 } from "typeorm";
+import { User } from "./user.entity";
+import { Transaction } from "./transaction.entity";
 
 @Entity("origins")
 export class Origin {
@@ -40,13 +44,6 @@ export class Origin {
   })
   icon: string;
 
-  @Column({
-    type: "int",
-    unsigned: true,
-    name: "user_id"
-  })
-  userId: number;
-
   @CreateDateColumn({
     name: "created_at",
     type: "timestamp",
@@ -60,4 +57,10 @@ export class Origin {
     default: null
   })
   updatedAt: Date;
+
+  @ManyToOne(() => User, (user) => user.id)
+  userId: number;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.origin)
+  transactions: Transaction[];
 }

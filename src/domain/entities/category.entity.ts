@@ -3,8 +3,12 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  OneToMany,
+  ManyToOne
 } from "typeorm";
+import { SubCategory } from "./sub-category.entity";
+import { User } from "./user.entity";
 
 export enum CategoryType {
   INCOME = "INCOME",
@@ -51,13 +55,6 @@ export class Category {
   })
   icon: string;
 
-  @Column({
-    type: "int",
-    unsigned: true,
-    name: "user_id"
-  })
-  userId: number;
-
   @CreateDateColumn({
     name: "created_at",
     type: "timestamp",
@@ -71,4 +68,10 @@ export class Category {
     default: null
   })
   updatedAt: Date;
+
+  @ManyToOne(() => User, (user) => user.id)
+  userId: number;
+
+  @OneToMany(() => SubCategory, (subCategory) => subCategory.category)
+  subCategories: SubCategory[];
 }

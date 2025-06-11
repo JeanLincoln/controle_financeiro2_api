@@ -1,7 +1,7 @@
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import { CreateOrUpdateAllSubCategoryProps } from "@domain/repositories/sub-category.repository";
-
-type SubCategoryMockProps = Omit<SubCategory, "category">;
+import { EXPENSE_CATEGORY_MOCK } from "./category.mock";
+import { INCOME_CATEGORY_MOCK } from "./category.mock";
 
 export const CREATE_SUB_CATEGORY_MOCK: CreateOrUpdateAllSubCategoryProps = {
   name: "Sub Category",
@@ -11,7 +11,7 @@ export const CREATE_SUB_CATEGORY_MOCK: CreateOrUpdateAllSubCategoryProps = {
   icon: "🍎"
 };
 
-export const SUB_CATEGORIES_MOCK: SubCategoryMockProps[] = Array.from(
+export const SUB_CATEGORIES_MOCK: SubCategory[] = Array.from(
   { length: 10 },
   (_, index) => ({
     id: index + 1,
@@ -21,9 +21,12 @@ export const SUB_CATEGORIES_MOCK: SubCategoryMockProps[] = Array.from(
     createdAt: new Date(),
     updatedAt: new Date(),
     color: "#000000",
-    icon: "🍎"
+    icon: "🍎",
+    transactions: [],
+    category:
+      (index + 1) % 2 === 0 ? INCOME_CATEGORY_MOCK : EXPENSE_CATEGORY_MOCK
   })
 );
 
-export const SUB_CATEGORY_MOCK_1: SubCategoryMockProps = SUB_CATEGORIES_MOCK[0];
-export const SUB_CATEGORY_MOCK_2: SubCategoryMockProps = SUB_CATEGORIES_MOCK[1];
+export const SUB_CATEGORY_MOCK_1: SubCategory = SUB_CATEGORIES_MOCK[0];
+export const SUB_CATEGORY_MOCK_2: SubCategory = SUB_CATEGORIES_MOCK[1];

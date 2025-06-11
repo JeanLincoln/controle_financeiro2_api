@@ -1,4 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Transaction } from "./transaction.entity";
+import { Origin } from "./origin.entity";
+import { Category } from "./category.entity";
 
 @Entity("users")
 export class User {
@@ -49,4 +52,13 @@ export class User {
     default: null
   })
   updatedAt: Date;
+
+  @OneToMany(() => Transaction, (transaction) => transaction.userId)
+  transactions: Transaction[];
+
+  @OneToMany(() => Origin, (origin) => origin.userId)
+  origins: Origin[];
+
+  @OneToMany(() => Category, (category) => category.userId)
+  categories: Category[];
 }

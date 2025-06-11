@@ -5,9 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
+  ManyToMany,
+  JoinTable
 } from "typeorm";
 import { Category } from "./category.entity";
+import { Transaction } from "./transaction.entity";
 
 @Entity("sub_categories")
 export class SubCategory {
@@ -67,4 +70,14 @@ export class SubCategory {
   @ManyToOne(() => Category)
   @JoinColumn({ name: "category_id" })
   category: Category;
+
+  @ManyToMany(() => Transaction)
+  @JoinTable({
+    name: "sub_categories_transactions",
+    joinColumn: {
+      name: "sub_category_id",
+      referencedColumnName: "id"
+    }
+  })
+  transactions: Transaction[];
 }

@@ -1,8 +1,6 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import {
-  SubCategoryRepository,
-  type SubCategoryWithoutRelations
-} from "@domain/repositories/sub-category.repository";
+import type { SubCategory } from "@domain/entities/sub-category.entity";
+import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -12,7 +10,7 @@ export class FindAllSubCategoryUseCase {
     private readonly exceptionAdapter: ExceptionsAdapter
   ) {}
 
-  async execute(userId: number): Promise<SubCategoryWithoutRelations[] | void> {
+  async execute(userId: number): Promise<SubCategory[] | void> {
     const subCategories =
       await this.subCategoryRepository.findAllByUserId(userId);
 

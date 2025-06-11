@@ -17,7 +17,10 @@ export const USERS_MOCK: User[] = Array.from({ length: 10 }, (_, index) => ({
   password: "123456",
   birthDate: new Date(),
   createdAt: new Date(),
-  updatedAt: new Date()
+  updatedAt: new Date(),
+  transactions: [],
+  origins: [],
+  categories: []
 }));
 
 export const USER_MOCK: User = USERS_MOCK[0];

@@ -11,7 +11,9 @@ export const CATEGORIES_MOCK: Category[] = Array.from(
     icon: "test-icon",
     userId: (index + 1) % 2 === 0 ? 2 : 1,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    subCategories: [],
+    transactions: []
   })
 );
 
