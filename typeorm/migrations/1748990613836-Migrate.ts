@@ -143,9 +143,9 @@ export class Migrate1748990613836 implements MigrationInterface {
             length: "255"
           },
           {
-            name: "origin",
-            type: "varchar",
-            length: "255"
+            name: "origin_id",
+            type: "int",
+            unsigned: true
           },
           {
             name: "amount",

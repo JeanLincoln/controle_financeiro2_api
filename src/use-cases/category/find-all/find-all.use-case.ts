@@ -13,14 +13,6 @@ export class FindAllCategoryUseCase {
   ) {}
 
   async execute(userId: number): Promise<Category[] | void> {
-    const user = await this.userRepository.findById(userId);
-
-    if (!user) {
-      return this.exceptionsAdapter.notFound({
-        message: "User not found"
-      });
-    }
-
     const categories = await this.categoryRepository.findAll(userId);
 
     return categories;

@@ -13,14 +13,18 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
   ) {}
 
   async create(subCategory: CreateOrUpdateAllSubCategoryProps): Promise<void> {
-    await this.subCategoryRepository.save(subCategory);
+    const subCategoryInstance = this.subCategoryRepository.create({
+      ...subCategory,
+      category: { id: subCategory.categoryId }
+    });
+    await this.subCategoryRepository.save(subCategoryInstance);
   }
 
   async findAllByUserId(userId: number): Promise<SubCategory[]> {
     return await this.subCategoryRepository.find({
       where: {
         category: {
-          userId
+          user: { id: userId }
         }
       }
     });

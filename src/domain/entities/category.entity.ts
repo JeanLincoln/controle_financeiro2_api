@@ -5,7 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  ManyToOne
+  ManyToOne,
+  JoinColumn
 } from "typeorm";
 import { SubCategory } from "./sub-category.entity";
 import { User } from "./user.entity";
@@ -69,8 +70,9 @@ export class Category {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.id)
-  userId: number;
+  @ManyToOne(() => User, (user) => user.categories)
+  @JoinColumn({ name: "user_id" })
+  user: User;
 
   @OneToMany(() => SubCategory, (subCategory) => subCategory.category)
   subCategories: SubCategory[];

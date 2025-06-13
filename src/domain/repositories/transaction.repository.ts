@@ -1,9 +1,19 @@
 import { Transaction } from "@domain/entities/transaction.entity";
 
-export type CreateOrUpdateAllTransactionProps = Omit<
-  Transaction,
-  "id" | "createdAt" | "updatedAt"
->;
+export interface CreateOrUpdateAllTransactionProps
+  extends Omit<
+    Transaction,
+    | "id"
+    | "createdAt"
+    | "updatedAt"
+    | "user"
+    | "origin"
+    | "categories"
+    | "subCategories"
+  > {
+  userId: number;
+  originId: number;
+}
 
 export abstract class TransactionRepository {
   abstract findAll(): Promise<Transaction[]>;

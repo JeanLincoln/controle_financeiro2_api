@@ -28,7 +28,7 @@ export class DeleteCategoryUseCase {
       });
     }
 
-    if (category.userId !== user.id) {
+    if (category.user.id !== user.id) {
       return this.exceptionsAdapter.forbidden({
         message: "You are not allowed to delete this category"
       });

@@ -53,12 +53,12 @@ export class User {
   })
   updatedAt: Date;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.userId)
+  @OneToMany(() => Transaction, (transaction) => transaction.user)
   transactions: Transaction[];
 
-  @OneToMany(() => Origin, (origin) => origin.userId)
+  @OneToMany(() => Origin, (origin) => origin.user)
   origins: Origin[];
 
-  @OneToMany(() => Category, (category) => category.userId)
+  @OneToMany(() => Category, (category) => category.user)
   categories: Category[];
 }

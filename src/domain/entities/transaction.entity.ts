@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -81,10 +82,12 @@ export class Transaction {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.transactions)
+  @JoinColumn({ name: "user_id" })
   user: User;
 
-  @ManyToOne(() => Origin, (origin) => origin.id)
+  @ManyToOne(() => Origin, (origin) => origin.transactions)
+  @JoinColumn({ name: "origin_id" })
   origin: Origin;
 
   @ManyToMany(() => Category)

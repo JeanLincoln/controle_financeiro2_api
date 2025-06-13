@@ -35,7 +35,7 @@ export class UpdateCategoryUseCase {
       });
     }
 
-    if (categoryFound.userId !== userId) {
+    if (categoryFound.user.id !== userId) {
       return this.exceptionsAdapter.forbidden({
         message: "You are not allowed to access this category"
       });

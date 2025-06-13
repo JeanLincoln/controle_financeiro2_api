@@ -5,7 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany
+  OneToMany,
+  JoinColumn
 } from "typeorm";
 import { User } from "./user.entity";
 import { Transaction } from "./transaction.entity";
@@ -58,8 +59,9 @@ export class Origin {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.id)
-  userId: number;
+  @ManyToOne(() => User, (user) => user.origins)
+  @JoinColumn({ name: "user_id" })
+  user: User;
 
   @OneToMany(() => Transaction, (transaction) => transaction.origin)
   transactions: Transaction[];

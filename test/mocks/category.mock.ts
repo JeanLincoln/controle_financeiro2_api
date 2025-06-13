@@ -1,4 +1,15 @@
-import { Category, CategoryType } from "@domain/entities/category.entity";
+import { CategoryType, type Category } from "@domain/entities/category.entity";
+import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
+import type { CreateOrUpdateAllCategoryProps } from "@domain/repositories/category.repository";
+
+export const CREATE_OR_UPDATE_CATEGORY_MOCK: CreateOrUpdateAllCategoryProps = {
+  name: "Category",
+  description: "Category description",
+  type: CategoryType.INCOME,
+  color: "#FF0000",
+  icon: "test-icon",
+  userId: 1
+};
 
 export const CATEGORIES_MOCK: Category[] = Array.from(
   { length: 10 },
@@ -13,7 +24,8 @@ export const CATEGORIES_MOCK: Category[] = Array.from(
     createdAt: new Date(),
     updatedAt: new Date(),
     subCategories: [],
-    transactions: []
+    transactions: [],
+    user: (index + 1) % 2 === 0 ? USER_MOCK_2 : USER_MOCK
   })
 );
 

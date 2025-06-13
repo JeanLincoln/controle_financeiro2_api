@@ -1,7 +1,7 @@
-import { SubCategory } from "@domain/entities/sub-category.entity";
 import { CreateOrUpdateAllSubCategoryProps } from "@domain/repositories/sub-category.repository";
 import { EXPENSE_CATEGORY_MOCK } from "./category.mock";
 import { INCOME_CATEGORY_MOCK } from "./category.mock";
+import type { SubCategory } from "@domain/entities/sub-category.entity";
 
 export const CREATE_SUB_CATEGORY_MOCK: CreateOrUpdateAllSubCategoryProps = {
   name: "Sub Category",

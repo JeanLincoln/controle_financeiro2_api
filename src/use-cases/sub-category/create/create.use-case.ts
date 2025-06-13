@@ -27,7 +27,7 @@ export class CreateSubCategoryUseCase {
       return;
     }
 
-    const notCategoriesOwner = category.userId !== userId;
+    const notCategoriesOwner = category.user.id !== userId;
 
     if (notCategoriesOwner) {
       this.exceptionAdapter.forbidden({

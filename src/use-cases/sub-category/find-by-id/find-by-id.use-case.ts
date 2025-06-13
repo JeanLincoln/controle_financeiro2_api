@@ -35,7 +35,7 @@ export class FindSubCategoryByIdUseCase {
       });
     }
 
-    if (category.userId !== userId) {
+    if (category.user.id !== userId) {
       return this.exceptionAdapter.forbidden({
         message: "You are not allowed to access this sub-category"
       });

@@ -71,6 +71,16 @@ export class Migrate1748991345795 implements MigrationInterface {
       })
     );
 
+    await queryRunner.createForeignKey(
+      "transactions",
+      new TableForeignKey({
+        columnNames: ["origin_id"],
+        referencedColumnNames: ["id"],
+        referencedTableName: "origins",
+        onDelete: "CASCADE"
+      })
+    );
+
     await queryRunner.createIndex(
       "origins",
       new TableIndex({
@@ -78,10 +88,19 @@ export class Migrate1748991345795 implements MigrationInterface {
         columnNames: ["user_id"]
       })
     );
+
+    await queryRunner.createIndex(
+      "transactions",
+      new TableIndex({
+        name: "IDX_transactions_origin",
+        columnNames: ["origin_id"]
+      })
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropIndex("origins", "IDX_origins_user");
+    await queryRunner.dropIndex("transactions", "IDX_transactions_origin");
     await queryRunner.dropTable("origins");
   }
 }

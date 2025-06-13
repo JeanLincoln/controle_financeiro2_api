@@ -6,6 +6,7 @@ import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import {
+  CREATE_OR_UPDATE_CATEGORY_MOCK,
   EXPENSE_CATEGORY_MOCK,
   INCOME_CATEGORY_MOCK
 } from "@test/mocks/category.mock";
@@ -38,7 +39,7 @@ describe("UpdateCategoryUseCase", () => {
     const result = await sut.execute(
       USER_MOCK.id,
       EXPENSE_CATEGORY_MOCK.id,
-      EXPENSE_CATEGORY_MOCK
+      CREATE_OR_UPDATE_CATEGORY_MOCK
     );
 
     testUtils.resultExpectations(result, undefined);
@@ -70,7 +71,7 @@ describe("UpdateCategoryUseCase", () => {
     const result = await sut.execute(
       USER_MOCK.id,
       EXPENSE_CATEGORY_MOCK.id,
-      EXPENSE_CATEGORY_MOCK
+      CREATE_OR_UPDATE_CATEGORY_MOCK
     );
 
     testUtils.resultExpectations(result, undefined);
@@ -109,7 +110,7 @@ describe("UpdateCategoryUseCase", () => {
     const result = await sut.execute(
       USER_MOCK.id,
       INCOME_CATEGORY_MOCK.id,
-      INCOME_CATEGORY_MOCK
+      CREATE_OR_UPDATE_CATEGORY_MOCK
     );
 
     testUtils.resultExpectations(result, undefined);

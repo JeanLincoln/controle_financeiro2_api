@@ -5,10 +5,7 @@ import { UserRepository } from "@domain/repositories/user.repository";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
-import {
-  EXPENSE_CATEGORY_MOCK,
-  INCOME_CATEGORY_MOCK
-} from "@test/mocks/category.mock";
+import { CREATE_OR_UPDATE_CATEGORY_MOCK } from "@test/mocks/category.mock";
 import { USER_MOCK } from "@test/mocks/user.mock";
 describe("LoginUseCase", () => {
   let sut: CreateCategoryUseCase;
@@ -32,7 +29,7 @@ describe("LoginUseCase", () => {
     jest.spyOn(exceptionsAdapter, "notFound");
     jest.spyOn(userRepository, "findById").mockResolvedValue(USER_MOCK);
 
-    await sut.execute(1, EXPENSE_CATEGORY_MOCK);
+    await sut.execute(1, CREATE_OR_UPDATE_CATEGORY_MOCK);
 
     testUtils.notCalledExpectations([exceptionsAdapter.notFound]);
     testUtils.timesCalledExpectations({
@@ -43,7 +40,7 @@ describe("LoginUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.create,
-      calledWith: { category: EXPENSE_CATEGORY_MOCK }
+      calledWith: { category: CREATE_OR_UPDATE_CATEGORY_MOCK }
     });
   });
 
@@ -52,7 +49,7 @@ describe("LoginUseCase", () => {
     jest.spyOn(exceptionsAdapter, "notFound");
     jest.spyOn(categoryRepository, "create");
 
-    await sut.execute(1, INCOME_CATEGORY_MOCK);
+    await sut.execute(1, CREATE_OR_UPDATE_CATEGORY_MOCK);
 
     testUtils.notCalledExpectations([categoryRepository.create]);
     testUtils.timesCalledExpectations({

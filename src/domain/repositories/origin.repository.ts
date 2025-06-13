@@ -2,8 +2,8 @@ import { Origin } from "@domain/entities/origin.entity";
 
 export type CreateOrUpdateAllOriginProps = Omit<
   Origin,
-  "id" | "createdAt" | "updatedAt"
->;
+  "id" | "createdAt" | "updatedAt" | "transactions" | "user"
+> & { userId: number };
 
 export abstract class OriginRepository {
   abstract findAll(userId: number): Promise<Origin[]>;

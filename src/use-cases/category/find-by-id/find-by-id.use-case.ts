@@ -29,7 +29,7 @@ export class FindByIdCategoryUseCase {
       });
     }
 
-    if (category.userId !== userId) {
+    if (category.user.id !== userId) {
       return this.exceptionsAdapter.forbidden({
         message: "You are not allowed to access this category"
       });

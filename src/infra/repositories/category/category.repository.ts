@@ -13,15 +13,22 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
   ) {}
 
   async findAll(userId: number): Promise<Category[]> {
-    return this.categoryRepository.find({ where: { userId } });
+    return this.categoryRepository.find({ where: { user: { id: userId } } });
   }
 
   async findById(id: number): Promise<Category | null> {
-    return this.categoryRepository.findOne({ where: { id } });
+    return this.categoryRepository.findOne({
+      where: { id },
+      relations: ["user", "subCategories"]
+    });
   }
 
   async create(category: CreateOrUpdateAllCategoryProps): Promise<void> {
-    await this.categoryRepository.save(category);
+    const categoryInstance = this.categoryRepository.create({
+      ...category,
+      user: { id: category.userId }
+    });
+    await this.categoryRepository.save(categoryInstance);
   }
 
   async update(
@@ -37,6 +44,6 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
   }
 
   async deleteByUserId(userId: number): Promise<void> {
-    await this.categoryRepository.delete({ userId });
+    await this.categoryRepository.delete({ user: { id: userId } });
   }
 }
