@@ -45,7 +45,7 @@ describe("FindByIdUserUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: exceptionsAdapter.notFound,
-      calledWith: { payload: { message: "User not found" } }
+      calledWith: [{ message: "User not found" }]
     });
   });
 });

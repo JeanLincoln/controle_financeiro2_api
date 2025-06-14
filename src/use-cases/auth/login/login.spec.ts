@@ -53,15 +53,15 @@ describe("LoginUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: jwtAdapter.generateToken,
-      calledWith: {
-        payload: { id: USER_MOCK.id.toString() },
-        options: {
+      calledWith: [
+        { id: USER_MOCK.id.toString() },
+        {
           expiresIn: "2 days",
           subject: USER_MOCK.id.toString(),
           issuer: "controle-financeiro",
           audience: "users"
         }
-      }
+      ]
     });
 
     testUtils.timesCalledExpectations({
@@ -92,9 +92,7 @@ describe("LoginUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: exceptionAdapter.forbidden,
-      calledWith: {
-        payload: { message: "Invalid credentials" }
-      }
+      calledWith: [{ message: "Invalid credentials" }]
     });
   });
 });

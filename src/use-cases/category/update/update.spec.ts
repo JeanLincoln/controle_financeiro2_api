@@ -92,9 +92,7 @@ describe("UpdateCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: exceptionsAdapter.notFound,
-      calledWith: {
-        payload: { message: "Category not found" }
-      },
+      calledWith: [{ message: "Category not found" }],
       times: 1
     });
   });
@@ -131,9 +129,7 @@ describe("UpdateCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: exceptionsAdapter.forbidden,
-      calledWith: {
-        payload: { message: "You are not allowed to access this category" }
-      },
+      calledWith: [{ message: "You are not allowed to access this category" }],
       times: 1
     });
   });

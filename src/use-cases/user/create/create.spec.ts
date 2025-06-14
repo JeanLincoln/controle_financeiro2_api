@@ -44,12 +44,12 @@ describe("CreateUserUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: userRepository.create,
-      calledWith: {
-        payload: {
+      calledWith: [
+        {
           ...CREATE_OR_UPDATE_USER_PARAMS_MOCK,
           password: "hashedPassword"
         }
-      }
+      ]
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -79,7 +79,7 @@ describe("CreateUserUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: exceptionsAdapter.badRequest,
-      calledWith: { payload: { message: "User already exists" } }
+      calledWith: [{ message: "User already exists" }]
     });
   });
 });

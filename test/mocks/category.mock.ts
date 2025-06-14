@@ -1,6 +1,6 @@
 import { CategoryType, type Category } from "@domain/entities/category.entity";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
-import type { CreateOrUpdateAllCategoryProps } from "@domain/repositories/category.repository";
+import { CreateOrUpdateAllCategoryProps } from "@domain/repositories/category.repository";
 
 export const CREATE_OR_UPDATE_CATEGORY_MOCK: CreateOrUpdateAllCategoryProps = {
   name: "Category",

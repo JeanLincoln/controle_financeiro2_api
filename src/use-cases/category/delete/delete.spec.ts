@@ -88,9 +88,7 @@ describe("DeleteCategoryUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: exceptionsAdapter.notFound,
-      calledWith: {
-        payload: { message: "Category not found" }
-      }
+      calledWith: [{ message: "Category not found" }]
     });
   });
 
@@ -121,9 +119,7 @@ describe("DeleteCategoryUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: exceptionsAdapter.forbidden,
-      calledWith: {
-        payload: { message: "You are not allowed to delete this category" }
-      }
+      calledWith: [{ message: "You are not allowed to delete this category" }]
     });
   });
 });

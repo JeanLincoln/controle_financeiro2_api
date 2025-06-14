@@ -64,9 +64,7 @@ describe("RouteAuthUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: exceptionAdapter.unauthorized,
-      calledWith: {
-        payload: { message: "Unauthorized" }
-      }
+      calledWith: [{ message: "Unauthorized" }]
     });
   });
 
@@ -88,9 +86,7 @@ describe("RouteAuthUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: exceptionAdapter.forbidden,
-      calledWith: {
-        payload: { message: "Invalid token" }
-      }
+      calledWith: [{ message: "Invalid token" }]
     });
   });
 
@@ -109,9 +105,7 @@ describe("RouteAuthUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: exceptionAdapter.forbidden,
-      calledWith: {
-        payload: { message: "Invalid token" }
-      }
+      calledWith: [{ message: "Invalid token" }]
     });
     testUtils.timesCalledExpectations({
       times: 1,

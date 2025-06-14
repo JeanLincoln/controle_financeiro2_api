@@ -1,5 +1,5 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import type { SubCategory } from "@domain/entities/sub-category.entity";
+import { SubCategory } from "@domain/entities/sub-category.entity";
 import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
 import { Injectable } from "@nestjs/common";
 

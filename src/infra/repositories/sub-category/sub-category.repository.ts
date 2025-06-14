@@ -31,7 +31,10 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
   }
 
   async findById(id: number): Promise<SubCategory | null> {
-    return await this.subCategoryRepository.findOne({ where: { id } });
+    return await this.subCategoryRepository.findOne({
+      where: { id },
+      relations: ["category.user"]
+    });
   }
 
   async update(

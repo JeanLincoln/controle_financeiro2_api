@@ -73,7 +73,7 @@ describe("CreateSubCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: exceptionAdapter.notFound,
-      calledWith: { payload: { message: "Category not found" } },
+      calledWith: [{ message: "Category not found" }],
       times: 1
     });
   });
@@ -99,9 +99,7 @@ describe("CreateSubCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: exceptionAdapter.forbidden,
-      calledWith: {
-        payload: { message: "You are not the owner of this category" }
-      },
+      calledWith: [{ message: "You are not the owner of this category" }],
       times: 1
     });
   });

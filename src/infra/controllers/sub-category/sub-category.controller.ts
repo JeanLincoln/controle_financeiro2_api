@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -12,9 +13,11 @@ import { CreateSubCategoryBodyDto } from "./dto/create.dto";
 import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 import { AuthGuard } from "@infra/commons/guards/auth/auth.guard";
 import { ApiCookieAuth } from "@nestjs/swagger";
-import { FindSubCategoryByIdUseCase } from "@use-cases/sub-category/find-by-id/find-by-id.use-case";
-import { IdDto } from "@infra/commons/global-dtos/id.dto";
 import { FindAllSubCategoryUseCase } from "@use-cases/sub-category/find-all/find-all.find-all.use-case";
+import { SubCategoryGuard } from "@infra/commons/guards/sub-category/sub-category-validation.guard";
+import { SubCategoryAuthenticatedRequest } from "@use-cases/sub-category/sub-category-find-and-validate/sub-category-find-and-validate.use-case";
+import { IdDto } from "@infra/commons/global-dtos/id.dto";
+import { DeleteSubCategoryUseCase } from "@use-cases/sub-category/delete/delete.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -22,8 +25,8 @@ import { FindAllSubCategoryUseCase } from "@use-cases/sub-category/find-all/find
 export class SubCategoryController {
   constructor(
     private readonly createSubCategoryUseCase: CreateSubCategoryUseCase,
-    private readonly findByIdSubCategoryUseCase: FindSubCategoryByIdUseCase,
-    private readonly findAllSubCategoryUseCase: FindAllSubCategoryUseCase
+    private readonly findAllSubCategoryUseCase: FindAllSubCategoryUseCase,
+    private readonly deleteSubCategoryUseCase: DeleteSubCategoryUseCase
   ) {}
 
   @Post()
@@ -37,13 +40,23 @@ export class SubCategoryController {
     );
   }
 
+  @UseGuards(SubCategoryGuard)
   @Get(":id")
-  async findById(@Req() req: AuthenticatedRequest, @Param() { id }: IdDto) {
-    return this.findByIdSubCategoryUseCase.execute(req.user.id, id);
+  async findById(
+    @Req() req: SubCategoryAuthenticatedRequest,
+    @Param() _: IdDto
+  ) {
+    return req.subCategory;
   }
 
   @Get()
   async findAll(@Req() req: AuthenticatedRequest) {
     return this.findAllSubCategoryUseCase.execute(req.user.id);
+  }
+
+  @UseGuards(SubCategoryGuard)
+  @Delete(":id")
+  async delete(@Req() req: SubCategoryAuthenticatedRequest, @Param() _: IdDto) {
+    return this.deleteSubCategoryUseCase.execute(req.subCategory.id);
   }
 }
