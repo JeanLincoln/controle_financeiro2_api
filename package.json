@@ -26,9 +26,12 @@
     "lint-staged": "lint-staged",
     "docker:up": "docker compose up --build -d",
     "typeorm:ts": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "typeorm:ts:extension": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs",
     "migration:create": "pnpm typeorm:ts migration:create ./typeorm/migrations/Migrate",
     "migration:up": "pnpm typeorm:ts migration:run -d ./typeorm/data-source.ts",
-    "migration:down": "pnpm typeorm:ts migration:revert -d ./typeorm/data-source.ts"
+    "migration:down": "pnpm typeorm:ts migration:revert -d ./typeorm/data-source.ts",
+    "seed:create": "pnpm typeorm:ts:extension seed:create --name ./typeorm/seed/new.seed.ts",
+    "seed:run": "pnpm typeorm:ts:extension seed:run -d ./typeorm/data-source.ts"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",
@@ -49,7 +52,8 @@
     "pug": "^3.0.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.24"
+    "typeorm": "^0.3.24",
+    "typeorm-extension": "^3.7.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
