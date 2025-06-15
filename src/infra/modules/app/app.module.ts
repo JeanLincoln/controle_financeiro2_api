@@ -22,7 +22,7 @@ import { SubCategoryModule } from "../sub-category/sub-category.module";
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      synchronize: process.env.ENV === "DEV",
+      synchronize: false,
       entities: [__dirname, "dist/src/domain/entities/*{.ts,.js}"]
     }),
     DatabaseModule,

@@ -6,46 +6,59 @@ import {
   TableIndex
 } from "typeorm";
 
-export class Migrate1748991345795 implements MigrationInterface {
+export class CreateTransactionsTable1750014222276
+  implements MigrationInterface
+{
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "origins",
+        name: "transactions",
         columns: [
           {
             name: "id",
             type: "int",
             isPrimary: true,
             isGenerated: true,
-            unsigned: true,
             generationStrategy: "increment"
           },
           {
             name: "name",
             type: "varchar",
-            length: "100"
+            length: "255"
           },
           {
             name: "description",
-            type: "text",
-            isNullable: true
+            type: "varchar",
+            length: "255"
           },
           {
-            name: "color",
-            type: "varchar",
-            length: "7",
-            isNullable: true
+            name: "origin_id",
+            type: "int",
+            unsigned: true
           },
           {
-            name: "icon",
-            type: "varchar",
-            length: "255",
+            name: "amount",
+            type: "decimal",
+            precision: 10,
+            scale: 2
+          },
+          {
+            name: "start_date",
+            type: "date"
+          },
+          {
+            name: "is_recurring",
+            type: "boolean",
+            default: false
+          },
+          {
+            name: "end_date",
+            type: "date",
             isNullable: true
           },
           {
             name: "user_id",
-            type: "int",
-            unsigned: true
+            type: "int"
           },
           {
             name: "created_at",
@@ -62,7 +75,7 @@ export class Migrate1748991345795 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      "origins",
+      "transactions",
       new TableForeignKey({
         columnNames: ["user_id"],
         referencedColumnNames: ["id"],
@@ -82,9 +95,9 @@ export class Migrate1748991345795 implements MigrationInterface {
     );
 
     await queryRunner.createIndex(
-      "origins",
+      "transactions",
       new TableIndex({
-        name: "IDX_origins_user",
+        name: "IDX_transactions_user",
         columnNames: ["user_id"]
       })
     );
@@ -99,8 +112,26 @@ export class Migrate1748991345795 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropIndex("origins", "IDX_origins_user");
+    const table = await queryRunner.getTable("transactions");
+
+    if (!table) throw new Error("Table transactions not found");
+
+    const userForeignKey = table.foreignKeys.find(
+      (fk) => fk.columnNames.indexOf("user_id") !== -1
+    );
+
+    if (!userForeignKey) throw new Error("Foreign key user_id not found");
+
+    const originForeignKey = table.foreignKeys.find(
+      (fk) => fk.columnNames.indexOf("origin_id") !== -1
+    );
+
+    if (!originForeignKey) throw new Error("Foreign key origin_id not found");
+
+    await queryRunner.dropIndex("transactions", "IDX_transactions_user");
     await queryRunner.dropIndex("transactions", "IDX_transactions_origin");
-    await queryRunner.dropTable("origins");
+    await queryRunner.dropForeignKey("transactions", userForeignKey);
+    await queryRunner.dropForeignKey("transactions", originForeignKey);
+    await queryRunner.dropTable("transactions");
   }
 }
