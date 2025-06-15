@@ -6,10 +6,12 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
+  ManyToMany
 } from "typeorm";
 import { SubCategory } from "./sub-category.entity";
 import { User } from "./user.entity";
+import { Transaction } from "./transaction.entity";
 
 export enum CategoryType {
   INCOME = "INCOME",
@@ -73,6 +75,9 @@ export class Category {
   @ManyToOne(() => User, (user) => user.categories)
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @ManyToMany(() => Transaction, (transaction) => transaction.categories)
+  transactions: Transaction[];
 
   @OneToMany(() => SubCategory, (subCategory) => subCategory.category)
   subCategories: SubCategory[];

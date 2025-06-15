@@ -12,12 +12,14 @@ export class User {
   id: number;
 
   @Column({
+    name: "first_name",
     type: "varchar",
     length: 255
   })
   firstName: string;
 
   @Column({
+    name: "last_name",
     type: "varchar",
     length: 255
   })
@@ -37,18 +39,22 @@ export class User {
   password: string;
 
   @Column({
+    name: "birth_date",
     type: "date"
   })
   birthDate: Date;
 
   @Column({
+    name: "created_at",
     type: "timestamp",
     default: () => "CURRENT_TIMESTAMP"
   })
   createdAt: Date;
 
   @Column({
+    name: "updated_at",
     type: "timestamp",
+    nullable: true,
     default: null
   })
   updatedAt: Date;

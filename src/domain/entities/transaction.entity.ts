@@ -90,9 +90,9 @@ export class Transaction {
   @JoinColumn({ name: "origin_id" })
   origin: Origin;
 
-  @ManyToMany(() => Category)
+  @ManyToMany(() => Category, (category) => category.transactions)
   @JoinTable({
-    name: "transactions_categories",
+    name: "transaction_categories",
     joinColumn: {
       name: "transaction_id",
       referencedColumnName: "id"
@@ -104,11 +104,15 @@ export class Transaction {
   })
   categories: Category[];
 
-  @ManyToMany(() => SubCategory)
+  @ManyToMany(() => SubCategory, (subCategory) => subCategory.transactions)
   @JoinTable({
-    name: "transactions_sub_categories",
+    name: "transaction_sub_categories",
     joinColumn: {
       name: "transaction_id",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "sub_category_id",
       referencedColumnName: "id"
     }
   })
