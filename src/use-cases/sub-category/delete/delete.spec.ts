@@ -1,4 +1,4 @@
-import type { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
+import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
 import { DeleteSubCategoryUseCase } from "./delete.use-case";
 import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
 import { SUB_CATEGORY_MOCK_1 } from "@test/mocks/sub-category.mock";

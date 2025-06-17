@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv";
 import { DataSource, type DataSourceOptions } from "typeorm";
-import type { SeederOptions } from "typeorm-extension";
+import { SeederOptions } from "typeorm-extension";
 
 dotenv.config();
 

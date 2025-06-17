@@ -9,6 +9,7 @@ import { AuthModule } from "../auth/auth.module";
 import { JwtModule } from "@nestjs/jwt";
 import { CategoryModule } from "../category/category.module";
 import { SubCategoryModule } from "../sub-category/sub-category.module";
+import { OriginModule } from "../origin/origin.module";
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { SubCategoryModule } from "../sub-category/sub-category.module";
     AuthModule,
     UserModule,
     CategoryModule,
-    SubCategoryModule
+    SubCategoryModule,
+    OriginModule
   ]
 })
 export class AppModule {}
