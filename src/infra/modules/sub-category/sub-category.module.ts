@@ -6,7 +6,7 @@ import { CreateSubCategoryUseCase } from "@use-cases/sub-category/create/create.
 import { SubCategoryController } from "@infra/controllers/sub-category/sub-category.controller";
 import { AuthModule } from "../auth/auth.module";
 import { FindAllSubCategoryUseCase } from "@use-cases/sub-category/find-all/find-all.find-all.use-case";
-import { SubCategoryValidationUseCase } from "@use-cases/sub-category/sub-category-find-and-validate/sub-category-find-and-validate.use-case";
+import { FindAndValidateSubCategoryUseCase } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
 import { DeleteSubCategoryUseCase } from "@use-cases/sub-category/delete/delete.use-case";
 
 @Module({
@@ -15,7 +15,7 @@ import { DeleteSubCategoryUseCase } from "@use-cases/sub-category/delete/delete.
   providers: [
     CreateSubCategoryUseCase,
     FindAllSubCategoryUseCase,
-    SubCategoryValidationUseCase,
+    FindAndValidateSubCategoryUseCase,
     DeleteSubCategoryUseCase
   ]
 })

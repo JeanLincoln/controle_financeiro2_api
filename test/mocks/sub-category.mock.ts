@@ -3,7 +3,7 @@ import { EXPENSE_CATEGORY_MOCK } from "./category.mock";
 import { INCOME_CATEGORY_MOCK } from "./category.mock";
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import { USER_MOCK } from "./user.mock";
-import { SubCategoryAuthenticatedRequest } from "@use-cases/sub-category/sub-category-find-and-validate/sub-category-find-and-validate.use-case";
+import { SubCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
 
 export const CREATE_SUB_CATEGORY_MOCK: CreateOrUpdateAllSubCategoryProps = {
   name: "Sub Category",

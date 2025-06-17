@@ -12,7 +12,7 @@ export interface SubCategoryAuthenticatedRequest extends AuthenticatedRequest {
 }
 
 @Injectable()
-export class SubCategoryValidationUseCase {
+export class FindAndValidateSubCategoryUseCase {
   constructor(
     private readonly subCategoryRepository: SubCategoryRepository,
     private readonly exceptionsAdapter: ExceptionsAdapter

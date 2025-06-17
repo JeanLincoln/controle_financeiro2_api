@@ -1,5 +1,5 @@
 import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
-import { SubCategoryValidationUseCase } from "./sub-category-find-and-validate.use-case";
+import { FindAndValidateSubCategoryUseCase } from "./find-and-validate.use-case";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
@@ -9,15 +9,15 @@ import {
   SUB_CATEGORY_MOCK_2
 } from "@test/mocks/sub-category.mock";
 
-describe("SubCategoryValidationUseCase", () => {
-  let sut: SubCategoryValidationUseCase;
+describe("FindAndValidateSubCategoryUseCase", () => {
+  let sut: FindAndValidateSubCategoryUseCase;
   let subCategoryRepository: SubCategoryRepository;
   let exceptionsAdapter: ExceptionsAdapter;
 
   beforeEach(() => {
     subCategoryRepository = new SubCategoryRepositoryStub();
     exceptionsAdapter = new ExceptionsAdapterStub();
-    sut = new SubCategoryValidationUseCase(
+    sut = new FindAndValidateSubCategoryUseCase(
       subCategoryRepository,
       exceptionsAdapter
     );

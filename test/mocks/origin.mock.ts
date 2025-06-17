@@ -1,7 +1,7 @@
 import { Origin } from "@domain/entities/origin.entity";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 import { CreateOrUpdateAllOriginProps } from "@domain/repositories/origin.repository";
-import { OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate.use-case/find-and-validate.use-case";
+import { OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 
 export const CREATE_OR_UPDATE_ORIGIN_MOCK: CreateOrUpdateAllOriginProps = {
   name: "Origin",

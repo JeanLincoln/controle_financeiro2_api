@@ -15,7 +15,7 @@ import { AuthGuard } from "@infra/commons/guards/auth/auth.guard";
 import { ApiCookieAuth } from "@nestjs/swagger";
 import { FindAllSubCategoryUseCase } from "@use-cases/sub-category/find-all/find-all.find-all.use-case";
 import { SubCategoryGuard } from "@infra/commons/guards/sub-category/sub-category-validation.guard";
-import { SubCategoryAuthenticatedRequest } from "@use-cases/sub-category/sub-category-find-and-validate/sub-category-find-and-validate.use-case";
+import { SubCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
 import { IdDto } from "@infra/commons/global-dtos/id.dto";
 import { DeleteSubCategoryUseCase } from "@use-cases/sub-category/delete/delete.use-case";
 

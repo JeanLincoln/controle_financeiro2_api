@@ -1,5 +1,5 @@
 import { Injectable, type ExecutionContext, CanActivate } from "@nestjs/common";
-import { FindAndValidateOriginUseCase } from "@use-cases/origin/find-and-validate.use-case/find-and-validate.use-case";
+import { FindAndValidateOriginUseCase } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 
 @Injectable()
 export class OriginGuard implements CanActivate {

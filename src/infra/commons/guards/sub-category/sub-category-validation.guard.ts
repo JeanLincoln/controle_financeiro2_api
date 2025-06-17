@@ -1,15 +1,15 @@
 import { Injectable, type ExecutionContext, CanActivate } from "@nestjs/common";
-import { SubCategoryValidationUseCase } from "@use-cases/sub-category/sub-category-find-and-validate/sub-category-find-and-validate.use-case";
+import { FindAndValidateSubCategoryUseCase } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
 
 @Injectable()
 export class SubCategoryGuard implements CanActivate {
   constructor(
-    private readonly subCategoryValidationUseCase: SubCategoryValidationUseCase
+    private readonly findAndValidateSubCategoryUseCase: FindAndValidateSubCategoryUseCase
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    return await this.subCategoryValidationUseCase.execute(request);
+    return await this.findAndValidateSubCategoryUseCase.execute(request);
   }
 }
