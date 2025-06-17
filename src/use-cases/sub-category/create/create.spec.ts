@@ -49,7 +49,7 @@ describe("CreateSubCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: subCategoryRepository.create,
-      calledWith: [CREATE_SUB_CATEGORY_MOCK],
+      calledWith: [EXPENSE_CATEGORY_MOCK.id, CREATE_SUB_CATEGORY_MOCK],
       times: 1
     });
   });

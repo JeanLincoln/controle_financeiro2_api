@@ -36,6 +36,9 @@ export class CreateSubCategoryUseCase {
       return;
     }
 
-    await this.subCategoryRepository.create(subCategory);
+    await this.subCategoryRepository.create(
+      subCategory.categoryId,
+      subCategory
+    );
   }
 }

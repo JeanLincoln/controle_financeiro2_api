@@ -7,8 +7,7 @@ export const CREATE_OR_UPDATE_ORIGIN_MOCK: CreateOrUpdateAllOriginProps = {
   name: "Origin",
   description: "Origin description",
   color: "#FF0000",
-  icon: "test-icon",
-  userId: 1
+  icon: "test-icon"
 };
 
 export const CATEGORIES_MOCK: Origin[] = Array.from(

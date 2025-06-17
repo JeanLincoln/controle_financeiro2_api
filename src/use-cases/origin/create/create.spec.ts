@@ -16,13 +16,16 @@ describe("CreateOriginUseCase", () => {
   it("should create an origin", async () => {
     jest.spyOn(originRepository, "create");
 
-    const result = await sut.execute(CREATE_OR_UPDATE_ORIGIN_MOCK);
+    const result = await sut.execute(
+      USER_MOCK.id,
+      CREATE_OR_UPDATE_ORIGIN_MOCK
+    );
 
     testUtils.resultExpectations(result, undefined);
-
-    expect(originRepository.create).toHaveBeenCalledWith({
-      ...CREATE_OR_UPDATE_ORIGIN_MOCK,
-      userId: USER_MOCK.id
+    testUtils.timesCalledExpectations({
+      mockFunction: originRepository.create,
+      calledWith: [USER_MOCK.id, CREATE_OR_UPDATE_ORIGIN_MOCK],
+      times: 1
     });
   });
 });

@@ -38,10 +38,7 @@ export class CategoryController {
     @Req() req: AuthenticatedRequest,
     @Body() body: CreateCategoryDto
   ) {
-    return this.createCategoryUseCase.execute(req.user.id, {
-      ...body,
-      userId: req.user.id
-    });
+    return this.createCategoryUseCase.execute(req.user.id, body);
   }
 
   @Get()
@@ -60,10 +57,7 @@ export class CategoryController {
     @Param() { id }: IdDto,
     @Body() body: UpdateCategoryDto
   ) {
-    return this.updateCategoryUseCase.execute(req.user.id, id, {
-      ...body,
-      userId: req.user.id
-    });
+    return this.updateCategoryUseCase.execute(req.user.id, id, body);
   }
 
   @Delete(":id")

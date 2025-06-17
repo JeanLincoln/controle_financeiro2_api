@@ -23,19 +23,26 @@ export class TypeOrmOriginRepository implements OriginRepository {
     });
   }
 
-  async create(origin: CreateOrUpdateAllOriginProps): Promise<void> {
+  async create(
+    userId: number,
+    origin: CreateOrUpdateAllOriginProps
+  ): Promise<void> {
     const originInstance = this.originRepository.create({
       ...origin,
-      user: { id: origin.userId }
+      user: { id: userId }
     });
     await this.originRepository.save(originInstance);
   }
 
   async update(
     id: number,
+    userId: number,
     origin: CreateOrUpdateAllOriginProps
   ): Promise<void> {
-    await this.originRepository.update(id, origin);
+    await this.originRepository.update(id, {
+      ...origin,
+      user: { id: userId }
+    });
   }
 
   async delete(id: number): Promise<void> {

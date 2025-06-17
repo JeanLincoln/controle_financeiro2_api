@@ -40,7 +40,7 @@ describe("LoginUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.create,
-      calledWith: { category: CREATE_OR_UPDATE_CATEGORY_MOCK }
+      calledWith: [1, CREATE_OR_UPDATE_CATEGORY_MOCK]
     });
   });
 

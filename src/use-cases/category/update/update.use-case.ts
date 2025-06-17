@@ -41,6 +41,6 @@ export class UpdateCategoryUseCase {
       });
     }
 
-    return this.categoryRepository.update(id, category);
+    return this.categoryRepository.update(id, userId, category);
   }
 }

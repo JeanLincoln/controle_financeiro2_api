@@ -12,10 +12,13 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
     private readonly subCategoryRepository: Repository<SubCategory>
   ) {}
 
-  async create(subCategory: CreateOrUpdateAllSubCategoryProps): Promise<void> {
+  async create(
+    categoryId: number,
+    subCategory: CreateOrUpdateAllSubCategoryProps
+  ): Promise<void> {
     const subCategoryInstance = this.subCategoryRepository.create({
       ...subCategory,
-      category: { id: subCategory.categoryId }
+      category: { id: categoryId }
     });
     await this.subCategoryRepository.save(subCategoryInstance);
   }
@@ -39,9 +42,13 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
 
   async update(
     id: number,
+    categoryId: number,
     subCategory: CreateOrUpdateAllSubCategoryProps
   ): Promise<void> {
-    await this.subCategoryRepository.update(id, subCategory);
+    await this.subCategoryRepository.update(id, {
+      ...subCategory,
+      category: { id: categoryId }
+    });
   }
 
   async delete(id: number): Promise<void> {

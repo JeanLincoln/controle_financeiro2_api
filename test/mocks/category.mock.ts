@@ -7,8 +7,7 @@ export const CREATE_OR_UPDATE_CATEGORY_MOCK: CreateOrUpdateAllCategoryProps = {
   description: "Category description",
   type: CategoryType.INCOME,
   color: "#FF0000",
-  icon: "test-icon",
-  userId: 1
+  icon: "test-icon"
 };
 
 export const CATEGORIES_MOCK: Category[] = Array.from(
