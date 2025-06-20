@@ -30,9 +30,11 @@ import { CategoryGuard } from "@infra/commons/guards/category/category-validatio
 import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 import { DeleteSubCategoryParamDto } from "./dto/delete.dto";
 import { FindSubCategoryByIdParamDto } from "./dto/find-by-id.dto";
-import { FindByIdSubCategoryInterceptor } from "@infra/commons/interceptors/sub-category/find-by-id.interceptor";
 import { FindAllSubCategoryParams } from "./dto/find-all.dto";
+import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
+import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 
+@UseInterceptors(ExcludeFieldsInterceptor)
 @ApiCookieAuth()
 @UseGuards(AuthGuard, CategoryGuard)
 @Controller("sub-categories")
@@ -54,7 +56,7 @@ export class SubCategoryController {
   }
 
   @UseGuards(SubCategoryGuard)
-  @UseInterceptors(FindByIdSubCategoryInterceptor)
+  @ExcludeFields("user")
   @Get(":categoryId/:subCategoryId")
   async findById(
     @Req() req: SubCategoryAuthenticatedRequest,

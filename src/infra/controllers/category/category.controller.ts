@@ -23,9 +23,11 @@ import { CategoryGuard } from "@infra/commons/guards/category/category-validatio
 import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 import { DeleteCategoryParamDto } from "./dto/delete.dto";
 import { FindCategoryByIdParamDto } from "./dto/find-by-id.dto";
-import { FindByIdCategoryInterceptor } from "@infra/commons/interceptors/category/find-by-id.interceptor";
+import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
+import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 
 @ApiCookieAuth()
+@UseInterceptors(ExcludeFieldsInterceptor)
 @UseGuards(AuthGuard)
 @Controller("categories")
 export class CategoryController {
@@ -49,7 +51,7 @@ export class CategoryController {
     return this.findAllCategoryUseCase.execute(req.user.id);
   }
 
-  @UseInterceptors(FindByIdCategoryInterceptor)
+  @ExcludeFields("user")
   @UseGuards(CategoryGuard)
   @Get(":categoryId")
   async findById(

@@ -21,13 +21,14 @@ import { FindAllUserUseCase } from "@use-cases/user/find-all/find-all.use-case";
 import { DeleteUserUseCase } from "@use-cases/user/delete/delete.use-case";
 import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 import { FindUserByIdParamDto } from "./dto/find-by-id.dto";
-import { FindAllUserInterceptor } from "@infra/commons/interceptors/user/find-all.interceptor";
-import { FindByIdUserInterceptor } from "@infra/commons/interceptors/user/find-by-id.interceptor";
+import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
+import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 
 @ApiTags("Users")
 @ApiCookieAuth()
 @Controller("users")
 @UseGuards(AuthGuard)
+@UseInterceptors(ExcludeFieldsInterceptor)
 export class UserController {
   constructor(
     private readonly createUserUseCase: CreateUserUseCase,
@@ -42,13 +43,13 @@ export class UserController {
     return this.createUserUseCase.execute(createUserDto);
   }
 
-  @UseInterceptors(FindAllUserInterceptor)
+  @ExcludeFields("password")
   @Get()
   async findAll() {
     return this.findAllUserUseCase.execute();
   }
 
-  @UseInterceptors(FindByIdUserInterceptor)
+  @ExcludeFields("password")
   @Get(":userId")
   async findById(
     @Req() req: AuthenticatedRequest,

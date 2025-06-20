@@ -18,10 +18,12 @@ import { CreateOriginUseCase } from "@use-cases/origin/create/create.use-case";
 import { UpdateOriginUseCase } from "@use-cases/origin/update/update.use-case";
 import { UpdateOriginBodyDto, UpdateOriginParamDto } from "./dto/update.dto";
 import { FindOriginByIdParamDto } from "./dto/find-by-id.dto";
-import { FindByIdOriginInterceptor } from "@infra/commons/interceptors/origin/find-by-id.interceptor";
+import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
+import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
+@UseInterceptors(ExcludeFieldsInterceptor)
 @Controller("origin")
 export class OriginController {
   constructor(
@@ -38,7 +40,7 @@ export class OriginController {
   }
 
   @UseGuards(OriginGuard)
-  @UseInterceptors(FindByIdOriginInterceptor)
+  @ExcludeFields("user")
   @Get(":originId")
   async findById(
     @Req() req: OriginAuthenticatedRequest,
