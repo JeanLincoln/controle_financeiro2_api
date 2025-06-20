@@ -30,6 +30,10 @@ export class ExcludeFieldsInterceptor implements NestInterceptor {
   private excludeFields(data: unknown, fields: string[]): unknown {
     if (!data || typeof data !== "object") return data;
 
+    if (Array.isArray(data)) {
+      return data.map((item) => this.excludeFields(item, fields));
+    }
+
     const result = Object.entries(data).reduce(
       (acc, [key, value]) => {
         const valueIsAnObject = typeof value === "object";
