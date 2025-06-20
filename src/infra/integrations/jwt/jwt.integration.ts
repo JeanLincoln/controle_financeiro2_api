@@ -1,7 +1,7 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { JwtAdapter, JwtSignPayload } from "@domain/adapters/jwt.adapter";
 import { Injectable } from "@nestjs/common";
-import { JwtService, type JwtSignOptions } from "@nestjs/jwt";
+import { JwtService, JwtSignOptions } from "@nestjs/jwt";
 import { handleAsync } from "src/utils/handle-async.util";
 
 @Injectable()

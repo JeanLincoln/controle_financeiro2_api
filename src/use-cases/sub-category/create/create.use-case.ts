@@ -1,44 +1,34 @@
-import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import { CategoryRepository } from "@domain/repositories/category.repository";
+import { Category } from "@domain/entities/category.entity";
 import {
   CreateOrUpdateAllSubCategoryProps,
   SubCategoryRepository
 } from "@domain/repositories/sub-category.repository";
 import { Injectable } from "@nestjs/common";
+import {
+  FindAndValidateCategoryUseCase,
+  CategoryAuthenticatedRequest
+} from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 
 @Injectable()
 export class CreateSubCategoryUseCase {
   constructor(
     private readonly subCategoryRepository: SubCategoryRepository,
-    private readonly exceptionAdapter: ExceptionsAdapter,
-    private readonly categoryRepository: CategoryRepository
+    private readonly findAndValidateCategoryUseCase: FindAndValidateCategoryUseCase
   ) {}
 
   async execute(
-    userId: number,
+    request: CategoryAuthenticatedRequest,
     subCategory: CreateOrUpdateAllSubCategoryProps
   ) {
-    const category = await this.categoryRepository.findById(
-      subCategory.categoryId
-    );
+    const { params } = request;
+    const categoryId = Number(params.categoryId);
 
-    if (!category) {
-      this.exceptionAdapter.notFound({ message: "Category not found" });
-      return;
-    }
+    await this.findAndValidateCategoryUseCase.execute({
+      ...request,
+      params: { categoryId: categoryId.toString() },
+      category: {} as Category
+    });
 
-    const notCategoriesOwner = category.user.id !== userId;
-
-    if (notCategoriesOwner) {
-      this.exceptionAdapter.forbidden({
-        message: "You are not the owner of this category"
-      });
-      return;
-    }
-
-    await this.subCategoryRepository.create(
-      subCategory.categoryId,
-      subCategory
-    );
+    await this.subCategoryRepository.create(categoryId, subCategory);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable, type ExecutionContext, CanActivate } from "@nestjs/common";
+import { Injectable, ExecutionContext, CanActivate } from "@nestjs/common";
 import { FindAndValidateOriginUseCase } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 
 @Injectable()

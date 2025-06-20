@@ -61,8 +61,6 @@ describe("DeleteCategoryUseCase", () => {
     });
   });
 
-  it.todo("should delete all subcategories of a category");
-
   it("should not be able to delete a category that does not exist", async () => {
     jest.spyOn(categoryRepository, "findById").mockResolvedValue(null);
     jest.spyOn(categoryRepository, "delete");

@@ -5,7 +5,7 @@ export class SubCategoryRepositoryStub extends SubCategoryRepository {
     return Promise.resolve();
   }
 
-  async findAllByUserId() {
+  async findAllByCategory() {
     return Promise.resolve([]);
   }
 

@@ -1,9 +1,3 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { FindCategoryByIdParamDto } from "./find-by-id.dto";
 
-export class DeleteCategoryDto {
-  @ApiProperty({ example: "1" })
-  @IsNumber()
-  @IsNotEmpty()
-  id: number;
-}
+export class DeleteCategoryParamDto extends FindCategoryByIdParamDto {}

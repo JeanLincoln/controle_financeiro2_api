@@ -1,5 +1,7 @@
-import { UserRepository } from "@domain/repositories/user.repository";
-import { User } from "@domain/entities/user.entity";
+import {
+  UserRepository,
+  UserWithoutRelations
+} from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 
@@ -10,7 +12,7 @@ export class FindByEmailUserUseCase {
     private readonly exceptionsAdapter: ExceptionsAdapter
   ) {}
 
-  async execute(email: string): Promise<User | void> {
+  async execute(email: string): Promise<UserWithoutRelations | void> {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {

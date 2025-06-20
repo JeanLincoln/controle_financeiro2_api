@@ -6,7 +6,7 @@ import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-
 
 export interface OriginAuthenticatedRequest extends AuthenticatedRequest {
   params: {
-    id: string;
+    originId: string;
   };
   origin: Origin;
 }
@@ -20,7 +20,7 @@ export class FindAndValidateOriginUseCase {
 
   async execute(request: OriginAuthenticatedRequest): Promise<boolean> {
     const { user, params } = request;
-    const originId = Number(params.id);
+    const originId = Number(params.originId);
     const userId = user.id;
 
     const origin = await this.originRepository.findById(originId);

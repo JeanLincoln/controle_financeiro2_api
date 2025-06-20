@@ -1,7 +1,7 @@
-import { Origin } from "@domain/entities/origin.entity";
-import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
+import type { Origin } from "@domain/entities/origin.entity";
 import { CreateOrUpdateAllOriginProps } from "@domain/repositories/origin.repository";
 import { OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
+import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 
 export const CREATE_OR_UPDATE_ORIGIN_MOCK: CreateOrUpdateAllOriginProps = {
   name: "Origin",
@@ -18,7 +18,6 @@ export const CATEGORIES_MOCK: Origin[] = Array.from(
     description: `Origin ${index + 1} description`,
     color: "#FF0000",
     icon: "test-icon",
-    userId: (index + 1) % 2 === 0 ? 2 : 1,
     createdAt: new Date(),
     updatedAt: new Date(),
     transactions: [],
@@ -33,6 +32,6 @@ export const ORIGIN_MOCK_2: Origin = CATEGORIES_MOCK[1];
 export const ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   params: {
-    id: "1"
+    originId: "1"
   }
 } as OriginAuthenticatedRequest;

@@ -1,7 +1,7 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import {
   CategoryRepository,
-  type CreateOrUpdateAllCategoryProps
+  CreateOrUpdateAllCategoryProps
 } from "@domain/repositories/category.repository";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";

@@ -1,7 +1,7 @@
 import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import {
-  CreateOrUpdateAllUserProps,
+  BaseCreateOrUpdateUserProps,
   UserRepository
 } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
@@ -14,7 +14,7 @@ export class CreateUserUseCase {
     private readonly cryptographyAdapter: CryptographyAdapter
   ) {}
 
-  async execute(user: CreateOrUpdateAllUserProps): Promise<void> {
+  async execute(user: BaseCreateOrUpdateUserProps): Promise<void> {
     const userAlreadyExists = await this.userRepository.findByEmail(user.email);
 
     if (userAlreadyExists) {

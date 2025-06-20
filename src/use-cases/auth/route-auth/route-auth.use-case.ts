@@ -1,7 +1,7 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { JwtAdapter } from "@domain/adapters/jwt.adapter";
-import { UserRepository } from "@domain/repositories/user.repository";
 import { User } from "@domain/entities/user.entity";
+import { UserRepository } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
 
 export interface AuthenticatedHeaders extends Headers {

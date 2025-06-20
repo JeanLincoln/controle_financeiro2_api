@@ -1,5 +1,8 @@
 import { CreateOrUpdateAllSubCategoryProps } from "@domain/repositories/sub-category.repository";
-import { EXPENSE_CATEGORY_MOCK } from "./category.mock";
+import {
+  EXPENSE_CATEGORY_MOCK,
+  EXPENSE_CATEGORY_MOCK_2
+} from "./category.mock";
 import { INCOME_CATEGORY_MOCK } from "./category.mock";
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import { USER_MOCK } from "./user.mock";
@@ -8,7 +11,6 @@ import { SubCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-an
 export const CREATE_SUB_CATEGORY_MOCK: CreateOrUpdateAllSubCategoryProps = {
   name: "Sub Category",
   description: "Sub Category Description",
-  categoryId: 1,
   color: "#000000",
   icon: "🍎"
 };
@@ -36,6 +38,15 @@ export const SUB_CATEGORY_MOCK_2: SubCategory = SUB_CATEGORIES_MOCK[1];
 export const SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   params: {
-    id: "1"
+    categoryId: EXPENSE_CATEGORY_MOCK.id.toString(),
+    subCategoryId: SUB_CATEGORY_MOCK_1.id.toString()
+  }
+} as SubCategoryAuthenticatedRequest;
+
+export const SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK_2 = {
+  user: USER_MOCK,
+  params: {
+    categoryId: EXPENSE_CATEGORY_MOCK_2.id.toString(),
+    subCategoryId: SUB_CATEGORY_MOCK_1.id.toString()
   }
 } as SubCategoryAuthenticatedRequest;

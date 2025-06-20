@@ -1,4 +1,3 @@
-import { IdDto } from "@infra/commons/global-dtos/id.dto";
 import {
   Body,
   Controller,
@@ -7,16 +6,19 @@ import {
   Post,
   Put,
   Req,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from "@nestjs/common";
-import { type OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
+import { OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 import { AuthGuard } from "@infra/commons/guards/auth/auth.guard";
 import { ApiCookieAuth } from "@nestjs/swagger";
 import { OriginGuard } from "@infra/commons/guards/origin/origin-validation.guard";
 import { CreateOriginBodyDto } from "./dto/create.dto";
 import { CreateOriginUseCase } from "@use-cases/origin/create/create.use-case";
 import { UpdateOriginUseCase } from "@use-cases/origin/update/update.use-case";
-import { UpdateOriginBodyDto } from "./dto/update.dto";
+import { UpdateOriginBodyDto, UpdateOriginParamDto } from "./dto/update.dto";
+import { FindOriginByIdParamDto } from "./dto/find-by-id.dto";
+import { FindByIdOriginInterceptor } from "@infra/commons/interceptors/origin/find-by-id.interceptor";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -36,16 +38,20 @@ export class OriginController {
   }
 
   @UseGuards(OriginGuard)
-  @Get(":id")
-  async findById(@Req() req: OriginAuthenticatedRequest, @Param() _: IdDto) {
+  @UseInterceptors(FindByIdOriginInterceptor)
+  @Get(":originId")
+  async findById(
+    @Req() req: OriginAuthenticatedRequest,
+    @Param() _: FindOriginByIdParamDto
+  ) {
     return req.origin;
   }
 
   @UseGuards(OriginGuard)
-  @Put(":id")
+  @Put(":originId")
   async update(
     @Req() req: OriginAuthenticatedRequest,
-    @Param() _: IdDto,
+    @Param() _: UpdateOriginParamDto,
     @Body() body: UpdateOriginBodyDto
   ) {
     return this.updateOriginUseCase.execute(req.origin.id, req.user.id, body);

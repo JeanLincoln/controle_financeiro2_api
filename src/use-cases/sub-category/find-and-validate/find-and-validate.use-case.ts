@@ -6,7 +6,8 @@ import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-
 
 export interface SubCategoryAuthenticatedRequest extends AuthenticatedRequest {
   params: {
-    id: string;
+    categoryId: string;
+    subCategoryId: string;
   };
   subCategory: SubCategory;
 }
@@ -20,7 +21,8 @@ export class FindAndValidateSubCategoryUseCase {
 
   async execute(request: SubCategoryAuthenticatedRequest): Promise<boolean> {
     const { user, params } = request;
-    const subCategoryId = Number(params.id);
+    const categoryId = Number(params.categoryId);
+    const subCategoryId = Number(params.subCategoryId);
     const userId = user.id;
 
     const subCategory =
@@ -36,6 +38,13 @@ export class FindAndValidateSubCategoryUseCase {
     if (subCategory.category.user.id !== userId) {
       this.exceptionsAdapter.forbidden({
         message: "You are not allowed to access this sub category"
+      });
+      return false;
+    }
+
+    if (subCategory.category.id !== categoryId) {
+      this.exceptionsAdapter.badRequest({
+        message: "This sub category does not belong to the category informed"
       });
       return false;
     }

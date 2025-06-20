@@ -5,58 +5,92 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Req,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from "@nestjs/common";
 import { CreateSubCategoryUseCase } from "@use-cases/sub-category/create/create.use-case";
-import { CreateSubCategoryBodyDto } from "./dto/create.dto";
-import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
+import {
+  CreateSubCategoryBodyDto,
+  CreateSubCategoryParams
+} from "./dto/create.dto";
 import { AuthGuard } from "@infra/commons/guards/auth/auth.guard";
 import { ApiCookieAuth } from "@nestjs/swagger";
 import { FindAllSubCategoryUseCase } from "@use-cases/sub-category/find-all/find-all.find-all.use-case";
 import { SubCategoryGuard } from "@infra/commons/guards/sub-category/sub-category-validation.guard";
 import { SubCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
-import { IdDto } from "@infra/commons/global-dtos/id.dto";
 import { DeleteSubCategoryUseCase } from "@use-cases/sub-category/delete/delete.use-case";
+import {
+  UpdateSubCategoryBodyDto,
+  UpdateSubCategoryParamDto
+} from "./dto/update.dto";
+import { UpdateSubCategoryUseCase } from "@use-cases/sub-category/update/update.use-case";
+import { CategoryGuard } from "@infra/commons/guards/category/category-validation.guard";
+import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import { DeleteSubCategoryParamDto } from "./dto/delete.dto";
+import { FindSubCategoryByIdParamDto } from "./dto/find-by-id.dto";
+import { FindByIdSubCategoryInterceptor } from "@infra/commons/interceptors/sub-category/find-by-id.interceptor";
+import { FindAllSubCategoryParams } from "./dto/find-all.dto";
 
 @ApiCookieAuth()
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, CategoryGuard)
 @Controller("sub-categories")
 export class SubCategoryController {
   constructor(
     private readonly createSubCategoryUseCase: CreateSubCategoryUseCase,
     private readonly findAllSubCategoryUseCase: FindAllSubCategoryUseCase,
-    private readonly deleteSubCategoryUseCase: DeleteSubCategoryUseCase
+    private readonly deleteSubCategoryUseCase: DeleteSubCategoryUseCase,
+    private readonly updateSubCategoryUseCase: UpdateSubCategoryUseCase
   ) {}
 
-  @Post()
+  @Post(":categoryId")
   async create(
-    @Req() req: AuthenticatedRequest,
+    @Req() req: CategoryAuthenticatedRequest,
+    @Param() _: CreateSubCategoryParams,
     @Body() createSubCategoryDto: CreateSubCategoryBodyDto
   ) {
-    return this.createSubCategoryUseCase.execute(
-      req.user.id,
-      createSubCategoryDto
-    );
+    return this.createSubCategoryUseCase.execute(req, createSubCategoryDto);
   }
 
   @UseGuards(SubCategoryGuard)
-  @Get(":id")
+  @UseInterceptors(FindByIdSubCategoryInterceptor)
+  @Get(":categoryId/:subCategoryId")
   async findById(
     @Req() req: SubCategoryAuthenticatedRequest,
-    @Param() _: IdDto
+    @Param() _: FindSubCategoryByIdParamDto
   ) {
     return req.subCategory;
   }
 
-  @Get()
-  async findAll(@Req() req: AuthenticatedRequest) {
-    return this.findAllSubCategoryUseCase.execute(req.user.id);
+  @Get(":categoryId")
+  async findAll(
+    @Req() req: CategoryAuthenticatedRequest,
+    @Param() _: FindAllSubCategoryParams
+  ) {
+    return this.findAllSubCategoryUseCase.execute(req);
   }
 
   @UseGuards(SubCategoryGuard)
-  @Delete(":id")
-  async delete(@Req() req: SubCategoryAuthenticatedRequest, @Param() _: IdDto) {
+  @Put(":categoryId/:subCategoryId")
+  async update(
+    @Req() req: SubCategoryAuthenticatedRequest & CategoryAuthenticatedRequest,
+    @Param() _: UpdateSubCategoryParamDto,
+    @Body() updateSubCategoryDto: UpdateSubCategoryBodyDto
+  ) {
+    return this.updateSubCategoryUseCase.execute(
+      req.subCategory.id,
+      req.category.id,
+      updateSubCategoryDto
+    );
+  }
+
+  @UseGuards(SubCategoryGuard)
+  @Delete(":categoryId/:subCategoryId")
+  async delete(
+    @Req() req: SubCategoryAuthenticatedRequest,
+    @Param() _: DeleteSubCategoryParamDto
+  ) {
     return this.deleteSubCategoryUseCase.execute(req.subCategory.id);
   }
 }

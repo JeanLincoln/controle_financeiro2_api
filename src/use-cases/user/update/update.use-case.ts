@@ -1,7 +1,9 @@
 import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import {
-  CreateOrUpdateAllUserProps,
-  UserRepository
+  BaseCreateOrUpdateUserProps,
+  UserRepository,
+  UserWithoutRelations
 } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
 
@@ -9,17 +11,34 @@ import { Injectable } from "@nestjs/common";
 export class UpdateUserUseCase {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly cryptographyAdapter: CryptographyAdapter
+    private readonly cryptographyAdapter: CryptographyAdapter,
+    private readonly exceptionsAdapter: ExceptionsAdapter
   ) {}
 
   async execute(
-    userId: number,
-    user: CreateOrUpdateAllUserProps
+    user: UserWithoutRelations,
+    updateProps: BaseCreateOrUpdateUserProps
   ): Promise<void> {
+    const emailMaintained = user.email === updateProps.email;
+
+    const emailAlreadyExists = await this.userRepository.findByEmail(
+      updateProps.email
+    );
+
+    const emailAlreadyExistsAndItsNotTheSame =
+      emailAlreadyExists && !emailMaintained;
+
+    if (emailAlreadyExistsAndItsNotTheSame) {
+      this.exceptionsAdapter.badRequest({
+        message: "Email already in use"
+      });
+      return;
+    }
+
     const hashedPassword = await this.cryptographyAdapter.hash(user.password);
 
-    await this.userRepository.update(userId, {
-      ...user,
+    await this.userRepository.update(user.id, {
+      ...updateProps,
       password: hashedPassword
     });
   }

@@ -47,7 +47,4 @@ describe("DeleteUserUseCase", () => {
       calledWith: { id: USER_MOCK.id }
     });
   });
-
-  it.todo("should delete all transactions of the user");
-  it.todo("should delete all subcategories of the user");
 });

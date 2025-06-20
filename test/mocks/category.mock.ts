@@ -1,6 +1,7 @@
 import { CategoryType, type Category } from "@domain/entities/category.entity";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 import { CreateOrUpdateAllCategoryProps } from "@domain/repositories/category.repository";
+import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 
 export const CREATE_OR_UPDATE_CATEGORY_MOCK: CreateOrUpdateAllCategoryProps = {
   name: "Category",
@@ -43,3 +44,10 @@ export const INCOME_CATEGORY_MOCK_2: Category = INCOME_CATEGORIES_MOCK[1];
 export const EXPENSE_CATEGORY_MOCK: Category = EXPENSE_CATEGORIES_MOCK[0];
 
 export const EXPENSE_CATEGORY_MOCK_2: Category = EXPENSE_CATEGORIES_MOCK[1];
+
+export const CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  params: {
+    categoryId: "1"
+  }
+} as CategoryAuthenticatedRequest;

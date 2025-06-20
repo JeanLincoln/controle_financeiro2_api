@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
 import { IsNotEmpty, IsNumber } from "class-validator";
 import { IsString } from "class-validator";
 
@@ -9,6 +10,7 @@ export class CreateSubCategoryParams {
   })
   @IsNumber()
   @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
   categoryId: number;
 }
 
@@ -44,12 +46,4 @@ export class CreateSubCategoryBodyDto {
   @IsString()
   @IsNotEmpty()
   icon: string;
-
-  @ApiProperty({
-    description: "The category id",
-    example: 1
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  categoryId: number;
 }

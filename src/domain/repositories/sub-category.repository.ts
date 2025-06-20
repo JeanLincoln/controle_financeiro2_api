@@ -2,11 +2,11 @@ import { SubCategory } from "@domain/entities/sub-category.entity";
 
 export type CreateOrUpdateAllSubCategoryProps = Omit<
   SubCategory,
-  "id" | "createdAt" | "updatedAt" | "category" | "transactions"
+  "id" | "createdAt" | "updatedAt" | "category" | "transactions" | "categoryId"
 >;
 
 export abstract class SubCategoryRepository {
-  abstract findAllByUserId(userId: number): Promise<SubCategory[]>;
+  abstract findAllByCategory(categoryId: number): Promise<SubCategory[]>;
   abstract findById(id: number): Promise<SubCategory | null>;
   abstract create(
     categoryId: number,

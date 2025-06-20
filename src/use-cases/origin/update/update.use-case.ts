@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import {
   OriginRepository,
-  type CreateOrUpdateAllOriginProps
+  CreateOrUpdateAllOriginProps
 } from "@domain/repositories/origin.repository";
 
 @Injectable()

@@ -20,7 +20,7 @@ describe("FindByIdUserUseCase", () => {
   it("should be able to find a user by id", async () => {
     jest.spyOn(userRepository, "findById").mockResolvedValue(USER_MOCK);
 
-    const user = await sut.execute(1);
+    const user = await sut.execute(USER_MOCK.id);
 
     testUtils.resultExpectations(user, USER_MOCK);
     testUtils.notCalledExpectations([exceptionsAdapter.notFound]);

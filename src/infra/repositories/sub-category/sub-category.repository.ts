@@ -23,11 +23,11 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
     await this.subCategoryRepository.save(subCategoryInstance);
   }
 
-  async findAllByUserId(userId: number): Promise<SubCategory[]> {
+  async findAllByCategory(categoryId: number): Promise<SubCategory[]> {
     return await this.subCategoryRepository.find({
       where: {
         category: {
-          user: { id: userId }
+          id: categoryId
         }
       }
     });

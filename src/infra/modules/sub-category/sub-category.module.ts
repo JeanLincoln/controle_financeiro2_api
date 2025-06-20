@@ -8,15 +8,23 @@ import { AuthModule } from "../auth/auth.module";
 import { FindAllSubCategoryUseCase } from "@use-cases/sub-category/find-all/find-all.find-all.use-case";
 import { FindAndValidateSubCategoryUseCase } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
 import { DeleteSubCategoryUseCase } from "@use-cases/sub-category/delete/delete.use-case";
+import { UpdateSubCategoryUseCase } from "@use-cases/sub-category/update/update.use-case";
 
 @Module({
-  imports: [DatabaseModule, ExceptionsModule, CategoryModule, AuthModule],
+  imports: [
+    DatabaseModule,
+    ExceptionsModule,
+    CategoryModule,
+    AuthModule,
+    CategoryModule
+  ],
   controllers: [SubCategoryController],
   providers: [
     CreateSubCategoryUseCase,
     FindAllSubCategoryUseCase,
     FindAndValidateSubCategoryUseCase,
-    DeleteSubCategoryUseCase
+    DeleteSubCategoryUseCase,
+    UpdateSubCategoryUseCase
   ]
 })
 export class SubCategoryModule {}

@@ -1,4 +1,4 @@
-import { Injectable, type ExecutionContext, CanActivate } from "@nestjs/common";
+import { Injectable, ExecutionContext, CanActivate } from "@nestjs/common";
 import { RouteAuthUseCase } from "@use-cases/auth/route-auth/route-auth.use-case";
 
 @Injectable()
