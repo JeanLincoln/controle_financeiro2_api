@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -20,6 +21,8 @@ import { UpdateOriginBodyDto, UpdateOriginParamDto } from "./dto/update.dto";
 import { FindOriginByIdParamDto } from "./dto/find-by-id.dto";
 import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
 import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
+import { DeleteOriginUseCase } from "@use-cases/origin/delete/delete.use-case";
+import { DeleteOriginParamDto } from "./dto/delete.dto";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -28,7 +31,8 @@ import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decor
 export class OriginController {
   constructor(
     private readonly createOriginUseCase: CreateOriginUseCase,
-    private readonly updateOriginUseCase: UpdateOriginUseCase
+    private readonly updateOriginUseCase: UpdateOriginUseCase,
+    private readonly deleteOriginUseCase: DeleteOriginUseCase
   ) {}
 
   @Post()
@@ -57,5 +61,14 @@ export class OriginController {
     @Body() body: UpdateOriginBodyDto
   ) {
     return this.updateOriginUseCase.execute(req.origin.id, req.user.id, body);
+  }
+
+  @UseGuards(OriginGuard)
+  @Delete(":originId")
+  async delete(
+    @Req() req: OriginAuthenticatedRequest,
+    @Param() _: DeleteOriginParamDto
+  ) {
+    return this.deleteOriginUseCase.execute(req.origin.id);
   }
 }

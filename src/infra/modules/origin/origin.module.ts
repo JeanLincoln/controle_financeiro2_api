@@ -7,6 +7,7 @@ import { FindAndValidateOriginUseCase } from "@use-cases/origin/find-and-validat
 import { OriginController } from "@infra/controllers/origin/origin.controller";
 import { CreateOriginUseCase } from "@use-cases/origin/create/create.use-case";
 import { UpdateOriginUseCase } from "@use-cases/origin/update/update.use-case";
+import { DeleteOriginUseCase } from "@use-cases/origin/delete/delete.use-case";
 
 @Module({
   imports: [DatabaseModule, ExceptionsModule, CategoryModule, AuthModule],
@@ -14,7 +15,8 @@ import { UpdateOriginUseCase } from "@use-cases/origin/update/update.use-case";
   providers: [
     FindAndValidateOriginUseCase,
     CreateOriginUseCase,
-    UpdateOriginUseCase
+    UpdateOriginUseCase,
+    DeleteOriginUseCase
   ]
 })
 export class OriginModule {}
