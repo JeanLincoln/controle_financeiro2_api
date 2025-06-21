@@ -29,7 +29,9 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
   ): Promise<void> {
     const categoryInstance = this.categoryRepository.create({
       ...category,
-      user: { id: userId }
+      user: { id: userId },
+      createdAt: new Date(),
+      updatedAt: new Date()
     });
     await this.categoryRepository.save(categoryInstance);
   }
@@ -41,7 +43,8 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
   ): Promise<void> {
     await this.categoryRepository.update(id, {
       ...category,
-      user: { id: userId }
+      user: { id: userId },
+      updatedAt: new Date()
     });
   }
 

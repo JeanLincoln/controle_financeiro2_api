@@ -29,7 +29,9 @@ export class TypeOrmOriginRepository implements OriginRepository {
   ): Promise<void> {
     const originInstance = this.originRepository.create({
       ...origin,
-      user: { id: userId }
+      user: { id: userId },
+      createdAt: new Date(),
+      updatedAt: new Date()
     });
     await this.originRepository.save(originInstance);
   }
@@ -41,7 +43,8 @@ export class TypeOrmOriginRepository implements OriginRepository {
   ): Promise<void> {
     await this.originRepository.update(id, {
       ...origin,
-      user: { id: userId }
+      user: { id: userId },
+      updatedAt: new Date()
     });
   }
 

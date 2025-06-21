@@ -35,7 +35,14 @@ export class UpdateUserUseCase {
       return;
     }
 
-    const hashedPassword = await this.cryptographyAdapter.hash(user.password);
+    const itsTheSamePassword = await this.cryptographyAdapter.compare(
+      user.password,
+      updateProps.password
+    );
+
+    const hashedPassword = itsTheSamePassword
+      ? user.password
+      : await this.cryptographyAdapter.hash(updateProps.password);
 
     await this.userRepository.update(user.id, {
       ...updateProps,

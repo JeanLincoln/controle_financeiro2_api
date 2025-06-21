@@ -18,7 +18,9 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
   ): Promise<void> {
     const subCategoryInstance = this.subCategoryRepository.create({
       ...subCategory,
-      category: { id: categoryId }
+      category: { id: categoryId },
+      createdAt: new Date(),
+      updatedAt: new Date()
     });
     await this.subCategoryRepository.save(subCategoryInstance);
   }
@@ -47,7 +49,8 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
   ): Promise<void> {
     await this.subCategoryRepository.update(id, {
       ...subCategory,
-      category: { id: categoryId }
+      category: { id: categoryId },
+      updatedAt: new Date()
     });
   }
 

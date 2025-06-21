@@ -25,7 +25,11 @@ export class TypeOrmUserRepository implements UserRepository {
   }
 
   async create(user: BaseCreateOrUpdateUserProps): Promise<void> {
-    await this.userRepository.save({ ...user, createdAt: new Date() });
+    await this.userRepository.save({
+      ...user,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
   }
 
   async update(id: number, user: BaseCreateOrUpdateUserProps): Promise<void> {
