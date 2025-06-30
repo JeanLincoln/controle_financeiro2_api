@@ -32,19 +32,25 @@ describe("UpdateUserUseCase", () => {
   it("should be able to update a user", async () => {
     jest.spyOn(userRepository, "findByEmail").mockResolvedValue(null);
     jest.spyOn(cryptographyAdapter, "hash").mockResolvedValue("hashedPassword");
+    jest.spyOn(cryptographyAdapter, "compare").mockResolvedValue(false);
     jest.spyOn(userRepository, "update");
 
-    const result = await sut.execute(
-      USER_MOCK,
-      CREATE_OR_UPDATE_USER_PARAMS_MOCK
-    );
+    const result = await sut.execute(USER_MOCK, {
+      ...CREATE_OR_UPDATE_USER_PARAMS_MOCK,
+      password: "newPassword"
+    });
 
     testUtils.resultExpectations(result, undefined);
     testUtils.notCalledExpectations([exceptionsAdapter.badRequest]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: cryptographyAdapter.hash,
-      calledWith: { password: CREATE_OR_UPDATE_USER_PARAMS_MOCK.password }
+      calledWith: { password: "newPassword" }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: cryptographyAdapter.compare,
+      calledWith: [USER_MOCK.password, "newPassword"]
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -64,9 +70,10 @@ describe("UpdateUserUseCase", () => {
     });
   });
 
-  it("should not be able to update a user if the email is already in use", async () => {
-    jest.spyOn(userRepository, "findByEmail").mockResolvedValue(USER_MOCK);
-    jest.spyOn(cryptographyAdapter, "hash").mockResolvedValue("hashedPassword");
+  it("should not hash the password again if it haven't been changed", async () => {
+    jest.spyOn(userRepository, "findByEmail").mockResolvedValue(null);
+    jest.spyOn(cryptographyAdapter, "compare").mockResolvedValue(true);
+    jest.spyOn(cryptographyAdapter, "hash");
     jest.spyOn(userRepository, "update");
 
     const result = await sut.execute(
@@ -77,6 +84,49 @@ describe("UpdateUserUseCase", () => {
     testUtils.resultExpectations(result, undefined);
     testUtils.notCalledExpectations([
       cryptographyAdapter.hash,
+      exceptionsAdapter.badRequest
+    ]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: cryptographyAdapter.compare,
+      calledWith: [
+        USER_MOCK.password,
+        CREATE_OR_UPDATE_USER_PARAMS_MOCK.password
+      ]
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.findByEmail,
+      calledWith: { email: CREATE_OR_UPDATE_USER_PARAMS_MOCK.email }
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: userRepository.update,
+      calledWith: {
+        id: 1,
+        user: {
+          ...CREATE_OR_UPDATE_USER_PARAMS_MOCK,
+          password: "123456"
+        }
+      }
+    });
+  });
+
+  it("should not be able to update a user if the email is already in use", async () => {
+    jest.spyOn(userRepository, "findByEmail").mockResolvedValue(USER_MOCK);
+    jest.spyOn(cryptographyAdapter, "hash");
+    jest.spyOn(cryptographyAdapter, "compare");
+    jest.spyOn(userRepository, "update");
+
+    const result = await sut.execute(
+      USER_MOCK,
+      CREATE_OR_UPDATE_USER_PARAMS_MOCK
+    );
+
+    testUtils.resultExpectations(result, undefined);
+    testUtils.notCalledExpectations([
+      cryptographyAdapter.hash,
+      cryptographyAdapter.compare,
       userRepository.update
     ]);
     testUtils.timesCalledExpectations({
