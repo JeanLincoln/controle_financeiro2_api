@@ -23,6 +23,8 @@ import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fi
 import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 import { DeleteOriginUseCase } from "@use-cases/origin/delete/delete.use-case";
 import { DeleteOriginParamDto } from "./dto/delete.dto";
+import { FindAllOriginUseCase } from "@use-cases/origin/find-all/find-all.use-case";
+import { Origin } from "@domain/entities/origin.entity";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -32,7 +34,8 @@ export class OriginController {
   constructor(
     private readonly createOriginUseCase: CreateOriginUseCase,
     private readonly updateOriginUseCase: UpdateOriginUseCase,
-    private readonly deleteOriginUseCase: DeleteOriginUseCase
+    private readonly deleteOriginUseCase: DeleteOriginUseCase,
+    private readonly findAllOriginUseCase: FindAllOriginUseCase
   ) {}
 
   @Post()
@@ -70,5 +73,12 @@ export class OriginController {
     @Param() _: DeleteOriginParamDto
   ) {
     return this.deleteOriginUseCase.execute(req.origin.id);
+  }
+
+  @Get()
+  async findAll(
+    @Req() req: OriginAuthenticatedRequest
+  ): Promise<Origin[] | void> {
+    return this.findAllOriginUseCase.execute(req.user.id);
   }
 }

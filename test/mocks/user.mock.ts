@@ -1,4 +1,4 @@
-import type { User } from "@domain/entities/user.entity";
+import { User } from "@domain/entities/user.entity";
 import { BaseCreateOrUpdateUserProps } from "@domain/repositories/user.repository";
 
 export const CREATE_OR_UPDATE_USER_PARAMS_MOCK: BaseCreateOrUpdateUserProps = {

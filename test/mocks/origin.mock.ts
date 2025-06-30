@@ -1,4 +1,4 @@
-import type { Origin } from "@domain/entities/origin.entity";
+import { Origin } from "@domain/entities/origin.entity";
 import { CreateOrUpdateAllOriginProps } from "@domain/repositories/origin.repository";
 import { OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
@@ -10,7 +10,7 @@ export const CREATE_OR_UPDATE_ORIGIN_MOCK: CreateOrUpdateAllOriginProps = {
   icon: "test-icon"
 };
 
-export const CATEGORIES_MOCK: Origin[] = Array.from(
+export const ORIGINS_MOCK: Origin[] = Array.from(
   { length: 10 },
   (_, index) => ({
     id: index + 1,
@@ -25,9 +25,9 @@ export const CATEGORIES_MOCK: Origin[] = Array.from(
   })
 );
 
-export const ORIGIN_MOCK: Origin = CATEGORIES_MOCK[0];
+export const ORIGIN_MOCK: Origin = ORIGINS_MOCK[0];
 
-export const ORIGIN_MOCK_2: Origin = CATEGORIES_MOCK[1];
+export const ORIGIN_MOCK_2: Origin = ORIGINS_MOCK[1];
 
 export const ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,

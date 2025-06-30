@@ -12,8 +12,11 @@ export class TypeOrmOriginRepository implements OriginRepository {
     private readonly originRepository: Repository<Origin>
   ) {}
 
-  async findAll(): Promise<Origin[]> {
-    return this.originRepository.find();
+  async findAll(userId: number): Promise<Origin[]> {
+    return this.originRepository.find({
+      where: { user: { id: userId } },
+      relations: ["user"]
+    });
   }
 
   async findById(id: number): Promise<Origin | null> {

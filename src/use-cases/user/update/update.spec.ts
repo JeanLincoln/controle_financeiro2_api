@@ -32,19 +32,20 @@ describe("UpdateUserUseCase", () => {
   it("should be able to update a user", async () => {
     jest.spyOn(userRepository, "findByEmail").mockResolvedValue(null);
     jest.spyOn(cryptographyAdapter, "hash").mockResolvedValue("hashedPassword");
+    jest.spyOn(cryptographyAdapter, "compare").mockResolvedValue(false);
     jest.spyOn(userRepository, "update");
 
-    const result = await sut.execute(
-      USER_MOCK,
-      CREATE_OR_UPDATE_USER_PARAMS_MOCK
-    );
+    const result = await sut.execute(USER_MOCK, {
+      ...CREATE_OR_UPDATE_USER_PARAMS_MOCK,
+      password: "newPassword"
+    });
 
     testUtils.resultExpectations(result, undefined);
     testUtils.notCalledExpectations([exceptionsAdapter.badRequest]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: cryptographyAdapter.hash,
-      calledWith: { password: CREATE_OR_UPDATE_USER_PARAMS_MOCK.password }
+      calledWith: { password: "newPassword" }
     });
     testUtils.timesCalledExpectations({
       times: 1,
