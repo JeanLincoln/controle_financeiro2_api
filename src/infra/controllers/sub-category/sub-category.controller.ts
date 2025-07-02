@@ -18,25 +18,25 @@ import {
 import { AuthGuard } from "@infra/commons/guards/auth/auth.guard";
 import { ApiCookieAuth } from "@nestjs/swagger";
 import { FindAllSubCategoryUseCase } from "@use-cases/sub-category/find-all/find-all.find-all.use-case";
-import { SubCategoryGuard } from "@infra/commons/guards/sub-category/sub-category-validation.guard";
-import { SubCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
+import { SubCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { DeleteSubCategoryUseCase } from "@use-cases/sub-category/delete/delete.use-case";
 import {
   UpdateSubCategoryBodyDto,
   UpdateSubCategoryParamDto
 } from "./dto/update.dto";
 import { UpdateSubCategoryUseCase } from "@use-cases/sub-category/update/update.use-case";
-import { CategoryGuard } from "@infra/commons/guards/category/category-validation.guard";
-import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { DeleteSubCategoryParamDto } from "./dto/delete.dto";
 import { FindSubCategoryByIdParamDto } from "./dto/find-by-id.dto";
 import { FindAllSubCategoryParams } from "./dto/find-all.dto";
 import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
 import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
+import { CategoryParamGuard } from "@infra/commons/guards/category/category-param-validation.guard";
+import { SubCategoryParamGuard } from "@infra/commons/guards/sub-category/sub-category-param-validation.guard";
 
 @UseInterceptors(ExcludeFieldsInterceptor)
 @ApiCookieAuth()
-@UseGuards(AuthGuard, CategoryGuard)
+@UseGuards(AuthGuard, CategoryParamGuard)
 @Controller("sub-categories")
 export class SubCategoryController {
   constructor(
@@ -55,7 +55,7 @@ export class SubCategoryController {
     return this.createSubCategoryUseCase.execute(req, createSubCategoryDto);
   }
 
-  @UseGuards(SubCategoryGuard)
+  @UseGuards(SubCategoryParamGuard)
   @ExcludeFields("user")
   @Get(":categoryId/:subCategoryId")
   async findById(
@@ -73,7 +73,7 @@ export class SubCategoryController {
     return this.findAllSubCategoryUseCase.execute(req);
   }
 
-  @UseGuards(SubCategoryGuard)
+  @UseGuards(SubCategoryParamGuard)
   @Put(":categoryId/:subCategoryId")
   async update(
     @Req() req: SubCategoryAuthenticatedRequest & CategoryAuthenticatedRequest,
@@ -87,7 +87,7 @@ export class SubCategoryController {
     );
   }
 
-  @UseGuards(SubCategoryGuard)
+  @UseGuards(SubCategoryParamGuard)
   @Delete(":categoryId/:subCategoryId")
   async delete(
     @Req() req: SubCategoryAuthenticatedRequest,

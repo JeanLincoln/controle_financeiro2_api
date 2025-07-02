@@ -1,6 +1,6 @@
 import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
 
-export class SubCategoryRepositoryStub extends SubCategoryRepository {
+export class SubCategoryRepositoryStub implements SubCategoryRepository {
   async create() {
     return Promise.resolve();
   }
@@ -11,6 +11,10 @@ export class SubCategoryRepositoryStub extends SubCategoryRepository {
 
   async findById() {
     return Promise.resolve(null);
+  }
+
+  async findByIds() {
+    return Promise.resolve([]);
   }
 
   async update() {

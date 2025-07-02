@@ -12,7 +12,7 @@ export interface CategoryAuthenticatedRequest extends AuthenticatedRequest {
 }
 
 @Injectable()
-export class FindAndValidateCategoryUseCase {
+export class FindAndValidateFromParamCategoryUseCase {
   constructor(
     private readonly categoryRepository: CategoryRepository,
     private readonly exceptionsAdapter: ExceptionsAdapter

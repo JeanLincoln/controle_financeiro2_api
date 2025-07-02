@@ -75,7 +75,7 @@ export class CreateCategoriesTable1750013754032 implements MigrationInterface {
       new TableForeignKey({
         columnNames: ["user_id"],
         referencedColumnNames: ["id"],
-        referencedTableName: "categories",
+        referencedTableName: "users",
         onDelete: "CASCADE"
       })
     );

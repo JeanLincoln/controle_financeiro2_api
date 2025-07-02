@@ -1,7 +1,8 @@
-import { CategoryType, type Category } from "@domain/entities/category.entity";
+import { CategoryType, Category } from "@domain/entities/category.entity";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 import { CreateOrUpdateAllCategoryProps } from "@domain/repositories/category.repository";
-import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
+import { ManyCategoriesAuthenticatedRequest } from "@use-cases/category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
 
 export const CREATE_OR_UPDATE_CATEGORY_MOCK: CreateOrUpdateAllCategoryProps = {
   name: "Category",
@@ -45,9 +46,24 @@ export const EXPENSE_CATEGORY_MOCK: Category = EXPENSE_CATEGORIES_MOCK[0];
 
 export const EXPENSE_CATEGORY_MOCK_2: Category = EXPENSE_CATEGORIES_MOCK[1];
 
+export const USER_MOCK_1_CATEGORIES: Category[] = CATEGORIES_MOCK.filter(
+  (category) => category.user.id === USER_MOCK.id
+);
+
+export const USER_MOCK_2_CATEGORIES: Category[] = CATEGORIES_MOCK.filter(
+  (category) => category.user.id === USER_MOCK_2.id
+);
+
 export const CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   params: {
     categoryId: "1"
   }
 } as CategoryAuthenticatedRequest;
+
+export const MANY_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  body: {
+    categoriesIds: USER_MOCK_1_CATEGORIES.map((category) => category.id)
+  }
+} as ManyCategoriesAuthenticatedRequest;

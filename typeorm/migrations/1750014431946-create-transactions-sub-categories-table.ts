@@ -30,6 +30,7 @@ export class CreateTransactionsSubCategoriesTable1750014431946
           {
             name: "updated_at",
             type: "timestamp",
+            isNullable: true,
             default: null
           }
         ]

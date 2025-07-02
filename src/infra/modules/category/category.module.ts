@@ -8,7 +8,8 @@ import { FindAllCategoryUseCase } from "@use-cases/category/find-all/find-all.us
 import { UpdateCategoryUseCase } from "@use-cases/category/update/update.use-case";
 import { UserModule } from "../user/user.module";
 import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-case";
-import { FindAndValidateCategoryUseCase } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import { FindAndValidateFromParamCategoryUseCase } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
+import { FindAndValidateManyFromBodyCategoryUseCase } from "@use-cases/category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
 
 @Module({
   imports: [DatabaseModule, AuthModule, ExceptionsModule, UserModule],
@@ -18,8 +19,12 @@ import { FindAndValidateCategoryUseCase } from "@use-cases/category/find-and-val
     FindAllCategoryUseCase,
     UpdateCategoryUseCase,
     DeleteCategoryUseCase,
-    FindAndValidateCategoryUseCase
+    FindAndValidateFromParamCategoryUseCase,
+    FindAndValidateManyFromBodyCategoryUseCase
   ],
-  exports: [FindAndValidateCategoryUseCase]
+  exports: [
+    FindAndValidateFromParamCategoryUseCase,
+    FindAndValidateManyFromBodyCategoryUseCase
+  ]
 })
 export class CategoryModule {}

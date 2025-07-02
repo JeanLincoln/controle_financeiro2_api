@@ -49,7 +49,8 @@ export class Transaction {
 
   @Column({
     type: "boolean",
-    default: false
+    default: false,
+    name: "is_recurring"
   })
   isRecurring: boolean;
 
@@ -59,7 +60,7 @@ export class Transaction {
     nullable: true,
     default: null
   })
-  endDate: Date;
+  endDate: Date | null;
 
   @Column({
     type: "int",
@@ -92,7 +93,7 @@ export class Transaction {
 
   @ManyToMany(() => Category, (category) => category.transactions)
   @JoinTable({
-    name: "transaction_categories",
+    name: "transactions_categories",
     joinColumn: {
       name: "transaction_id",
       referencedColumnName: "id"
@@ -106,7 +107,7 @@ export class Transaction {
 
   @ManyToMany(() => SubCategory, (subCategory) => subCategory.transactions)
   @JoinTable({
-    name: "transaction_sub_categories",
+    name: "transactions_sub_categories",
     joinColumn: {
       name: "transaction_id",
       referencedColumnName: "id"

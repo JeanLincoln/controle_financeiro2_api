@@ -13,7 +13,7 @@ export interface SubCategoryAuthenticatedRequest extends AuthenticatedRequest {
 }
 
 @Injectable()
-export class FindAndValidateSubCategoryUseCase {
+export class FindAndValidateFromParamSubCategoryUseCase {
   constructor(
     private readonly subCategoryRepository: SubCategoryRepository,
     private readonly exceptionsAdapter: ExceptionsAdapter

@@ -30,6 +30,7 @@ export class CreateTransactionsCategoriesTable1750014355131
           {
             name: "updated_at",
             type: "timestamp",
+            isNullable: true,
             default: null
           }
         ]

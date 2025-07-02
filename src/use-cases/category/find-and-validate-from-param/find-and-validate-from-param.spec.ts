@@ -1,4 +1,4 @@
-import { FindAndValidateCategoryUseCase } from "./find-and-validate.use-case";
+import { FindAndValidateFromParamCategoryUseCase } from "./find-and-validate-from-param.use-case";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { CategoryRepository } from "@domain/repositories/category.repository";
@@ -9,15 +9,15 @@ import {
   INCOME_CATEGORY_MOCK
 } from "@test/mocks/category.mock";
 
-describe("FindAndValidateCategoryUseCase", () => {
-  let sut: FindAndValidateCategoryUseCase;
+describe("FindAndValidateFromParamCategoryUseCase", () => {
+  let sut: FindAndValidateFromParamCategoryUseCase;
   let categoryRepository: CategoryRepository;
   let exceptionsAdapter: ExceptionsAdapter;
 
   beforeEach(() => {
     categoryRepository = new CategoryRepositoryStub();
     exceptionsAdapter = new ExceptionsAdapterStub();
-    sut = new FindAndValidateCategoryUseCase(
+    sut = new FindAndValidateFromParamCategoryUseCase(
       categoryRepository,
       exceptionsAdapter
     );
