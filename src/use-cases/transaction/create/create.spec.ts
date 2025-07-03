@@ -2,10 +2,10 @@ import { TransactionRepository } from "@domain/repositories/transaction.reposito
 import { CreateTransactionUseCase } from "./create.use-case";
 import { TransactionRepositoryStub } from "@test/stubs/repositories/transaction.stub";
 import { USER_MOCK } from "@test/mocks/user.mock";
-import { TRANSACTION_MOCK_1 } from "@test/mocks/transaction.mock";
 import { ORIGIN_MOCK } from "@test/mocks/origin.mock";
 import { USER_MOCK_1_CATEGORIES } from "@test/mocks/category.mock";
 import { USER_MOCK_1_SUB_CATEGORIES } from "@test/mocks/sub-category.mock";
+import { USER_1_TRANSACTIONS_MOCK } from "@test/mocks/transaction.mock";
 
 describe("CreateTransactionUseCase", () => {
   let sut: CreateTransactionUseCase;
@@ -24,7 +24,7 @@ describe("CreateTransactionUseCase", () => {
       ORIGIN_MOCK,
       USER_MOCK_1_CATEGORIES,
       USER_MOCK_1_SUB_CATEGORIES,
-      TRANSACTION_MOCK_1
+      USER_1_TRANSACTIONS_MOCK[0]
     );
 
     testUtils.resultExpectations(result, undefined);
@@ -36,7 +36,7 @@ describe("CreateTransactionUseCase", () => {
         ORIGIN_MOCK,
         USER_MOCK_1_CATEGORIES,
         USER_MOCK_1_SUB_CATEGORIES,
-        TRANSACTION_MOCK_1
+        USER_1_TRANSACTIONS_MOCK[0]
       ]
     });
   });

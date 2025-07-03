@@ -2,6 +2,7 @@ import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 import { CreateOrUpdateAllTransactionProps } from "@domain/repositories/transaction.repository";
 import { ORIGIN_MOCK } from "./origin.mock";
 import { Transaction } from "@domain/entities/transaction.entity";
+import { TransactionAuthenticatedRequest } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 
 export const CREATE_OR_UPDATE_TRANSACTION_MOCK: CreateOrUpdateAllTransactionProps =
   {
@@ -33,5 +34,16 @@ export const TRANSACTIONS_MOCK: Transaction[] = Array.from(
   })
 );
 
-export const TRANSACTION_MOCK_1: Transaction = TRANSACTIONS_MOCK[0];
-export const TRANSACTION_MOCK_2: Transaction = TRANSACTIONS_MOCK[1];
+export const USER_1_TRANSACTIONS_MOCK: Transaction[] = TRANSACTIONS_MOCK.filter(
+  (transaction) => transaction.user.id === USER_MOCK.id
+);
+export const USER_2_TRANSACTIONS_MOCK: Transaction[] = TRANSACTIONS_MOCK.filter(
+  (transaction) => transaction.user.id === USER_MOCK_2.id
+);
+
+export const TRANSACTION_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  params: {
+    transactionId: 1
+  }
+} as TransactionAuthenticatedRequest;
