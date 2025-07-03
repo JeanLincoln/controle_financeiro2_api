@@ -7,8 +7,7 @@ import {
   Post,
   Put,
   Req,
-  UseGuards,
-  UseInterceptors
+  UseGuards
 } from "@nestjs/common";
 import { CreateUserUseCase } from "@use-cases/user/create/create.use-case";
 import { CreateUserDto } from "./dto/create.dto";
@@ -21,14 +20,11 @@ import { FindAllUserUseCase } from "@use-cases/user/find-all/find-all.use-case";
 import { DeleteUserUseCase } from "@use-cases/user/delete/delete.use-case";
 import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 import { FindUserByIdParamDto } from "./dto/find-by-id.dto";
-import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
-import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 
 @ApiTags("Users")
 @ApiCookieAuth()
 @Controller("users")
 @UseGuards(AuthGuard)
-@UseInterceptors(ExcludeFieldsInterceptor)
 export class UserController {
   constructor(
     private readonly createUserUseCase: CreateUserUseCase,
@@ -43,13 +39,11 @@ export class UserController {
     return this.createUserUseCase.execute(createUserDto);
   }
 
-  @ExcludeFields("password")
   @Get()
   async findAll() {
     return this.findAllUserUseCase.execute();
   }
 
-  @ExcludeFields("password")
   @Get(":userId")
   async findById(
     @Req() req: AuthenticatedRequest,

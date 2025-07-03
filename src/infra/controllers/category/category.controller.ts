@@ -7,8 +7,7 @@ import {
   Post,
   Put,
   Req,
-  UseGuards,
-  UseInterceptors
+  UseGuards
 } from "@nestjs/common";
 import { CreateCategoryUseCase } from "@use-cases/category/create/create.use-case";
 import { CreateCategoryDto } from "./dto/create.dto";
@@ -22,12 +21,10 @@ import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-cas
 import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { DeleteCategoryParamDto } from "./dto/delete.dto";
 import { FindCategoryByIdParamDto } from "./dto/find-by-id.dto";
-import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
 import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 import { CategoryParamGuard } from "@infra/commons/guards/category/category-param-validation.guard";
 
 @ApiCookieAuth()
-@UseInterceptors(ExcludeFieldsInterceptor)
 @UseGuards(AuthGuard)
 @Controller("categories")
 export class CategoryController {

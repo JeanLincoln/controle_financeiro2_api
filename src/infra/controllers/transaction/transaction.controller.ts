@@ -6,8 +6,7 @@ import {
   Param,
   Post,
   Req,
-  UseGuards,
-  UseInterceptors
+  UseGuards
 } from "@nestjs/common";
 import { CreateTransactionUseCase } from "@use-cases/transaction/create/create.use-case";
 import { CreateTransactionDto } from "./dto/create.dto";
@@ -21,10 +20,8 @@ import { TransactionAuthenticatedRequest } from "@use-cases/transaction/find-and
 import { FindTransactionByIdParamDto } from "./dto/find-by-id.dto";
 import { TransactionParamGuard } from "@infra/commons/guards/transaction/transaction-param-validation.guard";
 import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
-import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
 
 @UseGuards(AuthGuard)
-@UseInterceptors(ExcludeFieldsInterceptor)
 @Controller("transaction")
 export class TransactionController {
   constructor(
