@@ -10,10 +10,9 @@ import {
   UseGuards,
   UseInterceptors
 } from "@nestjs/common";
-import { OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
+import { OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { AuthGuard } from "@infra/commons/guards/auth/auth.guard";
 import { ApiCookieAuth } from "@nestjs/swagger";
-import { OriginGuard } from "@infra/commons/guards/origin/origin-validation.guard";
 import { CreateOriginBodyDto } from "./dto/create.dto";
 import { CreateOriginUseCase } from "@use-cases/origin/create/create.use-case";
 import { UpdateOriginUseCase } from "@use-cases/origin/update/update.use-case";
@@ -25,6 +24,7 @@ import { DeleteOriginUseCase } from "@use-cases/origin/delete/delete.use-case";
 import { DeleteOriginParamDto } from "./dto/delete.dto";
 import { FindAllOriginUseCase } from "@use-cases/origin/find-all/find-all.use-case";
 import { Origin } from "@domain/entities/origin.entity";
+import { OriginParamGuard } from "@infra/commons/guards/origin/origin-param-validation.guard";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -46,7 +46,7 @@ export class OriginController {
     return this.createOriginUseCase.execute(req.user.id, body);
   }
 
-  @UseGuards(OriginGuard)
+  @UseGuards(OriginParamGuard)
   @ExcludeFields("user")
   @Get(":originId")
   async findById(
@@ -56,7 +56,7 @@ export class OriginController {
     return req.origin;
   }
 
-  @UseGuards(OriginGuard)
+  @UseGuards(OriginParamGuard)
   @Put(":originId")
   async update(
     @Req() req: OriginAuthenticatedRequest,
@@ -66,7 +66,7 @@ export class OriginController {
     return this.updateOriginUseCase.execute(req.origin.id, req.user.id, body);
   }
 
-  @UseGuards(OriginGuard)
+  @UseGuards(OriginParamGuard)
   @Delete(":originId")
   async delete(
     @Req() req: OriginAuthenticatedRequest,

@@ -5,15 +5,15 @@ import {
 } from "@domain/repositories/sub-category.repository";
 import { Injectable } from "@nestjs/common";
 import {
-  FindAndValidateCategoryUseCase,
-  CategoryAuthenticatedRequest
-} from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+  CategoryAuthenticatedRequest,
+  FindAndValidateFromParamCategoryUseCase
+} from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
 
 @Injectable()
 export class CreateSubCategoryUseCase {
   constructor(
     private readonly subCategoryRepository: SubCategoryRepository,
-    private readonly findAndValidateCategoryUseCase: FindAndValidateCategoryUseCase
+    private readonly findAndValidateCategoryUseCase: FindAndValidateFromParamCategoryUseCase
   ) {}
 
   async execute(

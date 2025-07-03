@@ -4,23 +4,26 @@ import { OriginRepository } from "@domain/repositories/origin.repository";
 import { Injectable } from "@nestjs/common";
 import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 
-export interface OriginAuthenticatedRequest extends AuthenticatedRequest {
-  params: {
-    originId: string;
-  };
+export interface OriginBodyData
+  extends ReadableStream<Uint8Array<ArrayBufferLike>> {
+  originId: number;
+}
+
+export interface OriginBodyAuthenticatedRequest extends AuthenticatedRequest {
+  body: OriginBodyData;
   origin: Origin;
 }
 
 @Injectable()
-export class FindAndValidateOriginUseCase {
+export class FindAndValidateOriginFromBodyUseCase {
   constructor(
     private readonly originRepository: OriginRepository,
     private readonly exceptionsAdapter: ExceptionsAdapter
   ) {}
 
-  async execute(request: OriginAuthenticatedRequest): Promise<boolean> {
-    const { user, params } = request;
-    const originId = Number(params.originId);
+  async execute(request: OriginBodyAuthenticatedRequest): Promise<boolean> {
+    const { user, body } = request;
+    const originId = Number(body.originId);
     const userId = user.id;
 
     const origin = await this.originRepository.findById(originId);

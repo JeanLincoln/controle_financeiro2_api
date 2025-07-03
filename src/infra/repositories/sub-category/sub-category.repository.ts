@@ -4,7 +4,7 @@ import {
   CreateOrUpdateAllSubCategoryProps
 } from "@domain/repositories/sub-category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 
 export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
   constructor(
@@ -38,6 +38,13 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
   async findById(id: number): Promise<SubCategory | null> {
     return await this.subCategoryRepository.findOne({
       where: { id },
+      relations: ["category.user"]
+    });
+  }
+
+  async findByIds(ids: number[]): Promise<SubCategory[] | null> {
+    return await this.subCategoryRepository.find({
+      where: { id: In(ids) },
       relations: ["category.user"]
     });
   }

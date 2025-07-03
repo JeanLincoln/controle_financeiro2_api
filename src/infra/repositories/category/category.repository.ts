@@ -1,10 +1,11 @@
 import { Category } from "@domain/entities/category.entity";
+import { User } from "@domain/entities/user.entity";
 import {
   CreateOrUpdateAllCategoryProps,
   CategoryRepository
 } from "@domain/repositories/category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Repository, In } from "typeorm";
 
 export class TypeOrmCategoryRepository implements CategoryRepository {
   constructor(
@@ -23,13 +24,20 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     });
   }
 
+  async findByIds(ids: number[]): Promise<Category[]> {
+    return this.categoryRepository.find({
+      where: { id: In(ids) },
+      relations: ["user"]
+    });
+  }
+
   async create(
-    userId: number,
+    user: User,
     category: CreateOrUpdateAllCategoryProps
   ): Promise<void> {
     const categoryInstance = this.categoryRepository.create({
       ...category,
-      user: { id: userId },
+      user: user,
       createdAt: new Date(),
       updatedAt: new Date()
     });

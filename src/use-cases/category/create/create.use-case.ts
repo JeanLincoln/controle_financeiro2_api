@@ -1,32 +1,18 @@
-import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { User } from "@domain/entities/user.entity";
 import {
   CategoryRepository,
   CreateOrUpdateAllCategoryProps
 } from "@domain/repositories/category.repository";
-import { UserRepository } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class CreateCategoryUseCase {
-  constructor(
-    private readonly categoryRepository: CategoryRepository,
-    private readonly userRepository: UserRepository,
-    private readonly exceptionsAdapter: ExceptionsAdapter
-  ) {}
+  constructor(private readonly categoryRepository: CategoryRepository) {}
 
   async execute(
-    userId: number,
+    user: User,
     category: CreateOrUpdateAllCategoryProps
   ): Promise<void> {
-    const userExists = await this.userRepository.findById(userId);
-
-    if (!userExists) {
-      this.exceptionsAdapter.notFound({
-        message: "User not found"
-      });
-      return;
-    }
-
-    await this.categoryRepository.create(userId, category);
+    await this.categoryRepository.create(user, category);
   }
 }

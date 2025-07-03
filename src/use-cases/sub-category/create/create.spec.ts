@@ -10,24 +10,25 @@ import {
   CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   EXPENSE_CATEGORY_MOCK
 } from "@test/mocks/category.mock";
-import { FindAndValidateCategoryUseCase } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import { FindAndValidateFromParamCategoryUseCase } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
 
 describe("CreateSubCategoryUseCase", () => {
   let sut: CreateSubCategoryUseCase;
   let subCategoryRepository: SubCategoryRepository;
   let exceptionAdapter: ExceptionsAdapter;
   let categoryRepository: CategoryRepository;
-  let findAndValidateCategoryUseCase: FindAndValidateCategoryUseCase;
+  let findAndValidateCategoryUseCase: FindAndValidateFromParamCategoryUseCase;
 
   beforeEach(() => {
     subCategoryRepository = new SubCategoryRepositoryStub();
     exceptionAdapter = new ExceptionsAdapterStub();
     categoryRepository = new CategoryRepositoryStub();
 
-    findAndValidateCategoryUseCase = new FindAndValidateCategoryUseCase(
-      categoryRepository,
-      exceptionAdapter
-    );
+    findAndValidateCategoryUseCase =
+      new FindAndValidateFromParamCategoryUseCase(
+        categoryRepository,
+        exceptionAdapter
+      );
 
     sut = new CreateSubCategoryUseCase(
       subCategoryRepository,

@@ -10,6 +10,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { CategoryModule } from "../category/category.module";
 import { SubCategoryModule } from "../sub-category/sub-category.module";
 import { OriginModule } from "../origin/origin.module";
+import { TransactionModule } from "../transaction/transaction.module";
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import { OriginModule } from "../origin/origin.module";
     UserModule,
     CategoryModule,
     SubCategoryModule,
-    OriginModule
+    OriginModule,
+    TransactionModule
   ]
 })
 export class AppModule {}

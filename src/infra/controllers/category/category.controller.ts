@@ -19,12 +19,12 @@ import { FindAllCategoryUseCase } from "@use-cases/category/find-all/find-all.us
 import { UpdateCategoryDto, UpdateCategoryParamDto } from "./dto/update.dto";
 import { UpdateCategoryUseCase } from "@use-cases/category/update/update.use-case";
 import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-case";
-import { CategoryGuard } from "@infra/commons/guards/category/category-validation.guard";
-import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { DeleteCategoryParamDto } from "./dto/delete.dto";
 import { FindCategoryByIdParamDto } from "./dto/find-by-id.dto";
 import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
 import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
+import { CategoryParamGuard } from "@infra/commons/guards/category/category-param-validation.guard";
 
 @ApiCookieAuth()
 @UseInterceptors(ExcludeFieldsInterceptor)
@@ -43,7 +43,7 @@ export class CategoryController {
     @Req() req: AuthenticatedRequest,
     @Body() body: CreateCategoryDto
   ) {
-    return this.createCategoryUseCase.execute(req.user.id, body);
+    return this.createCategoryUseCase.execute(req.user, body);
   }
 
   @Get()
@@ -52,7 +52,7 @@ export class CategoryController {
   }
 
   @ExcludeFields("user")
-  @UseGuards(CategoryGuard)
+  @UseGuards(CategoryParamGuard)
   @Get(":categoryId")
   async findById(
     @Req() req: CategoryAuthenticatedRequest,
@@ -61,7 +61,7 @@ export class CategoryController {
     return req.category;
   }
 
-  @UseGuards(CategoryGuard)
+  @UseGuards(CategoryParamGuard)
   @Put(":categoryId")
   async update(
     @Req() req: CategoryAuthenticatedRequest,
@@ -75,7 +75,7 @@ export class CategoryController {
     );
   }
 
-  @UseGuards(CategoryGuard)
+  @UseGuards(CategoryParamGuard)
   @Delete(":categoryId")
   async delete(
     @Req() req: CategoryAuthenticatedRequest,
