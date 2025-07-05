@@ -51,4 +51,24 @@ describe("FindAllTransactionUseCase", () => {
       calledWith: [USER_MOCK.id]
     });
   });
+
+  it("should handle errors", async () => {
+    jest.spyOn(transactionsRepository, "findAll").mockResolvedValue(null);
+
+    const result = await sut.execute(USER_MOCK.id);
+
+    testUtils.resultExpectations(result, undefined);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: transactionsRepository.findAll,
+      calledWith: [USER_MOCK.id]
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.internalServerError,
+      calledWith: [
+        { message: "There was an error while trying to find all transactions." }
+      ]
+    });
+  });
 });
