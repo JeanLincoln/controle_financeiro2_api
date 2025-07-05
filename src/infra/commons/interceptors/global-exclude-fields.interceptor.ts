@@ -38,11 +38,7 @@ export class GlobalExcludeFieldsInterceptor implements NestInterceptor {
         const keyIsListed = specificFields && specificFields.includes(key);
         const globalKeyIsListed = globalFieldsToExclude.includes(key);
 
-        if (keyIsListed) {
-          return acc;
-        }
-
-        if (!keyIsListed && globalKeyIsListed) {
+        if (keyIsListed || globalKeyIsListed) {
           return acc;
         }
 
