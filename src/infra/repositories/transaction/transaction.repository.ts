@@ -39,7 +39,8 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
 
   async findAll(userId: number): Promise<Transaction[]> {
     return this.transactionRepository.find({
-      where: { user: { id: userId } }
+      where: { user: { id: userId } },
+      relations: ["origin", "categories", "subCategories"]
     });
   }
 

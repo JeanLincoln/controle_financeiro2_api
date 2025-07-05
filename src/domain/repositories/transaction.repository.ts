@@ -16,7 +16,7 @@ export type CreateOrUpdateAllTransactionProps = Omit<
 >;
 
 export abstract class TransactionRepository {
-  abstract findAll(userId: number): Promise<Transaction[]>;
+  abstract findAll(userId: number): Promise<Transaction[] | null>;
   abstract findById(id: number): Promise<Transaction | null>;
   abstract create(
     userId: number,

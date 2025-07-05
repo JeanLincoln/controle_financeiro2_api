@@ -19,13 +19,15 @@ import { ManyCategoriesAuthenticatedRequest } from "@use-cases/category/find-and
 import { TransactionAuthenticatedRequest } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { FindTransactionByIdParamDto } from "./dto/find-by-id.dto";
 import { TransactionParamGuard } from "@infra/commons/guards/transaction/transaction-param-validation.guard";
-import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
+import { FindAllTransactionUseCase } from "@use-cases/transaction/find-all/find-all.use-case";
+import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 
 @UseGuards(AuthGuard)
 @Controller("transaction")
 export class TransactionController {
   constructor(
-    private readonly createTransactionUseCase: CreateTransactionUseCase
+    private readonly createTransactionUseCase: CreateTransactionUseCase,
+    private readonly findAllTransactionUseCase: FindAllTransactionUseCase
   ) {}
 
   @UseGuards(CategoriesBodyGuard, SubCategoriesBodyGuard, OriginBodyGuard)
@@ -46,7 +48,6 @@ export class TransactionController {
     );
   }
 
-  @ExcludeFields("password")
   @UseGuards(TransactionParamGuard)
   @Get(":transactionId")
   async findById(
@@ -54,5 +55,10 @@ export class TransactionController {
     @Param() _: FindTransactionByIdParamDto
   ) {
     return req.transaction;
+  }
+
+  @Get()
+  async findAll(@Req() req: AuthenticatedRequest) {
+    return this.findAllTransactionUseCase.execute(req.user.id);
   }
 }
