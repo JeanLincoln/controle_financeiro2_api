@@ -7,8 +7,7 @@ import {
   Post,
   Put,
   Req,
-  UseGuards,
-  UseInterceptors
+  UseGuards
 } from "@nestjs/common";
 import { OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { AuthGuard } from "@infra/commons/guards/auth/auth.guard";
@@ -18,7 +17,6 @@ import { CreateOriginUseCase } from "@use-cases/origin/create/create.use-case";
 import { UpdateOriginUseCase } from "@use-cases/origin/update/update.use-case";
 import { UpdateOriginBodyDto, UpdateOriginParamDto } from "./dto/update.dto";
 import { FindOriginByIdParamDto } from "./dto/find-by-id.dto";
-import { ExcludeFieldsInterceptor } from "@infra/commons/interceptors/exclude-fields.interceptor";
 import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 import { DeleteOriginUseCase } from "@use-cases/origin/delete/delete.use-case";
 import { DeleteOriginParamDto } from "./dto/delete.dto";
@@ -28,7 +26,6 @@ import { OriginParamGuard } from "@infra/commons/guards/origin/origin-param-vali
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
-@UseInterceptors(ExcludeFieldsInterceptor)
 @Controller("origin")
 export class OriginController {
   constructor(

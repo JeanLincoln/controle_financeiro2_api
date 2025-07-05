@@ -1,6 +1,6 @@
-import type { Category } from "@domain/entities/category.entity";
-import type { Origin } from "@domain/entities/origin.entity";
-import type { SubCategory } from "@domain/entities/sub-category.entity";
+import { Category } from "@domain/entities/category.entity";
+import { Origin } from "@domain/entities/origin.entity";
+import { SubCategory } from "@domain/entities/sub-category.entity";
 import { Transaction } from "@domain/entities/transaction.entity";
 
 export type CreateOrUpdateAllTransactionProps = Omit<
