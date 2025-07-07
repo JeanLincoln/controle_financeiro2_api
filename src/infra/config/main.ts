@@ -1,9 +1,8 @@
-import { NestFactory, Reflector } from "@nestjs/core";
+import { NestFactory } from "@nestjs/core";
 import { AppModule } from "../modules/app/app.module";
 import { SwaggerConfig } from "./swagger/swagger.config";
 import { ValidationPipe } from "@nestjs/common";
 import { LoggingInterceptor } from "@infra/commons/interceptors/logging.interceptor";
-import { GlobalExcludeFieldsInterceptor } from "@infra/commons/interceptors/global-exclude-fields.interceptor";
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -12,12 +11,7 @@ async function bootstrap(): Promise<void> {
   SwaggerConfig.config(app);
   app.useGlobalPipes(new ValidationPipe());
 
-  const reflector = app.get(Reflector);
-
-  app.useGlobalInterceptors(
-    new LoggingInterceptor(),
-    new GlobalExcludeFieldsInterceptor(reflector)
-  );
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   await app.listen(process.env.PORT!);
 

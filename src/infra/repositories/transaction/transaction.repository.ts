@@ -9,6 +9,7 @@ import {
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 
 @Injectable()
 export class TypeOrmTransactionRepository implements TransactionRepository {
@@ -47,7 +48,10 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
   async findById(id: number): Promise<Transaction | null> {
     return this.transactionRepository.findOne({
       where: { id },
-      relations: ["user", "origin", "categories", "subCategories"]
+      relations: ["user", "origin", "categories", "subCategories"],
+      select: {
+        user: USER_WITHOUT_PASSWORD_SELECT
+      }
     });
   }
 

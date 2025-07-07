@@ -6,6 +6,7 @@ import {
 } from "@domain/repositories/category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
+import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 
 export class TypeOrmCategoryRepository implements CategoryRepository {
   constructor(
@@ -20,14 +21,20 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
   async findById(id: number): Promise<Category | null> {
     return this.categoryRepository.findOne({
       where: { id },
-      relations: ["user", "subCategories"]
+      relations: ["user", "subCategories"],
+      select: {
+        user: USER_WITHOUT_PASSWORD_SELECT
+      }
     });
   }
 
   async findByIds(ids: number[]): Promise<Category[]> {
     return this.categoryRepository.find({
       where: { id: In(ids) },
-      relations: ["user"]
+      relations: ["user"],
+      select: {
+        user: USER_WITHOUT_PASSWORD_SELECT
+      }
     });
   }
 

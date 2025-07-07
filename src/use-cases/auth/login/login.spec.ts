@@ -32,7 +32,9 @@ describe("LoginUseCase", () => {
 
   it("should be able to login", async () => {
     jest.spyOn(exceptionAdapter, "forbidden");
-    jest.spyOn(userRepository, "findByEmail").mockResolvedValue(USER_MOCK);
+    jest
+      .spyOn(userRepository, "findUserWithAllProps")
+      .mockResolvedValue(USER_MOCK);
     jest.spyOn(jwtAdapter, "generateToken").mockResolvedValue("token");
     jest.spyOn(cryptographyAdapter, "compare").mockResolvedValue(true);
 
@@ -46,8 +48,8 @@ describe("LoginUseCase", () => {
 
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: userRepository.findByEmail,
-      calledWith: [LOGIN_PARAMS.email]
+      mockFunction: userRepository.findUserWithAllProps,
+      calledWith: [{ email: LOGIN_PARAMS.email }]
     });
 
     testUtils.timesCalledExpectations({
@@ -73,7 +75,7 @@ describe("LoginUseCase", () => {
 
   it("should not be able to login if user not found", async () => {
     jest.spyOn(exceptionAdapter, "forbidden");
-    jest.spyOn(userRepository, "findByEmail").mockResolvedValue(null);
+    jest.spyOn(userRepository, "findUserWithAllProps").mockResolvedValue(null);
     jest.spyOn(jwtAdapter, "generateToken");
     jest.spyOn(cryptographyAdapter, "compare");
 
@@ -86,8 +88,8 @@ describe("LoginUseCase", () => {
     ]);
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: userRepository.findByEmail,
-      calledWith: [LOGIN_PARAMS.email]
+      mockFunction: userRepository.findUserWithAllProps,
+      calledWith: [{ email: LOGIN_PARAMS.email }]
     });
     testUtils.timesCalledExpectations({
       times: 1,

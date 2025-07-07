@@ -18,6 +18,10 @@ export class UserRepositoryStub implements UserRepository {
     return Promise.resolve({} as User);
   }
 
+  async findUserWithAllProps(): Promise<User | null> {
+    return Promise.resolve(null);
+  }
+
   async update(): Promise<void> {
     return Promise.resolve();
   }

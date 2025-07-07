@@ -5,6 +5,7 @@ import {
 } from "@domain/repositories/origin.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 
 export class TypeOrmOriginRepository implements OriginRepository {
   constructor(
@@ -15,14 +16,20 @@ export class TypeOrmOriginRepository implements OriginRepository {
   async findAll(userId: number): Promise<Origin[]> {
     return this.originRepository.find({
       where: { user: { id: userId } },
-      relations: ["user"]
+      relations: ["user"],
+      select: {
+        user: USER_WITHOUT_PASSWORD_SELECT
+      }
     });
   }
 
   async findById(id: number): Promise<Origin | null> {
     return this.originRepository.findOne({
       where: { id },
-      relations: ["user"]
+      relations: ["user"],
+      select: {
+        user: USER_WITHOUT_PASSWORD_SELECT
+      }
     });
   }
 

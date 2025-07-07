@@ -38,7 +38,9 @@ export class RouteAuthUseCase {
       return false;
     }
 
-    const user = await this.userRepository.findById(Number(userPayload.id));
+    const user = await this.userRepository.findUserWithAllProps({
+      id: Number(userPayload.id)
+    });
 
     if (!user) {
       this.exceptionAdapter.forbidden({ message: "Invalid token" });
