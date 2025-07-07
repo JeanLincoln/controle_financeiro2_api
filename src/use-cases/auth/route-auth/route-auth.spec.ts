@@ -27,7 +27,9 @@ describe("RouteAuthUseCase", () => {
     jest.spyOn(jwtAdapter, "verifyToken").mockResolvedValue({
       id: "1"
     });
-    jest.spyOn(userRepository, "findById").mockResolvedValue(USER_MOCK);
+    jest
+      .spyOn(userRepository, "findUserWithAllProps")
+      .mockResolvedValue(USER_MOCK);
 
     const result = await sut.execute(REQUEST_MOCK);
 
@@ -40,13 +42,13 @@ describe("RouteAuthUseCase", () => {
     });
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: userRepository.findById,
-      calledWith: { id: 1 }
+      mockFunction: userRepository.findUserWithAllProps,
+      calledWith: [{ id: USER_MOCK.id }]
     });
   });
 
   it("should return false and throw an error if the token is not provided", async () => {
-    jest.spyOn(userRepository, "findById");
+    jest.spyOn(userRepository, "findUserWithAllProps");
     jest.spyOn(jwtAdapter, "verifyToken");
     jest.spyOn(exceptionAdapter, "forbidden");
     jest.spyOn(exceptionAdapter, "unauthorized");
@@ -57,7 +59,7 @@ describe("RouteAuthUseCase", () => {
 
     testUtils.notCalledExpectations([
       exceptionAdapter.forbidden,
-      userRepository.findById,
+      userRepository.findUserWithAllProps,
       jwtAdapter.verifyToken
     ]);
 
@@ -69,7 +71,7 @@ describe("RouteAuthUseCase", () => {
   });
 
   it("should return false and throw an error if the token is invalid", async () => {
-    jest.spyOn(userRepository, "findById");
+    jest.spyOn(userRepository, "findUserWithAllProps");
     jest.spyOn(jwtAdapter, "verifyToken").mockResolvedValue(undefined);
     jest.spyOn(exceptionAdapter, "forbidden");
     jest.spyOn(exceptionAdapter, "unauthorized");
@@ -80,7 +82,7 @@ describe("RouteAuthUseCase", () => {
 
     testUtils.notCalledExpectations([
       exceptionAdapter.unauthorized,
-      userRepository.findById
+      userRepository.findUserWithAllProps
     ]);
 
     testUtils.timesCalledExpectations({
@@ -96,7 +98,7 @@ describe("RouteAuthUseCase", () => {
     jest.spyOn(jwtAdapter, "verifyToken").mockResolvedValue({
       id: "1"
     });
-    jest.spyOn(userRepository, "findById").mockResolvedValue(null);
+    jest.spyOn(userRepository, "findUserWithAllProps").mockResolvedValue(null);
 
     const result = await sut.execute(REQUEST_MOCK);
 
@@ -114,8 +116,8 @@ describe("RouteAuthUseCase", () => {
     });
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: userRepository.findById,
-      calledWith: { id: 1 }
+      mockFunction: userRepository.findUserWithAllProps,
+      calledWith: [{ id: USER_MOCK.id }]
     });
   });
 });

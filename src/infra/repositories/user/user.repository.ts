@@ -1,10 +1,12 @@
 import { User } from "@domain/entities/user.entity";
 import {
   BaseCreateOrUpdateUserProps,
-  UserRepository
+  UserRepository,
+  type UserWithAllPropsParams
 } from "@domain/repositories/user.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 
 export class TypeOrmUserRepository implements UserRepository {
   constructor(
@@ -13,15 +15,32 @@ export class TypeOrmUserRepository implements UserRepository {
   ) {}
 
   async findAll(): Promise<User[]> {
-    return this.userRepository.find();
+    return this.userRepository.find({ select: USER_WITHOUT_PASSWORD_SELECT });
   }
 
   async findById(id: number): Promise<User | null> {
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.findOne({
+      where: { id },
+      select: USER_WITHOUT_PASSWORD_SELECT
+    });
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.userRepository.findOne({ where: { email } });
+    return this.userRepository.findOne({
+      where: { email },
+      select: USER_WITHOUT_PASSWORD_SELECT
+    });
+  }
+
+  async findUserWithAllProps({
+    id,
+    email
+  }: UserWithAllPropsParams): Promise<User | null> {
+    if (!id && !email) return null;
+
+    return this.userRepository.findOne({
+      where: { id: id ?? undefined, email: email ?? undefined }
+    });
   }
 
   async create(user: BaseCreateOrUpdateUserProps): Promise<void> {

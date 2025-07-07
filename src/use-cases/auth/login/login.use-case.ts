@@ -14,7 +14,9 @@ export class LoginUseCase {
   ) {}
 
   async execute(email: string, password: string) {
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.userRepository.findUserWithAllProps({
+      email: email
+    });
 
     if (!user) {
       return this.exceptionAdapter.forbidden({
