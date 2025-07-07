@@ -21,8 +21,4 @@ export class TransactionRepositoryStub implements TransactionRepository {
   findById(): Promise<Transaction | null> {
     return Promise.resolve(null);
   }
-
-  partialUpdate(): Promise<void> {
-    return Promise.resolve();
-  }
 }

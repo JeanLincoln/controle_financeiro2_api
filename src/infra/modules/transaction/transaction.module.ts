@@ -10,6 +10,7 @@ import { SubCategoryModule } from "../sub-category/sub-category.module";
 import { OriginModule } from "../origin/origin.module";
 import { FindAndValidateFromParamTransactionUseCase } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { FindAllTransactionUseCase } from "@use-cases/transaction/find-all/find-all.use-case";
+import { UpdateTransactionUseCase } from "@use-cases/transaction/update/update.use-case";
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { FindAllTransactionUseCase } from "@use-cases/transaction/find-all/find-
   providers: [
     CreateTransactionUseCase,
     FindAndValidateFromParamTransactionUseCase,
-    FindAllTransactionUseCase
+    FindAllTransactionUseCase,
+    UpdateTransactionUseCase
   ],
   exports: [FindAndValidateFromParamTransactionUseCase]
 })
