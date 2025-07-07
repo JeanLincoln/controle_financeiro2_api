@@ -56,23 +56,24 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
   }
 
   async update(
-    id: number,
-    transactionData: CreateOrUpdateAllTransactionProps
+    transactionToUpdate: Transaction,
+    userId: number,
+    origin: Origin,
+    categories: Category[],
+    subCategories: SubCategory[],
+    updateData: CreateOrUpdateAllTransactionProps
   ): Promise<void> {
-    await this.transactionRepository.update(id, {
-      ...transactionData,
+    Object.assign(transactionToUpdate, {
+      ...updateData,
+      origin: origin,
+      user: { id: userId },
       updatedAt: new Date()
     });
-  }
 
-  async partialUpdate(
-    id: number,
-    transactionData: Partial<CreateOrUpdateAllTransactionProps>
-  ): Promise<void> {
-    await this.transactionRepository.update(id, {
-      ...transactionData,
-      updatedAt: new Date()
-    });
+    transactionToUpdate.categories = categories;
+    transactionToUpdate.subCategories = subCategories;
+
+    await this.transactionRepository.save(transactionToUpdate);
   }
 
   async delete(id: number): Promise<void> {

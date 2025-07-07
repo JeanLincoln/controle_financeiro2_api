@@ -26,12 +26,12 @@ export abstract class TransactionRepository {
     transaction: CreateOrUpdateAllTransactionProps
   ): Promise<void>;
   abstract update(
-    id: number,
-    transaction: CreateOrUpdateAllTransactionProps
-  ): Promise<void>;
-  abstract partialUpdate(
-    id: number,
-    transaction: Partial<CreateOrUpdateAllTransactionProps>
+    transactionToUpdate: Transaction,
+    userId: number,
+    origin: Origin,
+    categories: Category[],
+    subCategories: SubCategory[],
+    updateData: CreateOrUpdateAllTransactionProps
   ): Promise<void>;
   abstract delete(id: number): Promise<void>;
 }

@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Req,
   UseGuards
 } from "@nestjs/common";
@@ -21,13 +22,19 @@ import { FindTransactionByIdParamDto } from "./dto/find-by-id.dto";
 import { TransactionParamGuard } from "@infra/commons/guards/transaction/transaction-param-validation.guard";
 import { FindAllTransactionUseCase } from "@use-cases/transaction/find-all/find-all.use-case";
 import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
+import { UpdateTransactionUseCase } from "@use-cases/transaction/update/update.use-case";
+import {
+  UpdateTransactionBodyDto,
+  UpdateTransactionDto
+} from "./dto/update.dto";
 
 @UseGuards(AuthGuard)
 @Controller("transaction")
 export class TransactionController {
   constructor(
     private readonly createTransactionUseCase: CreateTransactionUseCase,
-    private readonly findAllTransactionUseCase: FindAllTransactionUseCase
+    private readonly findAllTransactionUseCase: FindAllTransactionUseCase,
+    private readonly updateTransactionUseCase: UpdateTransactionUseCase
   ) {}
 
   @UseGuards(CategoriesBodyGuard, SubCategoriesBodyGuard, OriginBodyGuard)
@@ -60,5 +67,31 @@ export class TransactionController {
   @Get()
   async findAll(@Req() req: AuthenticatedRequest) {
     return this.findAllTransactionUseCase.execute(req.user.id);
+  }
+
+  @UseGuards(
+    TransactionParamGuard,
+    CategoriesBodyGuard,
+    SubCategoriesBodyGuard,
+    OriginBodyGuard
+  )
+  @Put(":transactionId")
+  async update(
+    @Req()
+    req: TransactionAuthenticatedRequest &
+      OriginBodyAuthenticatedRequest &
+      ManySubCategoriesAuthenticatedRequest &
+      ManyCategoriesAuthenticatedRequest,
+    @Param() _: UpdateTransactionDto,
+    @Body() transactionData: UpdateTransactionBodyDto
+  ) {
+    return this.updateTransactionUseCase.execute(
+      req.transaction,
+      req.user.id,
+      req.origin,
+      req.categories,
+      req.subCategories,
+      transactionData
+    );
   }
 }

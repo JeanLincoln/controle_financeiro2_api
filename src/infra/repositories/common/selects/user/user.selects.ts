@@ -1,4 +1,4 @@
-import type { UserWithoutPassword } from "@domain/repositories/user.repository";
+import { UserWithoutPassword } from "@domain/repositories/user.repository";
 
 export type UserWithoutRelations = UserWithoutPassword;
 
