@@ -33,5 +33,5 @@ export abstract class TransactionRepository {
     subCategories: SubCategory[],
     updateData: CreateOrUpdateAllTransactionProps
   ): Promise<void>;
-  abstract delete(id: number): Promise<void>;
+  abstract delete(transactionToDelete: Transaction): Promise<void>;
 }

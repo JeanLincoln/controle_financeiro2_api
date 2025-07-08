@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
@@ -64,6 +65,7 @@ export class OriginController {
   }
 
   @UseGuards(OriginParamGuard)
+  @HttpCode(204)
   @Delete(":originId")
   async delete(
     @Req() req: OriginAuthenticatedRequest,

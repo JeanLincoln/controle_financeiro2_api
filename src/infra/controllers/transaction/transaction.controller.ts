@@ -2,13 +2,16 @@ import { AuthGuard } from "@infra/commons/guards/auth/auth.guard";
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
   Req,
   UseGuards
 } from "@nestjs/common";
+import { ApiCookieAuth } from "@nestjs/swagger";
 import { CreateTransactionUseCase } from "@use-cases/transaction/create/create.use-case";
 import { CreateTransactionDto } from "./dto/create.dto";
 import { OriginBodyGuard } from "@infra/commons/guards/origin/origin-body-validation.guard";
@@ -25,16 +28,20 @@ import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-
 import { UpdateTransactionUseCase } from "@use-cases/transaction/update/update.use-case";
 import {
   UpdateTransactionBodyDto,
-  UpdateTransactionDto
+  type UpdateTransactionParamDto
 } from "./dto/update.dto";
+import { DeleteTransactionUseCase } from "@use-cases/transaction/delete/delete.use-case";
+import { DeleteTransactionParamDto } from "./dto/delete.dto";
 
+@ApiCookieAuth()
 @UseGuards(AuthGuard)
 @Controller("transaction")
 export class TransactionController {
   constructor(
     private readonly createTransactionUseCase: CreateTransactionUseCase,
     private readonly findAllTransactionUseCase: FindAllTransactionUseCase,
-    private readonly updateTransactionUseCase: UpdateTransactionUseCase
+    private readonly updateTransactionUseCase: UpdateTransactionUseCase,
+    private readonly deleteTransactionUseCase: DeleteTransactionUseCase
   ) {}
 
   @UseGuards(CategoriesBodyGuard, SubCategoriesBodyGuard, OriginBodyGuard)
@@ -82,7 +89,7 @@ export class TransactionController {
       OriginBodyAuthenticatedRequest &
       ManySubCategoriesAuthenticatedRequest &
       ManyCategoriesAuthenticatedRequest,
-    @Param() _: UpdateTransactionDto,
+    @Param() _: UpdateTransactionParamDto,
     @Body() transactionData: UpdateTransactionBodyDto
   ) {
     return this.updateTransactionUseCase.execute(
@@ -93,5 +100,15 @@ export class TransactionController {
       req.subCategories,
       transactionData
     );
+  }
+
+  @UseGuards(TransactionParamGuard)
+  @HttpCode(204)
+  @Delete(":transactionId")
+  async delete(
+    @Req() req: TransactionAuthenticatedRequest,
+    @Param() _: DeleteTransactionParamDto
+  ) {
+    return this.deleteTransactionUseCase.execute(req.transaction);
   }
 }

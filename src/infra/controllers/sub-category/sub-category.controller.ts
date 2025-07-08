@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
@@ -86,6 +87,7 @@ export class SubCategoryController {
   }
 
   @UseGuards(SubCategoryParamGuard)
+  @HttpCode(204)
   @Delete(":categoryId/:subCategoryId")
   async delete(
     @Req() req: SubCategoryAuthenticatedRequest,

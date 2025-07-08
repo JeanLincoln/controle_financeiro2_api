@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
@@ -61,6 +62,7 @@ export class UserController {
   }
 
   @Delete()
+  @HttpCode(204)
   async delete(@Req() req: AuthenticatedRequest) {
     return this.deleteUserUseCase.execute(req.user.id);
   }

@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
@@ -73,6 +74,7 @@ export class CategoryController {
   }
 
   @UseGuards(CategoryParamGuard)
+  @HttpCode(204)
   @Delete(":categoryId")
   async delete(
     @Req() req: CategoryAuthenticatedRequest,
