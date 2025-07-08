@@ -76,7 +76,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
     await this.transactionRepository.save(transactionToUpdate);
   }
 
-  async delete(id: number): Promise<void> {
-    await this.transactionRepository.delete(id);
+  async delete(transactionToDelete: Transaction): Promise<void> {
+    await this.transactionRepository.delete(transactionToDelete.id);
   }
 }

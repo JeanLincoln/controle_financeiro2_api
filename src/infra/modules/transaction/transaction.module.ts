@@ -11,6 +11,7 @@ import { OriginModule } from "../origin/origin.module";
 import { FindAndValidateFromParamTransactionUseCase } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { FindAllTransactionUseCase } from "@use-cases/transaction/find-all/find-all.use-case";
 import { UpdateTransactionUseCase } from "@use-cases/transaction/update/update.use-case";
+import { DeleteTransactionUseCase } from "@use-cases/transaction/delete/delete.use-case";
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { UpdateTransactionUseCase } from "@use-cases/transaction/update/update.u
     CreateTransactionUseCase,
     FindAndValidateFromParamTransactionUseCase,
     FindAllTransactionUseCase,
-    UpdateTransactionUseCase
+    UpdateTransactionUseCase,
+    DeleteTransactionUseCase
   ],
   exports: [FindAndValidateFromParamTransactionUseCase]
 })
