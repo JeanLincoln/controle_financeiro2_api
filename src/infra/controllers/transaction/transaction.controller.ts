@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
@@ -102,6 +103,7 @@ export class TransactionController {
   }
 
   @UseGuards(TransactionParamGuard)
+  @HttpCode(204)
   @Delete(":transactionId")
   async delete(
     @Req() req: TransactionAuthenticatedRequest,
