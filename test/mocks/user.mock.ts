@@ -46,5 +46,5 @@ const USER_PAGINATION_META_MOCK: PaginationMeta = {
 
 export const USERS_PAGINATED_MOCK: PaginatedResult<User> = {
   data: USERS_MOCK,
-  meta: USER_PAGINATION_META_MOCK
+  pagination: USER_PAGINATION_META_MOCK
 };

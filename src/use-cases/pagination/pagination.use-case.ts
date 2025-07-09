@@ -80,7 +80,7 @@ export class PaginationUseCase {
   ): PaginatedResult<T> {
     return {
       data,
-      meta: this.createMeta(paginationParams, total)
+      pagination: this.createMeta(paginationParams, total)
     };
   }
 }

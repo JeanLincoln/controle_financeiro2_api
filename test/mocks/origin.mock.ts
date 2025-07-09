@@ -57,12 +57,12 @@ const ORIGIN_PAGINATION_META_MOCK: PaginationMeta = {
 
 export const USER_1_PAGINATED_ORIGINS_MOCK: PaginatedResult<Origin> = {
   data: USER_1_ORIGINS_MOCK,
-  meta: ORIGIN_PAGINATION_META_MOCK
+  pagination: ORIGIN_PAGINATION_META_MOCK
 };
 
 export const USER_2_PAGINATED_ORIGINS_MOCK: PaginatedResult<Origin> = {
   data: USER_2_ORIGINS_MOCK,
-  meta: ORIGIN_PAGINATION_META_MOCK
+  pagination: ORIGIN_PAGINATION_META_MOCK
 };
 
 export const PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK = {

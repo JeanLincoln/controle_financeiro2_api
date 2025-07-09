@@ -18,7 +18,7 @@ export interface PaginationMeta {
 
 export interface PaginatedResult<T> {
   data: T[];
-  meta: PaginationMeta;
+  pagination: PaginationMeta;
 }
 
 export interface RepositoryPaginationParams {

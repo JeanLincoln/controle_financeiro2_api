@@ -43,5 +43,5 @@ export const EMPTY_PAGINATION_META_MOCK: PaginationMeta = {
 
 export const PAGINATION_EMPTY_RESULT_MOCK = {
   data: [],
-  meta: EMPTY_PAGINATION_META_MOCK
+  pagination: EMPTY_PAGINATION_META_MOCK
 };
