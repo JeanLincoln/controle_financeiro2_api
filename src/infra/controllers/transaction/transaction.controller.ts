@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards
 } from "@nestjs/common";
@@ -32,6 +33,7 @@ import {
 } from "./dto/update.dto";
 import { DeleteTransactionUseCase } from "@use-cases/transaction/delete/delete.use-case";
 import { DeleteTransactionParamDto } from "./dto/delete.dto";
+import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -72,8 +74,11 @@ export class TransactionController {
   }
 
   @Get()
-  async findAll(@Req() req: AuthenticatedRequest) {
-    return this.findAllTransactionUseCase.execute(req.user.id);
+  async findAll(
+    @Req() req: AuthenticatedRequest,
+    @Query() { page, limit }: PaginationQueryDto
+  ) {
+    return this.findAllTransactionUseCase.execute(req.user.id, page, limit);
   }
 
   @UseGuards(

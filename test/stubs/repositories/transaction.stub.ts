@@ -1,3 +1,4 @@
+import type { RepositoryToPaginationReturn } from "@domain/entities/pagination.entity";
 import { Transaction } from "@domain/entities/transaction.entity";
 import { TransactionRepository } from "@domain/repositories/transaction.repository";
 
@@ -14,8 +15,8 @@ export class TransactionRepositoryStub implements TransactionRepository {
     return Promise.resolve();
   }
 
-  findAll(): Promise<Transaction[]> {
-    return Promise.resolve([]);
+  findAll(): Promise<RepositoryToPaginationReturn<Transaction>> {
+    return Promise.resolve({ data: [], total: 0 });
   }
 
   findById(): Promise<Transaction | null> {

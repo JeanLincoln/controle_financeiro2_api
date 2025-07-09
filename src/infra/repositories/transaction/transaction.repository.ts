@@ -10,6 +10,10 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
+import {
+  RepositoryPaginationParams,
+  type RepositoryToPaginationReturn
+} from "@domain/entities/pagination.entity";
 
 @Injectable()
 export class TypeOrmTransactionRepository implements TransactionRepository {
@@ -38,11 +42,23 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
     await this.transactionRepository.save(transaction);
   }
 
-  async findAll(userId: number): Promise<Transaction[]> {
-    return this.transactionRepository.find({
-      where: { user: { id: userId } },
-      relations: ["origin", "categories", "subCategories"]
-    });
+  async findAll(
+    userId: number,
+    { skip, take }: RepositoryPaginationParams
+  ): Promise<RepositoryToPaginationReturn<Transaction>> {
+    const [transactions, total] = await this.transactionRepository.findAndCount(
+      {
+        where: { user: { id: userId } },
+        relations: ["origin", "categories", "subCategories"],
+        skip,
+        take
+      }
+    );
+
+    return {
+      data: transactions,
+      total
+    };
   }
 
   async findById(id: number): Promise<Transaction | null> {

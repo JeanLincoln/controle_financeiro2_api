@@ -3,6 +3,11 @@ import { CreateOrUpdateAllTransactionProps } from "@domain/repositories/transact
 import { ORIGIN_MOCK } from "./origin.mock";
 import { Transaction } from "@domain/entities/transaction.entity";
 import { TransactionAuthenticatedRequest } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
+import type {
+  PaginatedResult,
+  PaginationMeta
+} from "@domain/entities/pagination.entity";
+import { EMPTY_PAGINATION_META_MOCK } from "./pagination.mock";
 
 export const CREATE_OR_UPDATE_TRANSACTION_MOCK: CreateOrUpdateAllTransactionProps =
   {
@@ -40,6 +45,32 @@ export const USER_1_TRANSACTIONS_MOCK: Transaction[] = TRANSACTIONS_MOCK.filter(
 export const USER_2_TRANSACTIONS_MOCK: Transaction[] = TRANSACTIONS_MOCK.filter(
   (transaction) => transaction.user.id === USER_MOCK_2.id
 );
+
+export const EMPTY_TRANSACTIONS_MOCK = {
+  data: [],
+  meta: EMPTY_PAGINATION_META_MOCK
+};
+
+const TRANSACTION_PAGINATION_META_MOCK: PaginationMeta = {
+  page: 1,
+  limit: 10,
+  total: 5,
+  totalPages: 1,
+  hasNext: false,
+  hasPrevious: false
+};
+
+export const USER_1_PAGINATED_TRANSACTIONS_MOCK: PaginatedResult<Transaction> =
+  {
+    data: USER_1_TRANSACTIONS_MOCK,
+    meta: TRANSACTION_PAGINATION_META_MOCK
+  };
+
+export const USER_2_PAGINATED_TRANSACTIONS_MOCK: PaginatedResult<Transaction> =
+  {
+    data: USER_2_TRANSACTIONS_MOCK,
+    meta: TRANSACTION_PAGINATION_META_MOCK
+  };
 
 export const TRANSACTION_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,

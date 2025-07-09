@@ -1,27 +1,33 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { PaginatedResult } from "@domain/entities/pagination.entity";
 import { Transaction } from "@domain/entities/transaction.entity";
 import { TransactionRepository } from "@domain/repositories/transaction.repository";
 import { Injectable } from "@nestjs/common";
+import { PaginationUseCase } from "@use-cases/pagination/pagination.use-case";
 
 @Injectable()
 export class FindAllTransactionUseCase {
   constructor(
     private readonly transactionsRepository: TransactionRepository,
-    private readonly exceptionsAdapter: ExceptionsAdapter
+    private readonly exceptionsAdapter: ExceptionsAdapter,
+    private readonly paginationUseCase: PaginationUseCase
   ) {}
 
-  async execute(userId: number): Promise<Transaction[] | void> {
-    const allTransactions = await this.transactionsRepository.findAll(userId);
+  async execute(
+    userId: number,
+    page?: number,
+    limit?: number
+  ): Promise<PaginatedResult<Transaction> | void> {
+    const { paginationParams, repositoryParams, createPaginationResult } =
+      await this.paginationUseCase.execute(page, limit);
 
-    if (!allTransactions) {
-      this.exceptionsAdapter.internalServerError({
-        message: "There was an error while trying to find all transactions."
-      });
-      return;
-    }
+    const allTransactions = await this.transactionsRepository.findAll(
+      userId,
+      repositoryParams
+    );
 
-    const arrayIsEmpty = allTransactions.length === 0;
+    const { data: transactions, total } = allTransactions;
 
-    return arrayIsEmpty ? [] : allTransactions;
+    return createPaginationResult(transactions, paginationParams, total);
   }
 }
