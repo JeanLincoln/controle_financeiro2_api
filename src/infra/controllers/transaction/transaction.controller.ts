@@ -29,11 +29,13 @@ import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-
 import { UpdateTransactionUseCase } from "@use-cases/transaction/update/update.use-case";
 import {
   UpdateTransactionBodyDto,
-  type UpdateTransactionParamDto
+  UpdateTransactionParamDto
 } from "./dto/update.dto";
 import { DeleteTransactionUseCase } from "@use-cases/transaction/delete/delete.use-case";
 import { DeleteTransactionParamDto } from "./dto/delete.dto";
 import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
+import { Transaction } from "@domain/entities/transaction.entity";
+import { PaginatedResult } from "@domain/entities/pagination.entity";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -77,7 +79,7 @@ export class TransactionController {
   async findAll(
     @Req() req: AuthenticatedRequest,
     @Query() { page, limit }: PaginationQueryDto
-  ) {
+  ): Promise<PaginatedResult<Transaction> | void> {
     return this.findAllTransactionUseCase.execute(req.user.id, page, limit);
   }
 

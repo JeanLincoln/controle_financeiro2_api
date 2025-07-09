@@ -10,9 +10,16 @@ import { UpdateOriginUseCase } from "@use-cases/origin/update/update.use-case";
 import { DeleteOriginUseCase } from "@use-cases/origin/delete/delete.use-case";
 import { FindAllOriginUseCase } from "@use-cases/origin/find-all/find-all.use-case";
 import { FindAndValidateOriginFromParamUseCase } from "@use-cases/origin/find-and-validate-from-param/find-and-validate-from-param.use-case";
+import { PaginationModule } from "../pagination/pagination.module";
 
 @Module({
-  imports: [DatabaseModule, ExceptionsModule, CategoryModule, AuthModule],
+  imports: [
+    DatabaseModule,
+    ExceptionsModule,
+    CategoryModule,
+    AuthModule,
+    PaginationModule
+  ],
   controllers: [OriginController],
   providers: [
     FindAndValidateOriginFromParamUseCase,

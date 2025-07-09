@@ -4,13 +4,13 @@ import { TransactionRepository } from "@domain/repositories/transaction.reposito
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import {
-  EMPTY_TRANSACTIONS_MOCK,
   USER_1_PAGINATED_TRANSACTIONS_MOCK,
   USER_1_TRANSACTIONS_MOCK
 } from "@test/mocks/transaction.mock";
 import { USER_MOCK } from "@test/mocks/user.mock";
 import { PaginationUseCase } from "@use-cases/pagination/pagination.use-case";
 import {
+  PAGINATION_EMPTY_RESULT_MOCK,
   PAGINATION_PARAMS_MOCK,
   PAGINATION_TO_REPOSITORY_PARAMS_MOCK
 } from "@test/mocks/pagination.mock";
@@ -64,7 +64,7 @@ describe("FindAllTransactionUseCase", () => {
     const result = await sut.execute(USER_MOCK.id, page, limit);
 
     testUtils.notCalledExpectations([exceptionsAdapter.internalServerError]);
-    testUtils.resultExpectations(result, EMPTY_TRANSACTIONS_MOCK);
+    testUtils.resultExpectations(result, PAGINATION_EMPTY_RESULT_MOCK);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: transactionsRepository.findAll,

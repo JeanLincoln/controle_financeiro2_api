@@ -10,11 +10,15 @@ export interface PaginationMeta {
   totalPages: number;
   hasNext: boolean;
   hasPrevious: boolean;
+  firstPage: number;
+  lastPage: number;
+  from: number;
+  to: number;
 }
 
 export interface PaginatedResult<T> {
   data: T[];
-  meta: PaginationMeta;
+  pagination: PaginationMeta;
 }
 
 export interface RepositoryPaginationParams {

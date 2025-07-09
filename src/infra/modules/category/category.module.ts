@@ -10,9 +10,16 @@ import { UserModule } from "../user/user.module";
 import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-case";
 import { FindAndValidateFromParamCategoryUseCase } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { FindAndValidateManyFromBodyCategoryUseCase } from "@use-cases/category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
+import { PaginationModule } from "../pagination/pagination.module";
 
 @Module({
-  imports: [DatabaseModule, AuthModule, ExceptionsModule, UserModule],
+  imports: [
+    DatabaseModule,
+    AuthModule,
+    ExceptionsModule,
+    UserModule,
+    PaginationModule
+  ],
   controllers: [CategoryController],
   providers: [
     CreateCategoryUseCase,

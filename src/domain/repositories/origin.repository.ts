@@ -1,4 +1,8 @@
 import { Origin } from "@domain/entities/origin.entity";
+import {
+  RepositoryPaginationParams,
+  RepositoryToPaginationReturn
+} from "@domain/entities/pagination.entity";
 
 export type CreateOrUpdateAllOriginProps = Omit<
   Origin,
@@ -6,7 +10,10 @@ export type CreateOrUpdateAllOriginProps = Omit<
 >;
 
 export abstract class OriginRepository {
-  abstract findAll(userId: number): Promise<Origin[]>;
+  abstract findAll(
+    userId: number,
+    paginationParams: RepositoryPaginationParams
+  ): Promise<RepositoryToPaginationReturn<Origin>>;
   abstract findById(id: number): Promise<Origin | null>;
   abstract create(
     userId: number,

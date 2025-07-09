@@ -1,26 +1,32 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { Origin } from "@domain/entities/origin.entity";
+import { PaginatedResult } from "@domain/entities/pagination.entity";
 import { OriginRepository } from "@domain/repositories/origin.repository";
 import { Injectable } from "@nestjs/common";
+import { PaginationUseCase } from "@use-cases/pagination/pagination.use-case";
 
 @Injectable()
 export class FindAllOriginUseCase {
   constructor(
     private readonly originRepository: OriginRepository,
-    private readonly exceptionsAdapter: ExceptionsAdapter
+    private readonly exceptionsAdapter: ExceptionsAdapter,
+    private readonly paginationUseCase: PaginationUseCase
   ) {}
 
-  async execute(userId: number): Promise<Origin[] | void> {
-    const origins = await this.originRepository.findAll(userId);
+  async execute(
+    userId: number,
+    page?: number,
+    limit?: number
+  ): Promise<PaginatedResult<Origin> | void> {
+    const { paginationParams, repositoryParams, createPaginationResult } =
+      await this.paginationUseCase.execute(page, limit);
 
-    if (!origins) {
-      this.exceptionsAdapter.internalServerError({
-        message: "There was an error while fetching origins"
-      });
-      return;
-    }
+    const paginatedOrigins = await this.originRepository.findAll(
+      userId,
+      repositoryParams
+    );
 
-    const atLeastOneOriginDoesntBelongToUser = origins.some(
+    const atLeastOneOriginDoesntBelongToUser = paginatedOrigins.data.some(
       (origin) => origin.user.id !== userId
     );
 
@@ -31,6 +37,8 @@ export class FindAllOriginUseCase {
       return;
     }
 
-    return origins;
+    const { data: origins, total } = paginatedOrigins;
+
+    return createPaginationResult(origins, paginationParams, total);
   }
 }

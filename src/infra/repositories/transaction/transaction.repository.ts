@@ -12,7 +12,7 @@ import { Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import {
   RepositoryPaginationParams,
-  type RepositoryToPaginationReturn
+  RepositoryToPaginationReturn
 } from "@domain/entities/pagination.entity";
 
 @Injectable()

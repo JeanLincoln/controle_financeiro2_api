@@ -1,4 +1,5 @@
 import { Category } from "@domain/entities/category.entity";
+import { RepositoryToPaginationReturn } from "@domain/entities/pagination.entity";
 import { CategoryRepository } from "@domain/repositories/category.repository";
 
 export class CategoryRepositoryStub implements CategoryRepository {
@@ -6,8 +7,8 @@ export class CategoryRepositoryStub implements CategoryRepository {
     return Promise.resolve();
   }
 
-  async findAll(): Promise<Category[]> {
-    return Promise.resolve([]);
+  async findAll(): Promise<RepositoryToPaginationReturn<Category>> {
+    return Promise.resolve({ data: [], total: 0 });
   }
 
   async findById(): Promise<Category | null> {

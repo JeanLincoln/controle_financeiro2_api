@@ -2,11 +2,15 @@ import { User } from "@domain/entities/user.entity";
 import {
   BaseCreateOrUpdateUserProps,
   UserRepository,
-  type UserWithAllPropsParams
+  UserWithAllPropsParams
 } from "@domain/repositories/user.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
+import {
+  RepositoryToPaginationReturn,
+  RepositoryPaginationParams
+} from "@domain/entities/pagination.entity";
 
 export class TypeOrmUserRepository implements UserRepository {
   constructor(
@@ -14,8 +18,20 @@ export class TypeOrmUserRepository implements UserRepository {
     private readonly userRepository: Repository<User>
   ) {}
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find({ select: USER_WITHOUT_PASSWORD_SELECT });
+  async findAll({
+    skip,
+    take
+  }: RepositoryPaginationParams): Promise<RepositoryToPaginationReturn<User>> {
+    const [users, total] = await this.userRepository.findAndCount({
+      select: USER_WITHOUT_PASSWORD_SELECT,
+      skip,
+      take
+    });
+
+    return {
+      data: users,
+      total
+    };
   }
 
   async findById(id: number): Promise<User | null> {

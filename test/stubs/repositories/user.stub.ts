@@ -1,3 +1,4 @@
+import { RepositoryToPaginationReturn } from "@domain/entities/pagination.entity";
 import { User } from "@domain/entities/user.entity";
 import { UserRepository } from "@domain/repositories/user.repository";
 
@@ -6,8 +7,8 @@ export class UserRepositoryStub implements UserRepository {
     return Promise.resolve();
   }
 
-  async findAll(): Promise<User[]> {
-    return Promise.resolve([]);
+  async findAll(): Promise<RepositoryToPaginationReturn<User>> {
+    return Promise.resolve({ data: [], total: 0 });
   }
 
   async findById(): Promise<User> {

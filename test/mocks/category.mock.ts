@@ -3,6 +3,10 @@ import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 import { CreateOrUpdateAllCategoryProps } from "@domain/repositories/category.repository";
 import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { ManyCategoriesAuthenticatedRequest } from "@use-cases/category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
+import {
+  PaginatedResult,
+  PaginationMeta
+} from "@domain/entities/pagination.entity";
 
 export const CREATE_OR_UPDATE_CATEGORY_MOCK: CreateOrUpdateAllCategoryProps = {
   name: "Category",
@@ -46,13 +50,36 @@ export const EXPENSE_CATEGORY_MOCK: Category = EXPENSE_CATEGORIES_MOCK[0];
 
 export const EXPENSE_CATEGORY_MOCK_2: Category = EXPENSE_CATEGORIES_MOCK[1];
 
-export const USER_MOCK_1_CATEGORIES: Category[] = CATEGORIES_MOCK.filter(
+export const USER_1_CATEGORIES_MOCK: Category[] = CATEGORIES_MOCK.filter(
   (category) => category.user.id === USER_MOCK.id
 );
 
-export const USER_MOCK_2_CATEGORIES: Category[] = CATEGORIES_MOCK.filter(
+export const USER_2_CATEGORIES_MOCK: Category[] = CATEGORIES_MOCK.filter(
   (category) => category.user.id === USER_MOCK_2.id
 );
+
+const CATEGORY_PAGINATION_META_MOCK: PaginationMeta = {
+  page: 1,
+  limit: 10,
+  total: 5,
+  totalPages: 1,
+  hasNext: false,
+  hasPrevious: false,
+  firstPage: 1,
+  lastPage: 1,
+  from: 1,
+  to: 5
+};
+
+export const USER_1_PAGINATED_CATEGORIES_MOCK: PaginatedResult<Category> = {
+  data: USER_1_CATEGORIES_MOCK,
+  pagination: CATEGORY_PAGINATION_META_MOCK
+};
+
+export const USER_2_PAGINATED_CATEGORIES_MOCK: PaginatedResult<Category> = {
+  data: USER_2_CATEGORIES_MOCK,
+  pagination: CATEGORY_PAGINATION_META_MOCK
+};
 
 export const CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
@@ -64,6 +91,6 @@ export const CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
 export const MANY_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   body: {
-    categoriesIds: USER_MOCK_1_CATEGORIES.map((category) => category.id)
+    categoriesIds: USER_1_CATEGORIES_MOCK.map((category) => category.id)
   }
 } as ManyCategoriesAuthenticatedRequest;

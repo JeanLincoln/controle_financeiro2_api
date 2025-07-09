@@ -7,6 +7,10 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
+import {
+  RepositoryToPaginationReturn,
+  type RepositoryPaginationParams
+} from "@domain/entities/pagination.entity";
 
 export class TypeOrmCategoryRepository implements CategoryRepository {
   constructor(
@@ -14,8 +18,20 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     private readonly categoryRepository: Repository<Category>
   ) {}
 
-  async findAll(userId: number): Promise<Category[]> {
-    return this.categoryRepository.find({ where: { user: { id: userId } } });
+  async findAll(
+    userId: number,
+    { skip, take }: RepositoryPaginationParams
+  ): Promise<RepositoryToPaginationReturn<Category>> {
+    const [categories, total] = await this.categoryRepository.findAndCount({
+      where: { user: { id: userId } },
+      skip,
+      take
+    });
+
+    return {
+      data: categories,
+      total
+    };
   }
 
   async findById(id: number): Promise<Category | null> {

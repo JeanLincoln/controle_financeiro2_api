@@ -1,3 +1,7 @@
+import {
+  PaginationMeta,
+  PaginatedResult
+} from "@domain/entities/pagination.entity";
 import { User } from "@domain/entities/user.entity";
 import { BaseCreateOrUpdateUserProps } from "@domain/repositories/user.repository";
 
@@ -26,3 +30,21 @@ export const USERS_MOCK: User[] = Array.from({ length: 10 }, (_, index) => ({
 export const USER_MOCK: User = USERS_MOCK[0];
 
 export const USER_MOCK_2: User = USERS_MOCK[1];
+
+const USER_PAGINATION_META_MOCK: PaginationMeta = {
+  page: 1,
+  limit: 10,
+  total: 10,
+  totalPages: 1,
+  hasNext: false,
+  hasPrevious: false,
+  firstPage: 1,
+  lastPage: 1,
+  from: 1,
+  to: 10
+};
+
+export const USERS_PAGINATED_MOCK: PaginatedResult<User> = {
+  data: USERS_MOCK,
+  pagination: USER_PAGINATION_META_MOCK
+};

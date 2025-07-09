@@ -2,7 +2,7 @@ import { Category } from "@domain/entities/category.entity";
 import { Origin } from "@domain/entities/origin.entity";
 import {
   RepositoryPaginationParams,
-  type RepositoryToPaginationReturn
+  RepositoryToPaginationReturn
 } from "@domain/entities/pagination.entity";
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import { Transaction } from "@domain/entities/transaction.entity";
