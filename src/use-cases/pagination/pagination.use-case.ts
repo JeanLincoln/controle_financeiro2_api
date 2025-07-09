@@ -1,8 +1,8 @@
 import {
   PaginationParams,
-  type PaginatedResult,
-  type PaginationMeta,
-  type RepositoryPaginationParams
+  PaginatedResult,
+  PaginationMeta,
+  RepositoryPaginationParams
 } from "@domain/entities/pagination.entity";
 import { Injectable } from "@nestjs/common";
 
@@ -55,10 +55,16 @@ export class PaginationUseCase {
     total: number
   ): PaginationMeta {
     const { page, limit } = paginationParams;
-    const totalPages = Math.ceil(total / limit);
+    const totalPages = total > 0 ? Math.ceil(total / limit) : 1;
+    const firstPageItem = total > 0 ? (page - 1) * limit + 1 : 0;
+    const lastPageItem = total > 0 ? Math.min(page * limit, total) : 0;
 
     return {
+      firstPage: 1,
+      lastPage: totalPages,
       page,
+      from: firstPageItem,
+      to: lastPageItem,
       limit,
       total,
       totalPages,

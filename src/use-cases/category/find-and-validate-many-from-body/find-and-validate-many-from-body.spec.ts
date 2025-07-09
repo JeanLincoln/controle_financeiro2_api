@@ -5,8 +5,8 @@ import { CategoryRepository } from "@domain/repositories/category.repository";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import {
   MANY_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
-  USER_MOCK_1_CATEGORIES,
-  USER_MOCK_2_CATEGORIES
+  USER_1_CATEGORIES_MOCK,
+  USER_2_CATEGORIES_MOCK
 } from "@test/mocks/category.mock";
 
 describe("FindAndValidateManyFromBodyCategoryUseCase", () => {
@@ -29,14 +29,14 @@ describe("FindAndValidateManyFromBodyCategoryUseCase", () => {
   it("should return true if all categories are found and belong to the user", async () => {
     jest
       .spyOn(categoryRepository, "findByIds")
-      .mockResolvedValue(USER_MOCK_1_CATEGORIES);
+      .mockResolvedValue(USER_1_CATEGORIES_MOCK);
 
     const result = await sut.execute(MANY_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, true);
     testUtils.resultExpectations(
       MANY_CATEGORY_AUTHENTICATED_REQUEST_MOCK.categories,
-      USER_MOCK_1_CATEGORIES
+      USER_1_CATEGORIES_MOCK
     );
     testUtils.notCalledExpectations([
       exceptionsAdapter.notFound,
@@ -76,7 +76,7 @@ describe("FindAndValidateManyFromBodyCategoryUseCase", () => {
   it("should return false if some categories are not found", async () => {
     jest
       .spyOn(categoryRepository, "findByIds")
-      .mockResolvedValue([USER_MOCK_1_CATEGORIES[0]]);
+      .mockResolvedValue([USER_1_CATEGORIES_MOCK[0]]);
 
     const result = await sut.execute(MANY_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
 
@@ -99,7 +99,7 @@ describe("FindAndValidateManyFromBodyCategoryUseCase", () => {
   it("should return false if some categories do not belong to the user", async () => {
     jest
       .spyOn(categoryRepository, "findByIds")
-      .mockResolvedValue(USER_MOCK_2_CATEGORIES);
+      .mockResolvedValue(USER_2_CATEGORIES_MOCK);
 
     const result = await sut.execute(MANY_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
 

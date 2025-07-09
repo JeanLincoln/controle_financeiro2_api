@@ -1,3 +1,7 @@
+import {
+  RepositoryPaginationParams,
+  RepositoryToPaginationReturn
+} from "@domain/entities/pagination.entity";
 import { User } from "../entities/user.entity";
 
 export type UserWithoutRelations = Omit<
@@ -21,7 +25,9 @@ export type UserWithAllPropsParams =
   | { id?: number; email: string };
 
 export abstract class UserRepository {
-  abstract findAll(): Promise<User[]>;
+  abstract findAll(
+    paginationParams: RepositoryPaginationParams
+  ): Promise<RepositoryToPaginationReturn<User>>;
   abstract findById(id: number): Promise<User | null>;
   abstract findByEmail(email: string): Promise<User | null>;
   abstract findUserWithAllProps(

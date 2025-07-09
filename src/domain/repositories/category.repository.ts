@@ -1,4 +1,8 @@
 import { Category } from "@domain/entities/category.entity";
+import {
+  RepositoryPaginationParams,
+  RepositoryToPaginationReturn
+} from "@domain/entities/pagination.entity";
 import { User } from "@domain/entities/user.entity";
 
 export type CreateOrUpdateAllCategoryProps = Omit<
@@ -7,7 +11,10 @@ export type CreateOrUpdateAllCategoryProps = Omit<
 >;
 
 export abstract class CategoryRepository {
-  abstract findAll(userId: number): Promise<Category[]>;
+  abstract findAll(
+    userId: number,
+    paginationParams: RepositoryPaginationParams
+  ): Promise<RepositoryToPaginationReturn<Category>>;
   abstract findById(id: number): Promise<Category | null>;
   abstract findByIds(ids: number[]): Promise<Category[] | null>;
   abstract create(

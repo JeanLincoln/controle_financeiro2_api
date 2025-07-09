@@ -10,9 +10,16 @@ import { ExceptionsModule } from "../exceptions/exceptions.module";
 import { CryptographyModule } from "../cryptography/cryptography.module";
 import { UserController } from "@infra/controllers/user/user.controller";
 import { AuthModule } from "../auth/auth.module";
+import { PaginationModule } from "../pagination/pagination.module";
 
 @Module({
-  imports: [DatabaseModule, ExceptionsModule, CryptographyModule, AuthModule],
+  imports: [
+    DatabaseModule,
+    ExceptionsModule,
+    CryptographyModule,
+    AuthModule,
+    PaginationModule
+  ],
   controllers: [UserController],
   providers: [
     CreateUserUseCase,

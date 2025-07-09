@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards
 } from "@nestjs/common";
@@ -21,6 +22,9 @@ import { FindAllUserUseCase } from "@use-cases/user/find-all/find-all.use-case";
 import { DeleteUserUseCase } from "@use-cases/user/delete/delete.use-case";
 import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 import { FindUserByIdParamDto } from "./dto/find-by-id.dto";
+import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
+import { PaginatedResult } from "@domain/entities/pagination.entity";
+import { UserWithoutPassword } from "@domain/repositories/user.repository";
 
 @ApiTags("Users")
 @ApiCookieAuth()
@@ -41,8 +45,10 @@ export class UserController {
   }
 
   @Get()
-  async findAll() {
-    return this.findAllUserUseCase.execute();
+  async findAll(
+    @Query() { page, limit }: PaginationQueryDto
+  ): Promise<PaginatedResult<UserWithoutPassword>> {
+    return this.findAllUserUseCase.execute(page, limit);
   }
 
   @Get(":userId")

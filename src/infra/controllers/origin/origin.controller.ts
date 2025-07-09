@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards
 } from "@nestjs/common";
@@ -24,6 +25,9 @@ import { DeleteOriginParamDto } from "./dto/delete.dto";
 import { FindAllOriginUseCase } from "@use-cases/origin/find-all/find-all.use-case";
 import { Origin } from "@domain/entities/origin.entity";
 import { OriginParamGuard } from "@infra/commons/guards/origin/origin-param-validation.guard";
+import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
+import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
+import { PaginatedResult } from "@domain/entities/pagination.entity";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -76,8 +80,9 @@ export class OriginController {
 
   @Get()
   async findAll(
-    @Req() req: OriginAuthenticatedRequest
-  ): Promise<Origin[] | void> {
-    return this.findAllOriginUseCase.execute(req.user.id);
+    @Req() req: AuthenticatedRequest,
+    @Query() { page, limit }: PaginationQueryDto
+  ): Promise<PaginatedResult<Origin> | void> {
+    return this.findAllOriginUseCase.execute(req.user.id, page, limit);
   }
 }

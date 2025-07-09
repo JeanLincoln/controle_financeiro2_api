@@ -4,28 +4,50 @@ import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { OriginRepositoryStub } from "@test/stubs/repositories/origin";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { USER_MOCK } from "@test/mocks/user.mock";
-import { ORIGIN_MOCK, ORIGINS_MOCK } from "@test/mocks/origin.mock";
+import {
+  USER_1_ORIGINS_MOCK,
+  USER_1_PAGINATED_ORIGINS_MOCK,
+  USER_2_ORIGINS_MOCK
+} from "@test/mocks/origin.mock";
+import { PaginationUseCase } from "@use-cases/pagination/pagination.use-case";
+import {
+  PAGINATION_EMPTY_RESULT_MOCK,
+  PAGINATION_PARAMS_MOCK,
+  PAGINATION_TO_REPOSITORY_PARAMS_MOCK
+} from "@test/mocks/pagination.mock";
 
 describe("FindAllOriginUseCase", () => {
   let sut: FindAllOriginUseCase;
   let originRepository: OriginRepository;
   let exceptionsAdapter: ExceptionsAdapter;
+  let paginationUseCase: PaginationUseCase;
 
   beforeEach(() => {
     originRepository = new OriginRepositoryStub();
     exceptionsAdapter = new ExceptionsAdapterStub();
-    sut = new FindAllOriginUseCase(originRepository, exceptionsAdapter);
+    paginationUseCase = new PaginationUseCase();
+
+    sut = new FindAllOriginUseCase(
+      originRepository,
+      exceptionsAdapter,
+      paginationUseCase
+    );
 
     jest.spyOn(exceptionsAdapter, "internalServerError");
     jest.spyOn(exceptionsAdapter, "forbidden");
   });
 
   it("should return all users origins", async () => {
-    jest.spyOn(originRepository, "findAll").mockResolvedValue([ORIGIN_MOCK]);
+    jest.spyOn(originRepository, "findAll").mockResolvedValue({
+      data: USER_1_ORIGINS_MOCK,
+      total: USER_1_ORIGINS_MOCK.length
+    });
 
-    const result = await sut.execute(USER_MOCK.id);
+    const { page, limit } = PAGINATION_PARAMS_MOCK;
 
-    testUtils.resultExpectations(result, [ORIGIN_MOCK]);
+    const result = await sut.execute(USER_MOCK.id, page, limit);
+
+    testUtils.resultExpectations(result, USER_1_PAGINATED_ORIGINS_MOCK);
     testUtils.notCalledExpectations([
       exceptionsAdapter.internalServerError,
       exceptionsAdapter.forbidden
@@ -33,16 +55,20 @@ describe("FindAllOriginUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: originRepository.findAll,
-      calledWith: [USER_MOCK.id]
+      calledWith: [USER_MOCK.id, PAGINATION_TO_REPOSITORY_PARAMS_MOCK]
     });
   });
 
   it("should return an empty array if the user has no origins", async () => {
-    jest.spyOn(originRepository, "findAll").mockResolvedValue([]);
+    jest
+      .spyOn(originRepository, "findAll")
+      .mockResolvedValue({ data: [], total: 0 });
 
-    const result = await sut.execute(USER_MOCK.id);
+    const { page, limit } = PAGINATION_PARAMS_MOCK;
 
-    testUtils.resultExpectations(result, []);
+    const result = await sut.execute(USER_MOCK.id, page, limit);
+
+    testUtils.resultExpectations(result, PAGINATION_EMPTY_RESULT_MOCK);
     testUtils.notCalledExpectations([
       exceptionsAdapter.internalServerError,
       exceptionsAdapter.forbidden
@@ -50,21 +76,26 @@ describe("FindAllOriginUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: originRepository.findAll,
-      calledWith: [USER_MOCK.id]
+      calledWith: [1, PAGINATION_TO_REPOSITORY_PARAMS_MOCK]
     });
   });
 
   it("should throw an error if there is at least one origin that doesn't belong to the user", async () => {
-    jest.spyOn(originRepository, "findAll").mockResolvedValue(ORIGINS_MOCK);
+    jest.spyOn(originRepository, "findAll").mockResolvedValue({
+      data: USER_2_ORIGINS_MOCK,
+      total: USER_2_ORIGINS_MOCK.length
+    });
 
-    const result = await sut.execute(USER_MOCK.id);
+    const { page, limit } = PAGINATION_PARAMS_MOCK;
+
+    const result = await sut.execute(USER_MOCK.id, page, limit);
 
     testUtils.resultExpectations(result, undefined);
     testUtils.notCalledExpectations([exceptionsAdapter.internalServerError]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: originRepository.findAll,
-      calledWith: [USER_MOCK.id]
+      calledWith: [USER_MOCK.id, PAGINATION_TO_REPOSITORY_PARAMS_MOCK]
     });
     testUtils.timesCalledExpectations({
       times: 1,

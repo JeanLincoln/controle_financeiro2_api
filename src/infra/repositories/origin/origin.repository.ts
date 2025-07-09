@@ -6,6 +6,10 @@ import {
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
+import {
+  RepositoryToPaginationReturn,
+  RepositoryPaginationParams
+} from "@domain/entities/pagination.entity";
 
 export class TypeOrmOriginRepository implements OriginRepository {
   constructor(
@@ -13,14 +17,24 @@ export class TypeOrmOriginRepository implements OriginRepository {
     private readonly originRepository: Repository<Origin>
   ) {}
 
-  async findAll(userId: number): Promise<Origin[]> {
-    return this.originRepository.find({
+  async findAll(
+    userId: number,
+    { skip, take }: RepositoryPaginationParams
+  ): Promise<RepositoryToPaginationReturn<Origin>> {
+    const [origins, total] = await this.originRepository.findAndCount({
       where: { user: { id: userId } },
       relations: ["user"],
       select: {
         user: USER_WITHOUT_PASSWORD_SELECT
-      }
+      },
+      skip,
+      take
     });
+
+    return {
+      data: origins,
+      total
+    };
   }
 
   async findById(id: number): Promise<Origin | null> {
