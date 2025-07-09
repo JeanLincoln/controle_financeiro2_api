@@ -12,6 +12,7 @@ import { FindAndValidateFromParamTransactionUseCase } from "@use-cases/transacti
 import { FindAllTransactionUseCase } from "@use-cases/transaction/find-all/find-all.use-case";
 import { UpdateTransactionUseCase } from "@use-cases/transaction/update/update.use-case";
 import { DeleteTransactionUseCase } from "@use-cases/transaction/delete/delete.use-case";
+import { PaginationModule } from "../pagination/pagination.module";
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { DeleteTransactionUseCase } from "@use-cases/transaction/delete/delete.u
     UserModule,
     CategoryModule,
     SubCategoryModule,
-    OriginModule
+    OriginModule,
+    PaginationModule
   ],
   controllers: [TransactionController],
   providers: [

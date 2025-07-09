@@ -1,5 +1,9 @@
 import { Category } from "@domain/entities/category.entity";
 import { Origin } from "@domain/entities/origin.entity";
+import {
+  RepositoryPaginationParams,
+  type RepositoryToPaginationReturn
+} from "@domain/entities/pagination.entity";
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import { Transaction } from "@domain/entities/transaction.entity";
 
@@ -16,7 +20,10 @@ export type CreateOrUpdateAllTransactionProps = Omit<
 >;
 
 export abstract class TransactionRepository {
-  abstract findAll(userId: number): Promise<Transaction[] | null>;
+  abstract findAll(
+    userId: number,
+    paginationParams: RepositoryPaginationParams
+  ): Promise<RepositoryToPaginationReturn<Transaction> | null>;
   abstract findById(id: number): Promise<Transaction | null>;
   abstract create(
     userId: number,
