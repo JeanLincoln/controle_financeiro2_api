@@ -45,7 +45,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
   async findAll(
     userId: number,
     { skip, take }: RepositoryPaginationParams
-  ): Promise<RepositoryToPaginationReturn<Transaction> | null> {
+  ): Promise<RepositoryToPaginationReturn<Transaction>> {
     const [transactions, total] = await this.transactionRepository.findAndCount(
       {
         where: { user: { id: userId } },
@@ -54,8 +54,6 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
         take
       }
     );
-
-    if (!transactions) return null;
 
     return {
       data: transactions,

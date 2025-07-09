@@ -23,7 +23,7 @@ export abstract class TransactionRepository {
   abstract findAll(
     userId: number,
     paginationParams: RepositoryPaginationParams
-  ): Promise<RepositoryToPaginationReturn<Transaction> | null>;
+  ): Promise<RepositoryToPaginationReturn<Transaction>>;
   abstract findById(id: number): Promise<Transaction | null>;
   abstract create(
     userId: number,

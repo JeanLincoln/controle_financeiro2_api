@@ -15,8 +15,8 @@ export class TransactionRepositoryStub implements TransactionRepository {
     return Promise.resolve();
   }
 
-  findAll(): Promise<RepositoryToPaginationReturn<Transaction> | null> {
-    return Promise.resolve(null);
+  findAll(): Promise<RepositoryToPaginationReturn<Transaction>> {
+    return Promise.resolve({ data: [], total: 0 });
   }
 
   findById(): Promise<Transaction | null> {

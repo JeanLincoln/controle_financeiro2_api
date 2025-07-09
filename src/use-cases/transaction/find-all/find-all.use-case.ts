@@ -26,13 +26,6 @@ export class FindAllTransactionUseCase {
       repositoryParams
     );
 
-    if (!allTransactions) {
-      this.exceptionsAdapter.internalServerError({
-        message: "There was an error while trying to find all transactions."
-      });
-      return;
-    }
-
     const { data: transactions, total } = allTransactions;
 
     return createPaginationResult(transactions, paginationParams, total);

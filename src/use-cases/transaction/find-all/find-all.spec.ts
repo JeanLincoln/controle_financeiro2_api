@@ -71,26 +71,4 @@ describe("FindAllTransactionUseCase", () => {
       calledWith: [USER_MOCK.id, PAGINATION_TO_REPOSITORY_PARAMS_MOCK]
     });
   });
-
-  it("should handle errors", async () => {
-    jest.spyOn(transactionsRepository, "findAll").mockResolvedValue(null);
-
-    const { page, limit } = PAGINATION_PARAMS_MOCK;
-
-    const result = await sut.execute(USER_MOCK.id, page, limit);
-
-    testUtils.resultExpectations(result, undefined);
-    testUtils.timesCalledExpectations({
-      times: 1,
-      mockFunction: transactionsRepository.findAll,
-      calledWith: [USER_MOCK.id, PAGINATION_TO_REPOSITORY_PARAMS_MOCK]
-    });
-    testUtils.timesCalledExpectations({
-      times: 1,
-      mockFunction: exceptionsAdapter.internalServerError,
-      calledWith: [
-        { message: "There was an error while trying to find all transactions." }
-      ]
-    });
-  });
 });
