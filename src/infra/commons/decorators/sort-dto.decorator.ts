@@ -1,6 +1,6 @@
 import { SortOrderEnum } from "@domain/entities/common/sort.entity";
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEnum, IsString } from "class-validator";
+import { IsEnum } from "class-validator";
 
 interface SortableFieldProps<T> {
   enumType: T;
@@ -29,9 +29,6 @@ export function SortableFieldDto<T extends Record<string, string | number>>({
     IsEnum(enumType, {
       message: DEFAULT_FIELD_ERROR_MESSAGE
     })(target, propertyKey);
-    IsString({
-      message: DEFAULT_FIELD_ERROR_MESSAGE
-    })(target, propertyKey);
   };
 }
 
@@ -45,9 +42,6 @@ export function SortableOrderDto() {
     })(target, propertyKey);
 
     IsEnum(SortOrderEnum, {
-      message: DEFAULT_ORDER_ERROR_MESSAGE
-    })(target, propertyKey);
-    IsString({
       message: DEFAULT_ORDER_ERROR_MESSAGE
     })(target, propertyKey);
   };

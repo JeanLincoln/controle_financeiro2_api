@@ -9,7 +9,7 @@ import { SortOrderEnum } from "@domain/entities/common/sort.entity";
 export class FindAllQueryParamDto extends PaginationQueryDto {
   @SortableFieldDto({
     enumType: TransactionsSortableFieldsEnum,
-    defaultValue: "updatedAt"
+    defaultValue: TransactionsSortableFieldsEnum.updatedAt
   })
   sortBy: TransactionsSortableFieldsEnum;
 
