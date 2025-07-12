@@ -1,5 +1,8 @@
 import { Origin } from "@domain/entities/origin.entity";
-import { CreateOrUpdateAllOriginProps } from "@domain/repositories/origin.repository";
+import {
+  CreateOrUpdateAllOriginProps,
+  OriginsSortableFieldsEnum
+} from "@domain/repositories/origin.repository";
 import { OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 import { OriginBodyAuthenticatedRequest } from "@use-cases/origin/find-and-validate-from-body/find-and-validate-from-body.use-case";
@@ -7,6 +10,11 @@ import {
   PaginationMeta,
   PaginatedResult
 } from "@domain/entities/common/pagination.entity";
+import { SortOrderEnum } from "@domain/entities/common/sort.entity";
+import {
+  PAGINATION_PARAMS_MOCK,
+  PAGINATION_TO_REPOSITORY_PARAMS_MOCK
+} from "./pagination.mock";
 
 export const CREATE_OR_UPDATE_ORIGIN_MOCK: CreateOrUpdateAllOriginProps = {
   name: "Origin",
@@ -53,6 +61,21 @@ const ORIGIN_PAGINATION_META_MOCK: PaginationMeta = {
   lastPage: 1,
   from: 1,
   to: 5
+};
+
+export const ORIGINS_SORT_MOCK = {
+  sortBy: OriginsSortableFieldsEnum.updatedAt,
+  sortOrder: SortOrderEnum.DESC
+};
+
+export const ORIGINS_PAGINATION_AND_SORT_PARAMS_MOCK = {
+  ...PAGINATION_PARAMS_MOCK,
+  ...ORIGINS_SORT_MOCK
+};
+
+export const ORIGINS_PAGINATION_AND_SORT_TO_REPOSITORY_PARAMS_MOCK = {
+  ...PAGINATION_TO_REPOSITORY_PARAMS_MOCK,
+  ...ORIGINS_SORT_MOCK
 };
 
 export const USER_1_PAGINATED_ORIGINS_MOCK: PaginatedResult<Origin> = {

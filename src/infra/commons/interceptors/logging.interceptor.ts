@@ -20,7 +20,9 @@ export class LoggingInterceptor implements NestInterceptor {
 
     this.logger.log(`${method} ${url} - Request started`);
 
-    const userInfo = `User: ${request.user.firstName} ${request.user.lastName}, ID: ${request.user.id}`;
+    const userInfo = request.user
+      ? `User: ${request.user.firstName} ${request.user.lastName}, ID: ${request.user.id}`
+      : "";
 
     return next.handle().pipe(
       tap({

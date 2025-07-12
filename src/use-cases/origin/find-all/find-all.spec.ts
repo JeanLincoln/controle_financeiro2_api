@@ -5,16 +5,15 @@ import { OriginRepositoryStub } from "@test/stubs/repositories/origin";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { USER_MOCK } from "@test/mocks/user.mock";
 import {
+  ORIGINS_PAGINATION_AND_SORT_PARAMS_MOCK,
+  ORIGINS_PAGINATION_AND_SORT_TO_REPOSITORY_PARAMS_MOCK,
   USER_1_ORIGINS_MOCK,
   USER_1_PAGINATED_ORIGINS_MOCK,
   USER_2_ORIGINS_MOCK
 } from "@test/mocks/origin.mock";
 import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
-import {
-  PAGINATION_EMPTY_RESULT_MOCK,
-  PAGINATION_PARAMS_MOCK,
-  PAGINATION_TO_REPOSITORY_PARAMS_MOCK
-} from "@test/mocks/pagination.mock";
+import { PAGINATION_EMPTY_RESULT_MOCK } from "@test/mocks/pagination.mock";
+import { CATEGORIES_PAGINATION_AND_SORT_TO_REPOSITORY_PARAMS_MOCK } from "@test/mocks/category.mock";
 
 describe("FindAllOriginUseCase", () => {
   let sut: FindAllOriginUseCase;
@@ -43,9 +42,10 @@ describe("FindAllOriginUseCase", () => {
       total: USER_1_ORIGINS_MOCK.length
     });
 
-    const { page, limit } = PAGINATION_PARAMS_MOCK;
-
-    const result = await sut.execute(USER_MOCK.id, page, limit);
+    const result = await sut.execute(
+      USER_MOCK.id,
+      ORIGINS_PAGINATION_AND_SORT_PARAMS_MOCK
+    );
 
     testUtils.resultExpectations(result, USER_1_PAGINATED_ORIGINS_MOCK);
     testUtils.notCalledExpectations([
@@ -55,7 +55,10 @@ describe("FindAllOriginUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: originRepository.findAll,
-      calledWith: [USER_MOCK.id, PAGINATION_TO_REPOSITORY_PARAMS_MOCK]
+      calledWith: [
+        USER_MOCK.id,
+        CATEGORIES_PAGINATION_AND_SORT_TO_REPOSITORY_PARAMS_MOCK
+      ]
     });
   });
 
@@ -64,9 +67,10 @@ describe("FindAllOriginUseCase", () => {
       .spyOn(originRepository, "findAll")
       .mockResolvedValue({ data: [], total: 0 });
 
-    const { page, limit } = PAGINATION_PARAMS_MOCK;
-
-    const result = await sut.execute(USER_MOCK.id, page, limit);
+    const result = await sut.execute(
+      USER_MOCK.id,
+      ORIGINS_PAGINATION_AND_SORT_PARAMS_MOCK
+    );
 
     testUtils.resultExpectations(result, PAGINATION_EMPTY_RESULT_MOCK);
     testUtils.notCalledExpectations([
@@ -76,7 +80,7 @@ describe("FindAllOriginUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: originRepository.findAll,
-      calledWith: [1, PAGINATION_TO_REPOSITORY_PARAMS_MOCK]
+      calledWith: [1, ORIGINS_PAGINATION_AND_SORT_TO_REPOSITORY_PARAMS_MOCK]
     });
   });
 
@@ -86,16 +90,20 @@ describe("FindAllOriginUseCase", () => {
       total: USER_2_ORIGINS_MOCK.length
     });
 
-    const { page, limit } = PAGINATION_PARAMS_MOCK;
-
-    const result = await sut.execute(USER_MOCK.id, page, limit);
+    const result = await sut.execute(
+      USER_MOCK.id,
+      ORIGINS_PAGINATION_AND_SORT_PARAMS_MOCK
+    );
 
     testUtils.resultExpectations(result, undefined);
     testUtils.notCalledExpectations([exceptionsAdapter.internalServerError]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: originRepository.findAll,
-      calledWith: [USER_MOCK.id, PAGINATION_TO_REPOSITORY_PARAMS_MOCK]
+      calledWith: [
+        USER_MOCK.id,
+        ORIGINS_PAGINATION_AND_SORT_TO_REPOSITORY_PARAMS_MOCK
+      ]
     });
     testUtils.timesCalledExpectations({
       times: 1,

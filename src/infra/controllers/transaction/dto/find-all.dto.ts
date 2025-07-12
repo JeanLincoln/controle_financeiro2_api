@@ -6,10 +6,10 @@ import {
 } from "@infra/commons/decorators/sort-dto.decorator";
 import { SortOrderEnum } from "@domain/entities/common/sort.entity";
 
-export class FindAllQueryParamDto extends PaginationQueryDto {
+export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @SortableFieldDto({
     enumType: TransactionsSortableFieldsEnum,
-    defaultValue: TransactionsSortableFieldsEnum.updatedAt
+    defaultValue: "updatedAt"
   })
   sortBy: TransactionsSortableFieldsEnum;
 

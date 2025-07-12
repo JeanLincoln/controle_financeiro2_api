@@ -26,8 +26,8 @@ import { FindAllOriginUseCase } from "@use-cases/origin/find-all/find-all.use-ca
 import { Origin } from "@domain/entities/origin.entity";
 import { OriginParamGuard } from "@infra/commons/guards/origin/origin-param-validation.guard";
 import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
-import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
+import { FindAllOriginDto } from "./dto/find-all.dto";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -81,8 +81,8 @@ export class OriginController {
   @Get()
   async findAll(
     @Req() req: AuthenticatedRequest,
-    @Query() { page, limit }: PaginationQueryDto
+    @Query() queryParams: FindAllOriginDto
   ): Promise<PaginatedResult<Origin> | void> {
-    return this.findAllOriginUseCase.execute(req.user.id, page, limit);
+    return this.findAllOriginUseCase.execute(req.user.id, queryParams);
   }
 }
