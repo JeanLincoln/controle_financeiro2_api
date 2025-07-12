@@ -35,7 +35,7 @@ import { DeleteTransactionUseCase } from "@use-cases/transaction/delete/delete.u
 import { DeleteTransactionParamDto } from "./dto/delete.dto";
 import { Transaction } from "@domain/entities/transaction.entity";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
-import { FindAllQueryParamDto } from "./dto/find-all-query.dto";
+import { FindAllTransactionsQueryParamDto } from "./dto/find-all.dto";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -79,7 +79,7 @@ export class TransactionController {
   async findAll(
     @Req() req: AuthenticatedRequest,
     @Query()
-    queryParams: FindAllQueryParamDto
+    queryParams: FindAllTransactionsQueryParamDto
   ): Promise<PaginatedResult<Transaction> | void> {
     return this.findAllTransactionUseCase.execute(req.user.id, queryParams);
   }

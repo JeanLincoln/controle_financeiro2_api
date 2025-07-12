@@ -25,9 +25,9 @@ import { DeleteCategoryParamDto } from "./dto/delete.dto";
 import { FindCategoryByIdParamDto } from "./dto/find-by-id.dto";
 import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 import { CategoryParamGuard } from "@infra/commons/guards/category/category-param-validation.guard";
-import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
 import { Category } from "@domain/entities/category.entity";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
+import { FindAllCategoriesQueryParamDto } from "./dto/find-all.dto";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -51,9 +51,9 @@ export class CategoryController {
   @Get()
   async findAll(
     @Req() req: AuthenticatedRequest,
-    @Query() { page, limit }: PaginationQueryDto
+    @Query() queryParams: FindAllCategoriesQueryParamDto
   ): Promise<PaginatedResult<Category> | void> {
-    return this.findAllCategoryUseCase.execute(req.user.id, page, limit);
+    return this.findAllCategoryUseCase.execute(req.user.id, queryParams);
   }
 
   @ExcludeFields("user")

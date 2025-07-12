@@ -1,12 +1,20 @@
 import { CategoryType, Category } from "@domain/entities/category.entity";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
-import { CreateOrUpdateAllCategoryProps } from "@domain/repositories/category.repository";
+import {
+  CategoriesSortableFieldsEnum,
+  CreateOrUpdateAllCategoryProps
+} from "@domain/repositories/category.repository";
 import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { ManyCategoriesAuthenticatedRequest } from "@use-cases/category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
 import {
   PaginatedResult,
   PaginationMeta
 } from "@domain/entities/common/pagination.entity";
+import { SortOrderEnum } from "@domain/entities/common/sort.entity";
+import {
+  PAGINATION_PARAMS_MOCK,
+  PAGINATION_TO_REPOSITORY_PARAMS_MOCK
+} from "./pagination.mock";
 
 export const CREATE_OR_UPDATE_CATEGORY_MOCK: CreateOrUpdateAllCategoryProps = {
   name: "Category",
@@ -69,6 +77,21 @@ const CATEGORY_PAGINATION_META_MOCK: PaginationMeta = {
   lastPage: 1,
   from: 1,
   to: 5
+};
+
+export const CATEGORIES_SORT_MOCK = {
+  sortBy: CategoriesSortableFieldsEnum.updatedAt,
+  sortOrder: SortOrderEnum.DESC
+};
+
+export const CATEGORIES_PAGINATION_AND_SORT_PARAMS_MOCK = {
+  ...PAGINATION_PARAMS_MOCK,
+  ...CATEGORIES_SORT_MOCK
+};
+
+export const CATEGORIES_PAGINATION_AND_SORT_TO_REPOSITORY_PARAMS_MOCK = {
+  ...PAGINATION_TO_REPOSITORY_PARAMS_MOCK,
+  ...CATEGORIES_SORT_MOCK
 };
 
 export const USER_1_PAGINATED_CATEGORIES_MOCK: PaginatedResult<Category> = {

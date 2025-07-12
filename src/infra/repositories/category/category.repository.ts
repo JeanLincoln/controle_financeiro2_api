@@ -2,15 +2,14 @@ import { Category } from "@domain/entities/category.entity";
 import { User } from "@domain/entities/user.entity";
 import {
   CreateOrUpdateAllCategoryProps,
-  CategoryRepository
+  CategoryRepository,
+  type CategoryFindAllToRepositoryParams
 } from "@domain/repositories/category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
-import {
-  RepositoryToPaginationReturn,
-  type RepositoryPaginationParams
-} from "@domain/entities/common/pagination.entity";
+import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
+import { sortQuery } from "../common/queries/sort.query";
 
 export class TypeOrmCategoryRepository implements CategoryRepository {
   constructor(
@@ -20,12 +19,13 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
 
   async findAll(
     userId: number,
-    { skip, take }: RepositoryPaginationParams
+    { skip, take, sortBy, sortOrder }: CategoryFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Category>> {
     const [categories, total] = await this.categoryRepository.findAndCount({
       where: { user: { id: userId } },
       skip,
-      take
+      take,
+      order: sortQuery(sortBy, sortOrder)
     });
 
     return {

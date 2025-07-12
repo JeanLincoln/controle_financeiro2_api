@@ -1,8 +1,10 @@
 import { Category } from "@domain/entities/category.entity";
 import {
   RepositoryPaginationParams,
-  RepositoryToPaginationReturn
+  RepositoryToPaginationReturn,
+  type CommonPaginationParams
 } from "@domain/entities/common/pagination.entity";
+import { SortParams } from "@domain/entities/common/sort.entity";
 import { User } from "@domain/entities/user.entity";
 
 export type CreateOrUpdateAllCategoryProps = Omit<
@@ -10,10 +12,24 @@ export type CreateOrUpdateAllCategoryProps = Omit<
   "id" | "createdAt" | "updatedAt" | "subCategories" | "user" | "transactions"
 >;
 
+export enum CategoriesSortableFieldsEnum {
+  name = "name",
+  description = "description",
+  type = "type",
+  createdAt = "createdAt",
+  updatedAt = "updatedAt"
+}
+
+export type CategoryFindAllToUseCase = CommonPaginationParams &
+  SortParams<CategoriesSortableFieldsEnum>;
+
+export type CategoryFindAllToRepositoryParams = RepositoryPaginationParams &
+  SortParams<CategoriesSortableFieldsEnum>;
+
 export abstract class CategoryRepository {
   abstract findAll(
     userId: number,
-    paginationParams: RepositoryPaginationParams
+    paginationParams: CategoryFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Category>>;
   abstract findById(id: number): Promise<Category | null>;
   abstract findByIds(ids: number[]): Promise<Category[] | null>;
