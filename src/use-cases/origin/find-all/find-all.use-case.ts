@@ -1,7 +1,10 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { Origin } from "@domain/entities/origin.entity";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
-import { OriginRepository } from "@domain/repositories/origin.repository";
+import {
+  OriginRepository,
+  type OriginFindAllToUseCase
+} from "@domain/repositories/origin.repository";
 import { Injectable } from "@nestjs/common";
 import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
 
@@ -15,16 +18,18 @@ export class FindAllOriginUseCase {
 
   async execute(
     userId: number,
-    page?: number,
-    limit?: number
+    queryParams: OriginFindAllToUseCase
   ): Promise<PaginatedResult<Origin> | void> {
+    const { sortBy, sortOrder, limit, page } = queryParams;
+
     const { paginationParams, repositoryParams, createPaginationResult } =
       await this.paginationUseCase.execute(page, limit);
 
-    const paginatedOrigins = await this.originRepository.findAll(
-      userId,
-      repositoryParams
-    );
+    const paginatedOrigins = await this.originRepository.findAll(userId, {
+      ...repositoryParams,
+      sortBy,
+      sortOrder
+    });
 
     const atLeastOneOriginDoesntBelongToUser = paginatedOrigins.data.some(
       (origin) => origin.user.id !== userId

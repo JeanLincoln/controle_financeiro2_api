@@ -2,7 +2,7 @@ import { Category } from "@domain/entities/category.entity";
 import {
   RepositoryPaginationParams,
   RepositoryToPaginationReturn,
-  type CommonPaginationParams
+  CommonPaginationParams
 } from "@domain/entities/common/pagination.entity";
 import { SortParams } from "@domain/entities/common/sort.entity";
 import { User } from "@domain/entities/user.entity";

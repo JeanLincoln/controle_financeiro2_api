@@ -1,15 +1,14 @@
 import { Origin } from "@domain/entities/origin.entity";
 import {
   OriginRepository,
-  CreateOrUpdateAllOriginProps
+  CreateOrUpdateAllOriginProps,
+  OriginFindAllToRepositoryParams
 } from "@domain/repositories/origin.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
-import {
-  RepositoryToPaginationReturn,
-  RepositoryPaginationParams
-} from "@domain/entities/common/pagination.entity";
+import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
+import { sortQuery } from "../common/queries/sort.query";
 
 export class TypeOrmOriginRepository implements OriginRepository {
   constructor(
@@ -19,7 +18,7 @@ export class TypeOrmOriginRepository implements OriginRepository {
 
   async findAll(
     userId: number,
-    { skip, take }: RepositoryPaginationParams
+    { skip, take, sortBy, sortOrder }: OriginFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Origin>> {
     const [origins, total] = await this.originRepository.findAndCount({
       where: { user: { id: userId } },
@@ -28,7 +27,8 @@ export class TypeOrmOriginRepository implements OriginRepository {
         user: USER_WITHOUT_PASSWORD_SELECT
       },
       skip,
-      take
+      take,
+      order: sortQuery(sortBy, sortOrder)
     });
 
     return {

@@ -2,7 +2,7 @@ import { Category } from "@domain/entities/category.entity";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import {
   CategoryRepository,
-  type CategoryFindAllToUseCase
+  CategoryFindAllToUseCase
 } from "@domain/repositories/category.repository";
 import { Injectable } from "@nestjs/common";
 import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";

@@ -2,8 +2,8 @@ import { Category } from "@domain/entities/category.entity";
 import { Origin } from "@domain/entities/origin.entity";
 import {
   RepositoryToPaginationReturn,
-  type CommonPaginationParams,
-  type RepositoryPaginationParams
+  CommonPaginationParams,
+  RepositoryPaginationParams
 } from "@domain/entities/common/pagination.entity";
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import { Transaction } from "@domain/entities/transaction.entity";

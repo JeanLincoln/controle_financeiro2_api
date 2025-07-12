@@ -3,7 +3,7 @@ import { User } from "@domain/entities/user.entity";
 import {
   CreateOrUpdateAllCategoryProps,
   CategoryRepository,
-  type CategoryFindAllToRepositoryParams
+  CategoryFindAllToRepositoryParams
 } from "@domain/repositories/category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";

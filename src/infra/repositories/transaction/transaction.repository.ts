@@ -5,7 +5,7 @@ import { Transaction } from "@domain/entities/transaction.entity";
 import {
   TransactionRepository,
   CreateOrUpdateAllTransactionProps,
-  type TransactionFindAllToRepositoryParams
+  TransactionFindAllToRepositoryParams
 } from "@domain/repositories/transaction.repository";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
