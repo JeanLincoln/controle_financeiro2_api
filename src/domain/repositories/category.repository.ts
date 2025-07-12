@@ -2,7 +2,7 @@ import { Category } from "@domain/entities/category.entity";
 import {
   RepositoryPaginationParams,
   RepositoryToPaginationReturn
-} from "@domain/entities/pagination.entity";
+} from "@domain/entities/common/pagination.entity";
 import { User } from "@domain/entities/user.entity";
 
 export type CreateOrUpdateAllCategoryProps = Omit<

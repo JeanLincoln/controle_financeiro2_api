@@ -5,7 +5,7 @@ import {
   PAGINATION_DEFAULT_LIMIT,
   PAGINATION_DEFAULT_PAGE,
   PAGINATION_MAX_LIMIT
-} from "@use-cases/pagination/pagination.use-case";
+} from "@use-cases/common/pagination/pagination.use-case";
 
 export class PaginationQueryDto {
   @ApiPropertyOptional({

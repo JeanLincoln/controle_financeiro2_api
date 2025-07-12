@@ -27,7 +27,7 @@ import { Origin } from "@domain/entities/origin.entity";
 import { OriginParamGuard } from "@infra/commons/guards/origin/origin-param-validation.guard";
 import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
-import { PaginatedResult } from "@domain/entities/pagination.entity";
+import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)

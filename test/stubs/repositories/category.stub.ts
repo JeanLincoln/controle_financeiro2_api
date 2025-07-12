@@ -1,5 +1,5 @@
 import { Category } from "@domain/entities/category.entity";
-import { RepositoryToPaginationReturn } from "@domain/entities/pagination.entity";
+import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { CategoryRepository } from "@domain/repositories/category.repository";
 
 export class CategoryRepositoryStub implements CategoryRepository {

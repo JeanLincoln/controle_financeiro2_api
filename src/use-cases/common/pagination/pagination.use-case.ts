@@ -3,7 +3,7 @@ import {
   PaginatedResult,
   PaginationMeta,
   RepositoryPaginationParams
-} from "@domain/entities/pagination.entity";
+} from "@domain/entities/common/pagination.entity";
 import { Injectable } from "@nestjs/common";
 
 export const PAGINATION_DEFAULT_PAGE = 1;

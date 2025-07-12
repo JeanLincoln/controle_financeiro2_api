@@ -10,7 +10,7 @@ import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.select
 import {
   RepositoryToPaginationReturn,
   type RepositoryPaginationParams
-} from "@domain/entities/pagination.entity";
+} from "@domain/entities/common/pagination.entity";
 
 export class TypeOrmCategoryRepository implements CategoryRepository {
   constructor(

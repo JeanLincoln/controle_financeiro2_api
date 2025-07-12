@@ -6,7 +6,7 @@ import { ManyCategoriesAuthenticatedRequest } from "@use-cases/category/find-and
 import {
   PaginatedResult,
   PaginationMeta
-} from "@domain/entities/pagination.entity";
+} from "@domain/entities/common/pagination.entity";
 
 export const CREATE_OR_UPDATE_CATEGORY_MOCK: CreateOrUpdateAllCategoryProps = {
   name: "Category",

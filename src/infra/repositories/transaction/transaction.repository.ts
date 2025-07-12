@@ -4,16 +4,15 @@ import { SubCategory } from "@domain/entities/sub-category.entity";
 import { Transaction } from "@domain/entities/transaction.entity";
 import {
   TransactionRepository,
-  CreateOrUpdateAllTransactionProps
+  CreateOrUpdateAllTransactionProps,
+  type TransactionFindAllToRepositoryParams
 } from "@domain/repositories/transaction.repository";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
-import {
-  RepositoryPaginationParams,
-  RepositoryToPaginationReturn
-} from "@domain/entities/pagination.entity";
+import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
+import { sortQuery } from "../common/queries/sort.query";
 
 @Injectable()
 export class TypeOrmTransactionRepository implements TransactionRepository {
@@ -44,14 +43,15 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
 
   async findAll(
     userId: number,
-    { skip, take }: RepositoryPaginationParams
+    { skip, take, sortBy, sortOrder }: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>> {
     const [transactions, total] = await this.transactionRepository.findAndCount(
       {
         where: { user: { id: userId } },
         relations: ["origin", "categories", "subCategories"],
         skip,
-        take
+        take,
+        order: sortQuery(sortBy, sortOrder)
       }
     );
 

@@ -1,7 +1,7 @@
 import {
   RepositoryPaginationParams,
   RepositoryToPaginationReturn
-} from "@domain/entities/pagination.entity";
+} from "@domain/entities/common/pagination.entity";
 import { User } from "../entities/user.entity";
 
 export type UserWithoutRelations = Omit<

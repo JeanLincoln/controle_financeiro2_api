@@ -1,10 +1,10 @@
-import { PaginatedResult } from "@domain/entities/pagination.entity";
+import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import {
   UserRepository,
   UserWithoutPassword
 } from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
-import { PaginationUseCase } from "@use-cases/pagination/pagination.use-case";
+import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
 
 @Injectable()
 export class FindAllUserUseCase {

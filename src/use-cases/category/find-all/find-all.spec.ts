@@ -5,7 +5,7 @@ import {
   USER_1_CATEGORIES_MOCK,
   USER_1_PAGINATED_CATEGORIES_MOCK
 } from "@test/mocks/category.mock";
-import { PaginationUseCase } from "@use-cases/pagination/pagination.use-case";
+import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
 import {
   PAGINATION_EMPTY_RESULT_MOCK,
   PAGINATION_PARAMS_MOCK,
