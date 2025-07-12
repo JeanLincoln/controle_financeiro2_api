@@ -20,13 +20,15 @@ export class LoggingInterceptor implements NestInterceptor {
 
     this.logger.log(`${method} ${url} - Request started`);
 
+    const userInfo = `User: ${request.user.firstName} ${request.user.lastName}, ID: ${request.user.id}`;
+
     return next.handle().pipe(
       tap({
         next: (_data) => {
           const endTime = Date.now();
           const duration = endTime - startTime;
           this.logger.log(
-            `${method} ${url} - Request completed in ${duration}ms`
+            `${userInfo} - ${method} ${url} - Request completed in ${duration}ms`
           );
         },
         error: (error) => {

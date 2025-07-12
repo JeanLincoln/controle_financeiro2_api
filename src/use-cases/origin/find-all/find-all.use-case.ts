@@ -1,9 +1,9 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { Origin } from "@domain/entities/origin.entity";
-import { PaginatedResult } from "@domain/entities/pagination.entity";
+import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { OriginRepository } from "@domain/repositories/origin.repository";
 import { Injectable } from "@nestjs/common";
-import { PaginationUseCase } from "@use-cases/pagination/pagination.use-case";
+import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
 
 @Injectable()
 export class FindAllOriginUseCase {

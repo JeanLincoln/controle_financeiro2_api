@@ -2,7 +2,7 @@ import {
   PaginationMeta,
   PaginationParams,
   RepositoryPaginationParams
-} from "@domain/entities/pagination.entity";
+} from "@domain/entities/common/pagination.entity";
 
 export const PAGINATION_PARAMS_MOCK: PaginationParams = {
   page: 1,

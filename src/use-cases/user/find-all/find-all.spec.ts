@@ -2,7 +2,7 @@ import { FindAllUserUseCase } from "./find-all.use-case";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { UserRepository } from "@domain/repositories/user.repository";
 import { USERS_MOCK, USERS_PAGINATED_MOCK } from "@test/mocks/user.mock";
-import { PaginationUseCase } from "@use-cases/pagination/pagination.use-case";
+import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
 import {
   PAGINATION_EMPTY_RESULT_MOCK,
   PAGINATION_PARAMS_MOCK,

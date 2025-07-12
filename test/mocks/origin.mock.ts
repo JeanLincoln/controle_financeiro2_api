@@ -6,7 +6,7 @@ import { OriginBodyAuthenticatedRequest } from "@use-cases/origin/find-and-valid
 import {
   PaginationMeta,
   PaginatedResult
-} from "@domain/entities/pagination.entity";
+} from "@domain/entities/common/pagination.entity";
 
 export const CREATE_OR_UPDATE_ORIGIN_MOCK: CreateOrUpdateAllOriginProps = {
   name: "Origin",

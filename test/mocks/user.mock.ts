@@ -1,7 +1,7 @@
 import {
   PaginationMeta,
   PaginatedResult
-} from "@domain/entities/pagination.entity";
+} from "@domain/entities/common/pagination.entity";
 import { User } from "@domain/entities/user.entity";
 import { BaseCreateOrUpdateUserProps } from "@domain/repositories/user.repository";
 

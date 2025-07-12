@@ -1,5 +1,5 @@
 import { Origin } from "@domain/entities/origin.entity";
-import { RepositoryToPaginationReturn } from "@domain/entities/pagination.entity";
+import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { OriginRepository } from "@domain/repositories/origin.repository";
 
 export class OriginRepositoryStub implements OriginRepository {

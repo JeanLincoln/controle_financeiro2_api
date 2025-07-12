@@ -27,7 +27,7 @@ import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decor
 import { CategoryParamGuard } from "@infra/commons/guards/category/category-param-validation.guard";
 import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
 import { Category } from "@domain/entities/category.entity";
-import { PaginatedResult } from "@domain/entities/pagination.entity";
+import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)

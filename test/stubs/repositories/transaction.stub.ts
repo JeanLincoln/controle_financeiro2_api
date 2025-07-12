@@ -1,4 +1,4 @@
-import { RepositoryToPaginationReturn } from "@domain/entities/pagination.entity";
+import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { Transaction } from "@domain/entities/transaction.entity";
 import { TransactionRepository } from "@domain/repositories/transaction.repository";
 

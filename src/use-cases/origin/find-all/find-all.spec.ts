@@ -9,7 +9,7 @@ import {
   USER_1_PAGINATED_ORIGINS_MOCK,
   USER_2_ORIGINS_MOCK
 } from "@test/mocks/origin.mock";
-import { PaginationUseCase } from "@use-cases/pagination/pagination.use-case";
+import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
 import {
   PAGINATION_EMPTY_RESULT_MOCK,
   PAGINATION_PARAMS_MOCK,

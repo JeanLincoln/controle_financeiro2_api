@@ -1,12 +1,20 @@
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
-import { CreateOrUpdateAllTransactionProps } from "@domain/repositories/transaction.repository";
+import {
+  CreateOrUpdateAllTransactionProps,
+  TransactionsSortableFieldsEnum
+} from "@domain/repositories/transaction.repository";
 import { ORIGIN_MOCK } from "./origin.mock";
 import { Transaction } from "@domain/entities/transaction.entity";
 import { TransactionAuthenticatedRequest } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import {
   PaginatedResult,
   PaginationMeta
-} from "@domain/entities/pagination.entity";
+} from "@domain/entities/common/pagination.entity";
+import {
+  PAGINATION_PARAMS_MOCK,
+  PAGINATION_TO_REPOSITORY_PARAMS_MOCK
+} from "./pagination.mock";
+import { SortOrderEnum } from "@domain/entities/common/sort.entity";
 
 export const CREATE_OR_UPDATE_TRANSACTION_MOCK: CreateOrUpdateAllTransactionProps =
   {
@@ -56,6 +64,21 @@ const TRANSACTION_PAGINATION_META_MOCK: PaginationMeta = {
   lastPage: 1,
   from: 1,
   to: 5
+};
+
+export const TRANSACTIONS_SORT_MOCK = {
+  sortBy: TransactionsSortableFieldsEnum.updatedAt,
+  sortOrder: SortOrderEnum.DESC
+};
+
+export const TRANSACTIONS_PAGINATION_AND_SORT_PARAMS_MOCK = {
+  ...PAGINATION_PARAMS_MOCK,
+  ...TRANSACTIONS_SORT_MOCK
+};
+
+export const TRANSACTIONS_PAGINATION_AND_SORT_TO_REPOSITORY_PARAMS_MOCK = {
+  ...PAGINATION_TO_REPOSITORY_PARAMS_MOCK,
+  ...TRANSACTIONS_SORT_MOCK
 };
 
 export const USER_1_PAGINATED_TRANSACTIONS_MOCK: PaginatedResult<Transaction> =

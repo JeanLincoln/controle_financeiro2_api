@@ -1,8 +1,8 @@
 import { Category } from "@domain/entities/category.entity";
-import { PaginatedResult } from "@domain/entities/pagination.entity";
+import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { CategoryRepository } from "@domain/repositories/category.repository";
 import { Injectable } from "@nestjs/common";
-import { PaginationUseCase } from "@use-cases/pagination/pagination.use-case";
+import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
 
 @Injectable()
 export class FindAllCategoryUseCase {

@@ -2,7 +2,7 @@ import { Origin } from "@domain/entities/origin.entity";
 import {
   RepositoryPaginationParams,
   RepositoryToPaginationReturn
-} from "@domain/entities/pagination.entity";
+} from "@domain/entities/common/pagination.entity";
 
 export type CreateOrUpdateAllOriginProps = Omit<
   Origin,
