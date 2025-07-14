@@ -3,12 +3,13 @@ import { TransactionsSortableFieldsEnum } from "@domain/repositories/transaction
 import {
   SortableFieldDto,
   SortableOrderDto
-} from "@infra/commons/decorators/sort-dto.decorator";
+} from "@infra/commons/decorators/dto-decorators/sort-dto.decorator";
 import { SortOrderEnum } from "@domain/entities/common/sort.entity";
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 import { IsDate, IsNumber, IsOptional, IsString } from "class-validator";
 import { Transform } from "class-transformer";
 import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
+import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
 
 export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @SortableFieldDto({
@@ -20,7 +21,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @SortableOrderDto()
   sortOrder: SortOrderEnum;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description:
       "Filter transactions that  match this name (case-insensitive).",
     example: "Supermarket",
@@ -32,7 +33,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @IsOptional()
   name?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description:
       "Filter transactions that  match this description (case-insensitive).",
     example: "Supermarket expenses",
@@ -44,7 +45,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @IsOptional()
   description?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: "Filter transactions that  match this amount.",
     example: "100.20",
     required: false,
@@ -52,8 +53,8 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
     format: "number"
   })
   @IsNumber()
-  @IsOptional()
   @Transform(({ value }) => (value ? Number(value) : value))
+  @IsOptional()
   amount?: number;
 
   @ApiPropertyOptional({
@@ -62,7 +63,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @IsOptional()
   isRecurring?: boolean;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description:
       "Filter transactions that start from this date (inclusive). Format: YYYY-MM-DD",
     example: "2025-01-01",
@@ -72,11 +73,11 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
-  @IsOptional()
   @DateRangeValidation()
+  @IsOptional()
   startDate?: Date;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description:
       "Filter transactions that start before or on this date (inclusive). Format: YYYY-MM-DD",
     example: "2025-02-01",
@@ -89,7 +90,36 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @IsOptional()
   endDate?: Date;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
+    description: "Filter transactions that was originated from this origin id.",
+    example: 1,
+    type: Number,
+    format: "number"
+  })
+  @IsNumber()
+  @Transform(({ value }) => (value ? Number(value) : value))
+  @IsOptional()
+  originId?: number;
+
+  @NumberArrayValidations({
+    description:
+      "Filter transactions that belong to any of these categories. Provide an array of category IDs to filter by multiple categories.",
+    example: [1, 2, 3],
+    required: false
+  })
+  @IsOptional()
+  categoriesId?: number[];
+
+  @NumberArrayValidations({
+    description:
+      "Filter transactions that belong to any of these sub-categories. Provide an array of sub-category IDs to filter by multiple sub-categories.",
+    example: [1, 2, 3],
+    required: false
+  })
+  @IsOptional()
+  subCategoriesId?: number[];
+
+  @ApiPropertyOptional({
     description:
       "Filter transactions that was created on this date. Format: YYYY-MM-DD",
     example: "2025-01-01",
@@ -99,11 +129,11 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
-  @IsOptional()
   @DateRangeValidation()
+  @IsOptional()
   createdAt?: Date;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description:
       "Filter transactions that was updated on this date. Format: YYYY-MM-DD",
     example: "2025-01-01",
@@ -113,7 +143,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
-  @IsOptional()
   @DateRangeValidation()
+  @IsOptional()
   updatedAt?: Date;
 }

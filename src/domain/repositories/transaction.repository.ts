@@ -46,6 +46,11 @@ export type TransactionFindAllFilters = {
   isRecurring?: boolean;
   startDate?: Date;
   endDate?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+  originId?: number;
+  categoriesId?: number[];
+  subCategoriesId?: number[];
 };
 
 export type TransactionFindAllToUseCase = CommonPaginationParams &

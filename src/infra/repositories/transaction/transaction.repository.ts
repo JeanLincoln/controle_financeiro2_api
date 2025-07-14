@@ -14,7 +14,8 @@ import {
   MoreThanOrEqual,
   Repository,
   FindOptionsWhere,
-  ILike
+  ILike,
+  In
 } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
@@ -59,7 +60,12 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       name,
       description,
       amount,
-      isRecurring
+      isRecurring,
+      createdAt,
+      updatedAt,
+      originId,
+      categoriesId,
+      subCategoriesId
     }: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>> {
     const whereClause: FindOptionsWhere<Transaction> = {
@@ -69,7 +75,16 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       ...(name && { name: ILike(`%${name}%`) }),
       ...(description && { description: ILike(`%${description}%`) }),
       ...(amount && { amount }),
-      ...(isRecurring && { isRecurring })
+      ...(isRecurring && { isRecurring }),
+      ...(createdAt && { createdAt }),
+      ...(updatedAt && { updatedAt }),
+      ...(originId && { origin: { id: originId } }),
+      ...(categoriesId && {
+        categories: { id: In(categoriesId) }
+      }),
+      ...(subCategoriesId && {
+        subCategories: { id: In(subCategoriesId) }
+      })
     };
 
     const [transactions, total] = await this.transactionRepository.findAndCount(

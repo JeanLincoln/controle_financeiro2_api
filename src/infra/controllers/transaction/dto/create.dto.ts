@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import {
-  IsArray,
   IsBoolean,
   IsDate,
   IsNotEmpty,
@@ -10,6 +9,7 @@ import {
   IsString
 } from "class-validator";
 import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
+import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
 
 export class CreateTransactionDto {
   @ApiProperty({
@@ -83,23 +83,17 @@ export class CreateTransactionDto {
   @IsNotEmpty()
   originId: number;
 
-  @ApiProperty({
+  @NumberArrayValidations({
+    description: "The ID of the categories associated with the transaction",
     example: [1, 2, 3],
-    description: "The ID of the categories associated with the transaction"
+    required: true
   })
-  @IsArray()
-  @IsNotEmpty()
-  @IsNumber({}, { each: true })
-  @Transform(({ value }) => (Array.isArray(value) ? value.map(Number) : value))
   categoriesIds: number[];
 
-  @ApiProperty({
+  @NumberArrayValidations({
+    description: "The ID of the sub-categories associated with the transaction",
     example: [1, 2, 3],
-    description: "The ID of the sub-categories associated with the transaction"
+    required: true
   })
-  @IsArray()
-  @IsNotEmpty()
-  @IsNumber({}, { each: true })
-  @Transform(({ value }) => (Array.isArray(value) ? value.map(Number) : value))
   subCategoriesIds: number[];
 }

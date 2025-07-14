@@ -19,7 +19,7 @@ export class FindAllTransactionUseCase {
     queryParams: TransactionFindAllToUseCase
   ): Promise<PaginatedResult<Transaction> | void> {
     const { page, limit, sortBy, sortOrder, ...filters } = queryParams;
-
+    console.log(filters);
     const { paginationParams, repositoryParams, createPaginationResult } =
       await this.paginationUseCase.execute(page, limit);
 
