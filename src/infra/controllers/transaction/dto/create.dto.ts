@@ -6,7 +6,8 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsString
+  IsString,
+  Min
 } from "class-validator";
 import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
 import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
@@ -36,6 +37,7 @@ export class CreateTransactionDto {
     format: "number"
   })
   @IsNumber()
+  @Min(1)
   @Transform(({ value }) => (value ? Number(value) : value))
   amount: number;
 
@@ -78,6 +80,7 @@ export class CreateTransactionDto {
     description: "The ID of the origin associated with the transaction"
   })
   @IsNumber()
+  @Min(1)
   @IsNotEmpty()
   originId: number;
 

@@ -80,10 +80,16 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       ...(updatedAt && { updatedAt }),
       ...(originId && { origin: { id: originId } }),
       ...(categoriesId && {
-        categories: { id: In(categoriesId) }
+        categories: {
+          id: In(Array.isArray(categoriesId) ? categoriesId : [categoriesId])
+        }
       }),
       ...(subCategoriesId && {
-        subCategories: { id: In(subCategoriesId) }
+        subCategories: {
+          id: In(
+            Array.isArray(subCategoriesId) ? subCategoriesId : [subCategoriesId]
+          )
+        }
       })
     };
 

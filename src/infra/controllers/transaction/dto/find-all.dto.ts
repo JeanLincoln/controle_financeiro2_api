@@ -11,7 +11,8 @@ import {
   IsDate,
   IsNumber,
   IsOptional,
-  IsString
+  IsString,
+  Min
 } from "class-validator";
 import { Transform } from "class-transformer";
 import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
@@ -59,6 +60,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
     format: "number"
   })
   @IsNumber()
+  @Min(1)
   @Transform(({ value }) => (value ? Number(value) : value))
   @IsOptional()
   amount?: number;
@@ -105,6 +107,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
     format: "number"
   })
   @IsNumber()
+  @Min(1)
   @Transform(({ value }) => (value ? Number(value) : value))
   @IsOptional()
   originId?: number;
