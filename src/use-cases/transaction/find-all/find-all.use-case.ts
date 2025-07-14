@@ -18,7 +18,7 @@ export class FindAllTransactionUseCase {
     userId: number,
     queryParams: TransactionFindAllToUseCase
   ): Promise<PaginatedResult<Transaction> | void> {
-    const { page, limit, sortBy, sortOrder, startDate, endDate } = queryParams;
+    const { page, limit, sortBy, sortOrder, ...filters } = queryParams;
 
     const { paginationParams, repositoryParams, createPaginationResult } =
       await this.paginationUseCase.execute(page, limit);
@@ -27,8 +27,7 @@ export class FindAllTransactionUseCase {
       ...repositoryParams,
       sortBy,
       sortOrder,
-      startDate,
-      endDate
+      ...filters
     });
 
     const { data: transactions, total } = allTransactions;

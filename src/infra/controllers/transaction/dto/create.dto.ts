@@ -9,7 +9,7 @@ import {
   IsOptional,
   IsString
 } from "class-validator";
-import { DateRangeValidation } from "./transactions-custom-validations.decorator";
+import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
 
 export class CreateTransactionDto {
   @ApiProperty({
@@ -29,11 +29,15 @@ export class CreateTransactionDto {
   description: string;
 
   @ApiProperty({
-    example: "100",
-    description: "The amount of the transaction"
+    description: "total amount of this transaction.",
+    example: "100.20",
+    required: false,
+    type: Number,
+    format: "number"
   })
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
+  @Transform(({ value }) => (value ? Number(value) : value))
   amount: number;
 
   @ApiProperty({

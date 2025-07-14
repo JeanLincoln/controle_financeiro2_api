@@ -13,7 +13,8 @@ import {
   LessThanOrEqual,
   MoreThanOrEqual,
   Repository,
-  FindOptionsWhere
+  FindOptionsWhere,
+  ILike
 } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
@@ -54,13 +55,21 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       sortBy,
       sortOrder,
       startDate,
-      endDate
+      endDate,
+      name,
+      description,
+      amount,
+      isRecurring
     }: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>> {
     const whereClause: FindOptionsWhere<Transaction> = {
       user: { id: userId },
       ...(startDate && { startDate: MoreThanOrEqual(startDate) }),
-      ...(endDate && { endDate: LessThanOrEqual(endDate) })
+      ...(endDate && { endDate: LessThanOrEqual(endDate) }),
+      ...(name && { name: ILike(`%${name}%`) }),
+      ...(description && { description: ILike(`%${description}%`) }),
+      ...(amount && { amount }),
+      ...(isRecurring && { isRecurring })
     };
 
     const [transactions, total] = await this.transactionRepository.findAndCount(

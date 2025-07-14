@@ -40,6 +40,10 @@ export enum TransactionsSortableFieldsEnum {
 }
 
 export type TransactionFindAllFilters = {
+  name?: string;
+  description?: string;
+  amount?: number;
+  isRecurring?: boolean;
   startDate?: Date;
   endDate?: Date;
 };
