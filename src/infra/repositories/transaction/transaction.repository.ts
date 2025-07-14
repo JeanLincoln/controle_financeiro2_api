@@ -75,7 +75,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       ...(name && { name: ILike(`%${name}%`) }),
       ...(description && { description: ILike(`%${description}%`) }),
       ...(amount && { amount }),
-      ...(isRecurring && { isRecurring }),
+      ...(isRecurring !== undefined && { isRecurring }),
       ...(createdAt && { createdAt }),
       ...(updatedAt && { updatedAt }),
       ...(originId && { origin: { id: originId } }),

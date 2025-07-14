@@ -6,7 +6,13 @@ import {
 } from "@infra/commons/decorators/dto-decorators/sort-dto.decorator";
 import { SortOrderEnum } from "@domain/entities/common/sort.entity";
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsDate, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsDate,
+  IsNumber,
+  IsOptional,
+  IsString
+} from "class-validator";
 import { Transform } from "class-transformer";
 import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
 import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
@@ -61,6 +67,8 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
     description: "Filter transactions that are recurring."
   })
   @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === "true" || value === true)
   isRecurring?: boolean;
 
   @ApiPropertyOptional({

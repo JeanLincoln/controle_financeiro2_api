@@ -36,7 +36,6 @@ export class CreateTransactionDto {
     format: "number"
   })
   @IsNumber()
-  @IsOptional()
   @Transform(({ value }) => (value ? Number(value) : value))
   amount: number;
 
@@ -50,7 +49,6 @@ export class CreateTransactionDto {
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
-  @IsOptional()
   @DateRangeValidation()
   startDate: Date;
 
