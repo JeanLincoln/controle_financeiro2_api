@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import {
-  IsArray,
   IsBoolean,
   IsDate,
   IsNotEmpty,
@@ -9,6 +8,8 @@ import {
   IsOptional,
   IsString
 } from "class-validator";
+import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
+import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
 
 export class CreateTransactionDto {
   @ApiProperty({
@@ -28,29 +29,41 @@ export class CreateTransactionDto {
   description: string;
 
   @ApiProperty({
-    example: "100",
-    description: "The amount of the transaction"
+    description: "total amount of this transaction.",
+    example: "100.20",
+    required: false,
+    type: Number,
+    format: "number"
   })
   @IsNumber()
-  @IsNotEmpty()
+  @Transform(({ value }) => (value ? Number(value) : value))
   amount: number;
 
   @ApiProperty({
-    example: "2023-10-01T00:00:00Z",
-    description: "The date when the transaction starts"
+    description:
+      "Filter transactions that start from this date (inclusive). Format: YYYY-MM-DD",
+    example: "2025-01-01",
+    required: false,
+    type: String,
+    format: "date"
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
+  @DateRangeValidation()
   startDate: Date;
 
   @ApiProperty({
-    example: "2023-10-01T00:00:00Z",
-    description: "The date when the transaction starts"
+    description:
+      "Filter transactions that start before or on this date (inclusive). Format: YYYY-MM-DD",
+    example: "2025-02-01",
+    required: false,
+    type: String,
+    format: "date"
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
   @IsOptional()
-  endDate: Date | null;
+  endDate?: Date;
 
   @ApiProperty({
     example: "true",
@@ -68,23 +81,17 @@ export class CreateTransactionDto {
   @IsNotEmpty()
   originId: number;
 
-  @ApiProperty({
+  @NumberArrayValidations({
+    description: "The ID of the categories associated with the transaction",
     example: [1, 2, 3],
-    description: "The ID of the categories associated with the transaction"
+    required: true
   })
-  @IsArray()
-  @IsNotEmpty()
-  @IsNumber({}, { each: true })
-  @Transform(({ value }) => (Array.isArray(value) ? value.map(Number) : value))
   categoriesIds: number[];
 
-  @ApiProperty({
+  @NumberArrayValidations({
+    description: "The ID of the sub-categories associated with the transaction",
     example: [1, 2, 3],
-    description: "The ID of the sub-categories associated with the transaction"
+    required: true
   })
-  @IsArray()
-  @IsNotEmpty()
-  @IsNumber({}, { each: true })
-  @Transform(({ value }) => (Array.isArray(value) ? value.map(Number) : value))
   subCategoriesIds: number[];
 }

@@ -3,7 +3,7 @@ import { OriginsSortableFieldsEnum } from "@domain/repositories/origin.repositor
 import {
   SortableFieldDto,
   SortableOrderDto
-} from "@infra/commons/decorators/sort-dto.decorator";
+} from "@infra/commons/decorators/dto-decorators/sort-dto.decorator";
 import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
 
 export class FindAllOriginDto extends PaginationQueryDto {

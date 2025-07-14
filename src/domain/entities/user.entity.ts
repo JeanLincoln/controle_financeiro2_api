@@ -42,7 +42,7 @@ export class User {
     name: "birth_date",
     type: "date"
   })
-  birthDate: Date;
+  birthDate?: Date;
 
   @Column({
     name: "created_at",

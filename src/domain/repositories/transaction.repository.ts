@@ -39,16 +39,32 @@ export enum TransactionsSortableFieldsEnum {
   originName = "origin.name"
 }
 
+export type TransactionFindAllFilters = {
+  name?: string;
+  description?: string;
+  amount?: number;
+  isRecurring?: boolean;
+  startDate?: Date;
+  endDate?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+  originId?: number;
+  categoriesId?: number[];
+  subCategoriesId?: number[];
+};
+
 export type TransactionFindAllToUseCase = CommonPaginationParams &
-  SortParams<TransactionsSortableFieldsEnum>;
+  SortParams<TransactionsSortableFieldsEnum> &
+  TransactionFindAllFilters;
 
 export type TransactionFindAllToRepositoryParams = RepositoryPaginationParams &
-  SortParams<TransactionsSortableFieldsEnum>;
+  SortParams<TransactionsSortableFieldsEnum> &
+  TransactionFindAllFilters;
 
 export abstract class TransactionRepository {
   abstract findAll(
     userId: number,
-    repositoryParams: TransactionFindAllToRepositoryParams
+    queryParams: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>>;
   abstract findById(id: number): Promise<Transaction | null>;
   abstract create(

@@ -9,7 +9,14 @@ import {
 } from "@domain/repositories/transaction.repository";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import {
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+  FindOptionsWhere,
+  ILike,
+  In
+} from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
@@ -43,11 +50,46 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
 
   async findAll(
     userId: number,
-    { skip, take, sortBy, sortOrder }: TransactionFindAllToRepositoryParams
+    {
+      skip,
+      take,
+      sortBy,
+      sortOrder,
+      startDate,
+      endDate,
+      name,
+      description,
+      amount,
+      isRecurring,
+      createdAt,
+      updatedAt,
+      originId,
+      categoriesId,
+      subCategoriesId
+    }: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>> {
+    const whereClause: FindOptionsWhere<Transaction> = {
+      user: { id: userId },
+      ...(startDate && { startDate: MoreThanOrEqual(startDate) }),
+      ...(endDate && { endDate: LessThanOrEqual(endDate) }),
+      ...(name && { name: ILike(`%${name}%`) }),
+      ...(description && { description: ILike(`%${description}%`) }),
+      ...(amount && { amount }),
+      ...(isRecurring !== undefined && { isRecurring }),
+      ...(createdAt && { createdAt }),
+      ...(updatedAt && { updatedAt }),
+      ...(originId && { origin: { id: originId } }),
+      ...(categoriesId && {
+        categories: { id: In(categoriesId) }
+      }),
+      ...(subCategoriesId && {
+        subCategories: { id: In(subCategoriesId) }
+      })
+    };
+
     const [transactions, total] = await this.transactionRepository.findAndCount(
       {
-        where: { user: { id: userId } },
+        where: whereClause,
         relations: ["origin", "categories", "subCategories"],
         skip,
         take,
