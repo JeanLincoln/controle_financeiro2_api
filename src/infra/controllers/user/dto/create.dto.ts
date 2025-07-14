@@ -35,9 +35,15 @@ export class CreateUserDto {
   })
   password: string;
 
-  @ApiProperty({ example: new Date("1990-01-01") })
+  @ApiProperty({
+    description: "User's birth date Format: YYYY-MM-DD",
+    example: "1995-11-22",
+    required: false,
+    type: String,
+    format: "date"
+  })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
   @IsOptional()
-  birthDate: Date;
+  birthDate?: Date;
 }

@@ -37,7 +37,7 @@ export class LoggingInterceptor implements NestInterceptor {
           const endTime = Date.now();
           const duration = endTime - startTime;
           this.logger.error(
-            `${method} ${url} - Request failed in ${duration}ms: ${error.message}`
+            `${userInfo} - ${method} ${url} - Request failed in ${duration}ms: ${error.message}`
           );
         }
       })

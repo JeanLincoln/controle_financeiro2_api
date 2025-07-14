@@ -60,7 +60,7 @@ export class Transaction {
     nullable: true,
     default: null
   })
-  endDate: Date | null;
+  endDate?: Date | null;
 
   @Column({
     type: "int",

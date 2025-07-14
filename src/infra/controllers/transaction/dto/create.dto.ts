@@ -9,6 +9,7 @@ import {
   IsOptional,
   IsString
 } from "class-validator";
+import { DateRangeValidation } from "./transactions-custom-validations.decorator";
 
 export class CreateTransactionDto {
   @ApiProperty({
@@ -36,21 +37,31 @@ export class CreateTransactionDto {
   amount: number;
 
   @ApiProperty({
-    example: "2023-10-01T00:00:00Z",
-    description: "The date when the transaction starts"
-  })
-  @Transform(({ value }) => (value ? new Date(value) : value))
-  @IsDate()
-  startDate: Date;
-
-  @ApiProperty({
-    example: "2023-10-01T00:00:00Z",
-    description: "The date when the transaction starts"
+    description:
+      "Filter transactions that start from this date (inclusive). Format: YYYY-MM-DD",
+    example: "2025-01-01",
+    required: false,
+    type: String,
+    format: "date"
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
   @IsOptional()
-  endDate: Date | null;
+  @DateRangeValidation()
+  startDate: Date;
+
+  @ApiProperty({
+    description:
+      "Filter transactions that start before or on this date (inclusive). Format: YYYY-MM-DD",
+    example: "2025-02-01",
+    required: false,
+    type: String,
+    format: "date"
+  })
+  @Transform(({ value }) => (value ? new Date(value) : value))
+  @IsDate()
+  @IsOptional()
+  endDate?: Date;
 
   @ApiProperty({
     example: "true",
