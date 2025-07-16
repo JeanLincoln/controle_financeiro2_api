@@ -16,11 +16,8 @@ import { ApiCookieAuth } from "@nestjs/swagger";
 import { CreateTransactionUseCase } from "@use-cases/transaction/create/create.use-case";
 import { CreateTransactionDto } from "./dto/create.dto";
 import { OriginBodyGuard } from "@infra/commons/guards/origin/origin-body-validation.guard";
-import { CategoriesBodyGuard } from "@infra/commons/guards/category/categories-body-validation.guard";
-import { SubCategoriesBodyGuard } from "@infra/commons/guards/sub-category/sub-categories-body-validation.guard";
 import { OriginBodyAuthenticatedRequest } from "@use-cases/origin/find-and-validate-from-body/find-and-validate-from-body.use-case";
 import { ManySubCategoriesAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
-import { ManyCategoriesAuthenticatedRequest } from "@use-cases/category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
 import { TransactionAuthenticatedRequest } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { FindTransactionByIdParamDto } from "./dto/find-by-id.dto";
 import { TransactionParamGuard } from "@infra/commons/guards/transaction/transaction-param-validation.guard";
@@ -36,6 +33,9 @@ import { DeleteTransactionParamDto } from "./dto/delete.dto";
 import { Transaction } from "@domain/entities/transaction.entity";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { FindAllTransactionsQueryParamDto } from "./dto/find-all.dto";
+import { BodyCategoriesAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import { CategoryValidationGuard } from "@infra/commons/guards/category/category-validation.guard";
+import { SubCategoriesBodyGuard } from "@infra/commons/guards/sub-category/sub-categories-body-validation.guard";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -48,13 +48,13 @@ export class TransactionController {
     private readonly deleteTransactionUseCase: DeleteTransactionUseCase
   ) {}
 
-  @UseGuards(CategoriesBodyGuard, SubCategoriesBodyGuard, OriginBodyGuard)
+  @UseGuards(CategoryValidationGuard, SubCategoriesBodyGuard, OriginBodyGuard)
   @Post()
   async create(
     @Req()
     req: OriginBodyAuthenticatedRequest &
       ManySubCategoriesAuthenticatedRequest &
-      ManyCategoriesAuthenticatedRequest,
+      BodyCategoriesAuthenticatedRequest,
     @Body() TransactionData: CreateTransactionDto
   ) {
     return this.createTransactionUseCase.execute(
@@ -76,6 +76,7 @@ export class TransactionController {
   }
 
   @Get()
+  @UseGuards(CategoryValidationGuard)
   async findAll(
     @Req() req: AuthenticatedRequest,
     @Query()
@@ -86,7 +87,7 @@ export class TransactionController {
 
   @UseGuards(
     TransactionParamGuard,
-    CategoriesBodyGuard,
+    CategoryValidationGuard,
     SubCategoriesBodyGuard,
     OriginBodyGuard
   )
@@ -96,7 +97,7 @@ export class TransactionController {
     req: TransactionAuthenticatedRequest &
       OriginBodyAuthenticatedRequest &
       ManySubCategoriesAuthenticatedRequest &
-      ManyCategoriesAuthenticatedRequest,
+      BodyCategoriesAuthenticatedRequest,
     @Param() _: UpdateTransactionParamDto,
     @Body() transactionData: UpdateTransactionBodyDto
   ) {

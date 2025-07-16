@@ -4,8 +4,6 @@ import {
   CategoriesSortableFieldsEnum,
   CreateOrUpdateAllCategoryProps
 } from "@domain/repositories/category.repository";
-import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
-import { ManyCategoriesAuthenticatedRequest } from "@use-cases/category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
 import {
   PaginatedResult,
   PaginationMeta
@@ -15,6 +13,10 @@ import {
   PAGINATION_PARAMS_MOCK,
   PAGINATION_TO_REPOSITORY_PARAMS_MOCK
 } from "./pagination.mock";
+import type {
+  ParamCategoryAuthenticatedRequest,
+  BodyCategoriesAuthenticatedRequest
+} from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 
 export const CREATE_OR_UPDATE_CATEGORY_MOCK: CreateOrUpdateAllCategoryProps = {
   name: "Category",
@@ -109,11 +111,11 @@ export const CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   params: {
     categoryId: "1"
   }
-} as CategoryAuthenticatedRequest;
+} as ParamCategoryAuthenticatedRequest;
 
 export const MANY_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   body: {
     categoriesIds: USER_1_CATEGORIES_MOCK.map((category) => category.id)
   }
-} as ManyCategoriesAuthenticatedRequest;
+} as BodyCategoriesAuthenticatedRequest;

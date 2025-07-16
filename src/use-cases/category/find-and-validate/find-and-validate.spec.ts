@@ -1,5 +1,4 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import { FindAndValidateManyFromBodyCategoryUseCase } from "./find-and-validate-many-from-body.use-case";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { CategoryRepository } from "@domain/repositories/category.repository";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
@@ -8,16 +7,17 @@ import {
   USER_1_CATEGORIES_MOCK,
   USER_2_CATEGORIES_MOCK
 } from "@test/mocks/category.mock";
+import { FindAndValidateCategoryUseCase } from "./find-and-validate.use-case";
 
-describe("FindAndValidateManyFromBodyCategoryUseCase", () => {
-  let sut: FindAndValidateManyFromBodyCategoryUseCase;
+describe("FindAndValidateCategoryUseCase", () => {
+  let sut: FindAndValidateCategoryUseCase;
   let categoryRepository: CategoryRepository;
   let exceptionsAdapter: ExceptionsAdapter;
 
   beforeEach(() => {
     categoryRepository = new CategoryRepositoryStub();
     exceptionsAdapter = new ExceptionsAdapterStub();
-    sut = new FindAndValidateManyFromBodyCategoryUseCase(
+    sut = new FindAndValidateCategoryUseCase(
       categoryRepository,
       exceptionsAdapter
     );

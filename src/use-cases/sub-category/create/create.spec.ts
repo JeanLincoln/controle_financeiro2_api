@@ -8,27 +8,26 @@ import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category
 import { CREATE_SUB_CATEGORY_MOCK } from "@test/mocks/sub-category.mock";
 import {
   CATEGORY_AUTHENTICATED_REQUEST_MOCK,
-  EXPENSE_CATEGORY_MOCK
+  EXPENSE_CATEGORY_MOCK,
+  USER_1_CATEGORIES_MOCK
 } from "@test/mocks/category.mock";
-import { FindAndValidateFromParamCategoryUseCase } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
+import { FindAndValidateCategoryUseCase } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 
 describe("CreateSubCategoryUseCase", () => {
   let sut: CreateSubCategoryUseCase;
   let subCategoryRepository: SubCategoryRepository;
   let exceptionAdapter: ExceptionsAdapter;
   let categoryRepository: CategoryRepository;
-  let findAndValidateCategoryUseCase: FindAndValidateFromParamCategoryUseCase;
+  let findAndValidateCategoryUseCase: FindAndValidateCategoryUseCase;
 
   beforeEach(() => {
     subCategoryRepository = new SubCategoryRepositoryStub();
     exceptionAdapter = new ExceptionsAdapterStub();
     categoryRepository = new CategoryRepositoryStub();
-
-    findAndValidateCategoryUseCase =
-      new FindAndValidateFromParamCategoryUseCase(
-        categoryRepository,
-        exceptionAdapter
-      );
+    findAndValidateCategoryUseCase = new FindAndValidateCategoryUseCase(
+      categoryRepository,
+      exceptionAdapter
+    );
 
     sut = new CreateSubCategoryUseCase(
       subCategoryRepository,
@@ -41,8 +40,8 @@ describe("CreateSubCategoryUseCase", () => {
 
   it("should be able to create a new sub category based on a category", async () => {
     jest
-      .spyOn(categoryRepository, "findById")
-      .mockResolvedValue(EXPENSE_CATEGORY_MOCK);
+      .spyOn(categoryRepository, "findByIds")
+      .mockResolvedValue([USER_1_CATEGORIES_MOCK[0]]);
     jest.spyOn(subCategoryRepository, "create");
 
     const result = await sut.execute(
@@ -56,8 +55,8 @@ describe("CreateSubCategoryUseCase", () => {
       exceptionAdapter.forbidden
     ]);
     testUtils.timesCalledExpectations({
-      mockFunction: categoryRepository.findById,
-      calledWith: [EXPENSE_CATEGORY_MOCK.id],
+      mockFunction: categoryRepository.findByIds,
+      calledWith: [[USER_1_CATEGORIES_MOCK[0].id]],
       times: 1
     });
 

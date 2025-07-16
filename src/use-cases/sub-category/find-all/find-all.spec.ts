@@ -1,5 +1,5 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import { FindAllSubCategoryUseCase } from "./find-all.find-all.use-case";
+import { FindAllSubCategoryUseCase } from "./find-all.use-case";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
 import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";

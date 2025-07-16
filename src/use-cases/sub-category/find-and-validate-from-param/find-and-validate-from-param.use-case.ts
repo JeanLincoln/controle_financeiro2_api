@@ -4,7 +4,8 @@ import { SubCategoryRepository } from "@domain/repositories/sub-category.reposit
 import { Injectable } from "@nestjs/common";
 import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 
-export interface SubCategoryAuthenticatedRequest extends AuthenticatedRequest {
+export interface SubParamCategoryAuthenticatedRequest
+  extends AuthenticatedRequest {
   params: {
     categoryId: string;
     subCategoryId: string;
@@ -19,7 +20,9 @@ export class FindAndValidateFromParamSubCategoryUseCase {
     private readonly exceptionsAdapter: ExceptionsAdapter
   ) {}
 
-  async execute(request: SubCategoryAuthenticatedRequest): Promise<boolean> {
+  async execute(
+    request: SubParamCategoryAuthenticatedRequest
+  ): Promise<boolean> {
     const { user, params } = request;
     const categoryId = Number(params.categoryId);
     const subCategoryId = Number(params.subCategoryId);

@@ -6,7 +6,7 @@ import {
 import { INCOME_CATEGORY_MOCK } from "./category.mock";
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
-import { SubCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate-from-param/find-and-validate-from-param.use-case";
+import { SubParamCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { ManySubCategoriesAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
 
 export const CREATE_SUB_CATEGORY_MOCK: CreateOrUpdateAllSubCategoryProps = {
@@ -52,7 +52,7 @@ export const SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
     categoryId: EXPENSE_CATEGORY_MOCK.id.toString(),
     subCategoryId: SUB_CATEGORY_MOCK_1.id.toString()
   }
-} as SubCategoryAuthenticatedRequest;
+} as SubParamCategoryAuthenticatedRequest;
 
 export const SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK_2 = {
   user: USER_MOCK,
@@ -60,7 +60,7 @@ export const SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK_2 = {
     categoryId: EXPENSE_CATEGORY_MOCK_2.id.toString(),
     subCategoryId: SUB_CATEGORY_MOCK_1.id.toString()
   }
-} as SubCategoryAuthenticatedRequest;
+} as SubParamCategoryAuthenticatedRequest;
 
 export const MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,

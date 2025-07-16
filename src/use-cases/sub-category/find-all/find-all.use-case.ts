@@ -2,7 +2,7 @@ import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
 import { Injectable } from "@nestjs/common";
-import { CategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
+import { ParamCategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 
 @Injectable()
 export class FindAllSubCategoryUseCase {
@@ -12,7 +12,7 @@ export class FindAllSubCategoryUseCase {
   ) {}
 
   async execute(
-    request: CategoryAuthenticatedRequest
+    request: ParamCategoryAuthenticatedRequest
   ): Promise<SubCategory[] | void> {
     const { params } = request;
     const categoryId = Number(params.categoryId);

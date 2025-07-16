@@ -5,7 +5,7 @@ import { ExceptionsModule } from "../exceptions/exceptions.module";
 import { CreateSubCategoryUseCase } from "@use-cases/sub-category/create/create.use-case";
 import { SubCategoryController } from "@infra/controllers/sub-category/sub-category.controller";
 import { AuthModule } from "../auth/auth.module";
-import { FindAllSubCategoryUseCase } from "@use-cases/sub-category/find-all/find-all.find-all.use-case";
+import { FindAllSubCategoryUseCase } from "@use-cases/sub-category/find-all/find-all.use-case";
 import { DeleteSubCategoryUseCase } from "@use-cases/sub-category/delete/delete.use-case";
 import { UpdateSubCategoryUseCase } from "@use-cases/sub-category/update/update.use-case";
 import { FindAndValidateFromParamSubCategoryUseCase } from "@use-cases/sub-category/find-and-validate-from-param/find-and-validate-from-param.use-case";
