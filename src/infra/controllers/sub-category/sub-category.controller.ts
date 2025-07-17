@@ -28,10 +28,10 @@ import { DeleteSubCategoryParamDto } from "./dto/delete.dto";
 import { FindSubCategoryByIdParamDto } from "./dto/find-by-id.dto";
 import { FindAllSubCategoryParams } from "./dto/find-all.dto";
 import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
-import { SubCategoryParamGuard } from "@infra/commons/guards/sub-category/sub-category-param-validation.guard";
 import { CategoryValidationGuard } from "@infra/commons/guards/category/category-validation.guard";
 import { ParamCategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
-import { SubParamCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate-from-param/find-and-validate-from-param.use-case";
+import { SubCategoryValidationGuard } from "@infra/commons/guards/sub-category/sub-category-validation.guard";
+import { ParamSubCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard, CategoryValidationGuard)
@@ -53,11 +53,11 @@ export class SubCategoryController {
     return this.createSubCategoryUseCase.execute(req, createSubCategoryDto);
   }
 
-  @UseGuards(SubCategoryParamGuard)
+  @UseGuards(SubCategoryValidationGuard)
   @ExcludeFields("user")
   @Get(":categoryId/:subCategoryId")
   async findById(
-    @Req() req: SubParamCategoryAuthenticatedRequest,
+    @Req() req: ParamSubCategoryAuthenticatedRequest,
     @Param() _: FindSubCategoryByIdParamDto
   ) {
     return req.subCategory;
@@ -71,11 +71,11 @@ export class SubCategoryController {
     return this.findAllSubCategoryUseCase.execute(req);
   }
 
-  @UseGuards(SubCategoryParamGuard)
+  @UseGuards(SubCategoryValidationGuard)
   @Put(":categoryId/:subCategoryId")
   async update(
     @Req()
-    req: SubParamCategoryAuthenticatedRequest &
+    req: ParamSubCategoryAuthenticatedRequest &
       ParamCategoryAuthenticatedRequest,
     @Param() _: UpdateSubCategoryParamDto,
     @Body() updateSubCategoryDto: UpdateSubCategoryBodyDto
@@ -87,11 +87,11 @@ export class SubCategoryController {
     );
   }
 
-  @UseGuards(SubCategoryParamGuard)
+  @UseGuards(SubCategoryValidationGuard)
   @HttpCode(204)
   @Delete(":categoryId/:subCategoryId")
   async delete(
-    @Req() req: SubParamCategoryAuthenticatedRequest,
+    @Req() req: ParamSubCategoryAuthenticatedRequest,
     @Param() _: DeleteSubCategoryParamDto
   ) {
     return this.deleteSubCategoryUseCase.execute(req.subCategory.id);

@@ -15,7 +15,6 @@ import {
 import { ApiCookieAuth } from "@nestjs/swagger";
 import { CreateTransactionUseCase } from "@use-cases/transaction/create/create.use-case";
 import { CreateTransactionDto } from "./dto/create.dto";
-import { ManySubCategoriesAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
 import { TransactionAuthenticatedRequest } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { FindTransactionByIdParamDto } from "./dto/find-by-id.dto";
 import { TransactionParamGuard } from "@infra/commons/guards/transaction/transaction-param-validation.guard";
@@ -35,12 +34,13 @@ import {
   QueryCategoryAuthenticatedRequest
 } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 import { CategoryValidationGuard } from "@infra/commons/guards/category/category-validation.guard";
-import { SubCategoriesBodyGuard } from "@infra/commons/guards/sub-category/sub-categories-body-validation.guard";
 import { OriginValidationGuard } from "@infra/commons/guards/origin/origin-validation.guard";
 import {
   BodyOriginAuthenticatedRequest,
   QueryOriginAuthenticatedRequest
 } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
+import { SubCategoryValidationGuard } from "@infra/commons/guards/sub-category/sub-category-validation.guard";
+import { BodySubCategoriesAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -55,14 +55,14 @@ export class TransactionController {
 
   @UseGuards(
     CategoryValidationGuard,
-    SubCategoriesBodyGuard,
+    SubCategoryValidationGuard,
     OriginValidationGuard
   )
   @Post()
   async create(
     @Req()
     req: BodyOriginAuthenticatedRequest &
-      ManySubCategoriesAuthenticatedRequest &
+      BodySubCategoriesAuthenticatedRequest &
       BodyCategoriesAuthenticatedRequest,
     @Body() TransactionData: CreateTransactionDto
   ) {
@@ -98,7 +98,7 @@ export class TransactionController {
   @UseGuards(
     TransactionParamGuard,
     CategoryValidationGuard,
-    SubCategoriesBodyGuard,
+    SubCategoryValidationGuard,
     OriginValidationGuard
   )
   @Put(":transactionId")
@@ -106,7 +106,7 @@ export class TransactionController {
     @Req()
     req: TransactionAuthenticatedRequest &
       BodyOriginAuthenticatedRequest &
-      ManySubCategoriesAuthenticatedRequest &
+      BodySubCategoriesAuthenticatedRequest &
       BodyCategoriesAuthenticatedRequest,
     @Param() _: UpdateTransactionParamDto,
     @Body() transactionData: UpdateTransactionBodyDto

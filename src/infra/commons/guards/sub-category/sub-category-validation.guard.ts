@@ -1,10 +1,10 @@
 import { Injectable, ExecutionContext, CanActivate } from "@nestjs/common";
-import { FindAndValidateFromParamSubCategoryUseCase } from "@use-cases/sub-category/find-and-validate-from-param/find-and-validate-from-param.use-case";
+import { FindAndValidateSubCategoryUseCase } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
 
 @Injectable()
-export class SubCategoryParamGuard implements CanActivate {
+export class SubCategoryValidationGuard implements CanActivate {
   constructor(
-    private readonly findAndValidateSubCategoryUseCase: FindAndValidateFromParamSubCategoryUseCase
+    private readonly findAndValidateSubCategoryUseCase: FindAndValidateSubCategoryUseCase
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
