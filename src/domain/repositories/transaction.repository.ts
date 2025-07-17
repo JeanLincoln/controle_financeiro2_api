@@ -67,6 +67,7 @@ export abstract class TransactionRepository {
     queryParams: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>>;
   abstract findById(id: number): Promise<Transaction | null>;
+  abstract findByIds(id: number[]): Promise<Transaction[] | null>;
   abstract create(
     userId: number,
     origin: Origin,

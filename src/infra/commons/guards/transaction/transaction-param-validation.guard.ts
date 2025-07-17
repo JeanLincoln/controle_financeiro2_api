@@ -1,10 +1,10 @@
 import { Injectable, ExecutionContext, CanActivate } from "@nestjs/common";
-import { FindAndValidateFromParamTransactionUseCase } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
+import { FindAndValidateTransactionUseCase } from "@use-cases/transaction/find-and-validate/find-and-validate.use-case";
 
 @Injectable()
-export class TransactionParamGuard implements CanActivate {
+export class TransactionValidationGuard implements CanActivate {
   constructor(
-    private readonly findAndValidateTransactionUseCase: FindAndValidateFromParamTransactionUseCase
+    private readonly findAndValidateTransactionUseCase: FindAndValidateTransactionUseCase
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

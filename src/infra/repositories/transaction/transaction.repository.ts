@@ -119,6 +119,16 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
     });
   }
 
+  async findByIds(id: number[]): Promise<Transaction[] | null> {
+    return this.transactionRepository.find({
+      where: { id: In(id) },
+      relations: ["user"],
+      select: {
+        user: USER_WITHOUT_PASSWORD_SELECT
+      }
+    });
+  }
+
   async update(
     transactionToUpdate: Transaction,
     userId: number,

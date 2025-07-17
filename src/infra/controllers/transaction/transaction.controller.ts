@@ -15,9 +15,7 @@ import {
 import { ApiCookieAuth } from "@nestjs/swagger";
 import { CreateTransactionUseCase } from "@use-cases/transaction/create/create.use-case";
 import { CreateTransactionDto } from "./dto/create.dto";
-import { TransactionAuthenticatedRequest } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { FindTransactionByIdParamDto } from "./dto/find-by-id.dto";
-import { TransactionParamGuard } from "@infra/commons/guards/transaction/transaction-param-validation.guard";
 import { FindAllTransactionUseCase } from "@use-cases/transaction/find-all/find-all.use-case";
 import { UpdateTransactionUseCase } from "@use-cases/transaction/update/update.use-case";
 import {
@@ -40,7 +38,12 @@ import {
   QueryOriginAuthenticatedRequest
 } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 import { SubCategoryValidationGuard } from "@infra/commons/guards/sub-category/sub-category-validation.guard";
-import { BodySubCategoriesAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
+import {
+  BodySubCategoriesAuthenticatedRequest,
+  QuerySubCategoryAuthenticatedRequest
+} from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
+import { TransactionValidationGuard } from "@infra/commons/guards/transaction/transaction-param-validation.guard";
+import { ParamTransactionAuthenticatedRequest } from "@use-cases/transaction/find-and-validate/find-and-validate.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -75,20 +78,26 @@ export class TransactionController {
     );
   }
 
-  @UseGuards(TransactionParamGuard)
+  @UseGuards(TransactionValidationGuard)
   @Get(":transactionId")
   async findById(
-    @Req() req: TransactionAuthenticatedRequest,
+    @Req() req: ParamTransactionAuthenticatedRequest,
     @Param() _: FindTransactionByIdParamDto
   ) {
     return req.transaction;
   }
 
   @Get()
-  @UseGuards(CategoryValidationGuard, OriginValidationGuard)
+  @UseGuards(
+    CategoryValidationGuard,
+    OriginValidationGuard,
+    SubCategoryValidationGuard
+  )
   async findAll(
     @Req()
-    req: QueryOriginAuthenticatedRequest & QueryCategoryAuthenticatedRequest,
+    req: QueryOriginAuthenticatedRequest &
+      QueryCategoryAuthenticatedRequest &
+      QuerySubCategoryAuthenticatedRequest,
     @Query()
     queryParams: FindAllTransactionsQueryParamDto
   ): Promise<PaginatedResult<Transaction> | void> {
@@ -96,7 +105,7 @@ export class TransactionController {
   }
 
   @UseGuards(
-    TransactionParamGuard,
+    TransactionValidationGuard,
     CategoryValidationGuard,
     SubCategoryValidationGuard,
     OriginValidationGuard
@@ -104,7 +113,7 @@ export class TransactionController {
   @Put(":transactionId")
   async update(
     @Req()
-    req: TransactionAuthenticatedRequest &
+    req: ParamTransactionAuthenticatedRequest &
       BodyOriginAuthenticatedRequest &
       BodySubCategoriesAuthenticatedRequest &
       BodyCategoriesAuthenticatedRequest,
@@ -121,11 +130,11 @@ export class TransactionController {
     );
   }
 
-  @UseGuards(TransactionParamGuard)
+  @UseGuards(TransactionValidationGuard)
   @HttpCode(204)
   @Delete(":transactionId")
   async delete(
-    @Req() req: TransactionAuthenticatedRequest,
+    @Req() req: ParamTransactionAuthenticatedRequest,
     @Param() _: DeleteTransactionParamDto
   ) {
     return this.deleteTransactionUseCase.execute(req.transaction);

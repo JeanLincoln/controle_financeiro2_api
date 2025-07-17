@@ -5,7 +5,6 @@ import {
 } from "@domain/repositories/transaction.repository";
 import { ORIGIN_MOCK } from "./origin.mock";
 import { Transaction } from "@domain/entities/transaction.entity";
-import { TransactionAuthenticatedRequest } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import {
   PaginatedResult,
   PaginationMeta
@@ -15,6 +14,11 @@ import {
   PAGINATION_TO_REPOSITORY_PARAMS_MOCK
 } from "./pagination.mock";
 import { SortOrderEnum } from "@domain/entities/common/sort.entity";
+import {
+  BodyTransactionsAuthenticatedRequest,
+  ParamTransactionAuthenticatedRequest,
+  QueryTransactionAuthenticatedRequest
+} from "@use-cases/transaction/find-and-validate/find-and-validate.use-case";
 
 export const CREATE_OR_UPDATE_TRANSACTION_MOCK: CreateOrUpdateAllTransactionProps =
   {
@@ -93,9 +97,27 @@ export const USER_2_PAGINATED_TRANSACTIONS_MOCK: PaginatedResult<Transaction> =
     pagination: TRANSACTION_PAGINATION_META_MOCK
   };
 
-export const TRANSACTION_AUTHENTICATED_REQUEST_MOCK = {
+export const PARAM_TRANSACTION_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   params: {
-    transactionId: 1
+    transactionId: "1"
   }
-} as TransactionAuthenticatedRequest;
+} as ParamTransactionAuthenticatedRequest;
+
+export const QUERY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  query: {
+    transactionsIds: USER_1_TRANSACTIONS_MOCK.map((transaction) =>
+      transaction.id.toString()
+    )
+  }
+} as QueryTransactionAuthenticatedRequest;
+
+export const BODY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  body: {
+    transactionsIds: USER_1_TRANSACTIONS_MOCK.map(
+      (transaction) => transaction.id
+    )
+  }
+} as BodyTransactionsAuthenticatedRequest;
