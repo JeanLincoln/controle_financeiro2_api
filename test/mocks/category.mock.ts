@@ -123,7 +123,7 @@ export const QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   }
 } as QueryCategoryAuthenticatedRequest;
 
-export const BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+export const BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   body: {
     categoriesIds: USER_1_CATEGORIES_MOCK.map((category) => category.id)

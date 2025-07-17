@@ -3,7 +3,7 @@ import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { CategoryRepository } from "@domain/repositories/category.repository";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import {
-  BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+  BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   USER_1_CATEGORIES_MOCK,
@@ -48,7 +48,20 @@ describe("FindAndValidateCategoryUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: sut.isParamCategoryRequest,
-      calledWith: [PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK]
+      calledWith: [PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryCategoriesRequest,
+      calledWith: [PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyCategoriesRequest,
+      calledWith: [PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -74,8 +87,21 @@ describe("FindAndValidateCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       times: 1,
+      mockFunction: sut.isParamCategoryRequest,
+      calledWith: [QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
       mockFunction: sut.isQueryCategoriesRequest,
-      calledWith: [QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK]
+      calledWith: [QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyCategoriesRequest,
+      calledWith: [QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -96,18 +122,31 @@ describe("FindAndValidateCategoryUseCase", () => {
       .mockResolvedValue(USER_1_CATEGORIES_MOCK);
 
     const response = await sut.execute(
-      BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+      BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK
     );
 
     testUtils.timesCalledExpectations({
       times: 1,
+      mockFunction: sut.isParamCategoryRequest,
+      calledWith: [BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryCategoriesRequest,
+      calledWith: [BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
       mockFunction: sut.isBodyCategoriesRequest,
-      calledWith: [BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK]
+      calledWith: [BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
     });
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: sut.handleBodyCategoriesRequest,
-      calledWith: [USER_MOCK.id, BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK]
+      calledWith: [USER_MOCK.id, BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK]
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -122,13 +161,11 @@ describe("FindAndValidateCategoryUseCase", () => {
       .spyOn(categoryRepository, "findByIds")
       .mockResolvedValue(USER_1_CATEGORIES_MOCK);
 
-    const result = await sut.execute(
-      BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
-    );
+    const result = await sut.execute(BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, true);
     testUtils.resultExpectations(
-      BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.categories,
+      BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK.categories,
       USER_1_CATEGORIES_MOCK
     );
     testUtils.notCalledExpectations([
@@ -138,27 +175,21 @@ describe("FindAndValidateCategoryUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.findByIds,
-      calledWith: [
-        BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.categoriesIds
-      ]
+      calledWith: [BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.categoriesIds]
     });
   });
 
   it("should return false if all the categories weren't found", async () => {
     jest.spyOn(categoryRepository, "findByIds").mockResolvedValue(null);
 
-    const result = await sut.execute(
-      BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
-    );
+    const result = await sut.execute(BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, false);
     testUtils.notCalledExpectations([exceptionsAdapter.forbidden]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.findByIds,
-      calledWith: [
-        BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.categoriesIds
-      ]
+      calledWith: [BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.categoriesIds]
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -177,18 +208,14 @@ describe("FindAndValidateCategoryUseCase", () => {
       .spyOn(categoryRepository, "findByIds")
       .mockResolvedValue([USER_1_CATEGORIES_MOCK[0]]);
 
-    const result = await sut.execute(
-      BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
-    );
+    const result = await sut.execute(BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, false);
     testUtils.notCalledExpectations([exceptionsAdapter.forbidden]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.findByIds,
-      calledWith: [
-        BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.categoriesIds
-      ]
+      calledWith: [BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.categoriesIds]
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -204,18 +231,14 @@ describe("FindAndValidateCategoryUseCase", () => {
       .spyOn(categoryRepository, "findByIds")
       .mockResolvedValue(USER_2_CATEGORIES_MOCK);
 
-    const result = await sut.execute(
-      BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
-    );
+    const result = await sut.execute(BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, false);
     testUtils.notCalledExpectations([exceptionsAdapter.notFound]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.findByIds,
-      calledWith: [
-        BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.categoriesIds
-      ]
+      calledWith: [BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.categoriesIds]
     });
     testUtils.timesCalledExpectations({
       times: 1,

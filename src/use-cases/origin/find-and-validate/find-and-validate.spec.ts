@@ -2,7 +2,7 @@ import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { OriginRepository } from "@domain/repositories/origin.repository";
 import {
-  BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK,
+  BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK,
   PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK,
   QUERY_ORIGIN_AUTHENTICATED_REQUEST_MOCK,
   USER_1_ORIGINS_MOCK,
@@ -43,7 +43,20 @@ describe("FindAndValidateOriginUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: sut.isParamOriginRequest,
-      calledWith: [PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK]
+      calledWith: [PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryOriginRequest,
+      calledWith: [PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyOriginRequest,
+      calledWith: [PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -67,8 +80,21 @@ describe("FindAndValidateOriginUseCase", () => {
 
     testUtils.timesCalledExpectations({
       times: 1,
+      mockFunction: sut.isParamOriginRequest,
+      calledWith: [QUERY_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
       mockFunction: sut.isQueryOriginRequest,
-      calledWith: [QUERY_ORIGIN_AUTHENTICATED_REQUEST_MOCK]
+      calledWith: [QUERY_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyOriginRequest,
+      calledWith: [QUERY_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -88,19 +114,30 @@ describe("FindAndValidateOriginUseCase", () => {
       .spyOn(originRepository, "findById")
       .mockResolvedValue(USER_1_ORIGINS_MOCK[0]);
 
-    const response = await sut.execute(
-      BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK
-    );
+    const response = await sut.execute(BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.timesCalledExpectations({
       times: 1,
+      mockFunction: sut.isParamOriginRequest,
+      calledWith: [BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryOriginRequest,
+      calledWith: [BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
       mockFunction: sut.isBodyOriginRequest,
-      calledWith: [BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK]
+      calledWith: [BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
     });
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: sut.handleBodyOriginRequest,
-      calledWith: [USER_MOCK.id, BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK]
+      calledWith: [USER_MOCK.id, BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK]
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -115,13 +152,11 @@ describe("FindAndValidateOriginUseCase", () => {
       .spyOn(originRepository, "findById")
       .mockResolvedValue(USER_1_ORIGINS_MOCK[0]);
 
-    const result = await sut.execute(
-      BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK
-    );
+    const result = await sut.execute(BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, true);
     testUtils.resultExpectations(
-      BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK.origin,
+      BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK.origin,
       USER_1_ORIGINS_MOCK[0]
     );
     testUtils.notCalledExpectations([
@@ -131,23 +166,21 @@ describe("FindAndValidateOriginUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: originRepository.findById,
-      calledWith: [BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK.body.originId]
+      calledWith: [BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK.body.originId]
     });
   });
 
   it("should return false if the origin is not found", async () => {
     jest.spyOn(originRepository, "findById").mockResolvedValue(null);
 
-    const result = await sut.execute(
-      BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK
-    );
+    const result = await sut.execute(BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, false);
     testUtils.notCalledExpectations([exceptionsAdapter.forbidden]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: originRepository.findById,
-      calledWith: [BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK.body.originId]
+      calledWith: [BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK.body.originId]
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -161,16 +194,14 @@ describe("FindAndValidateOriginUseCase", () => {
       .spyOn(originRepository, "findById")
       .mockResolvedValue(USER_2_ORIGINS_MOCK[0]);
 
-    const result = await sut.execute(
-      BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK
-    );
+    const result = await sut.execute(BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, false);
     testUtils.notCalledExpectations([exceptionsAdapter.notFound]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: originRepository.findById,
-      calledWith: [BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK.body.originId]
+      calledWith: [BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK.body.originId]
     });
     testUtils.timesCalledExpectations({
       times: 1,

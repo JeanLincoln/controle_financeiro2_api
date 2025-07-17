@@ -105,7 +105,7 @@ export const QUERY_ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
   }
 } as QueryOriginAuthenticatedRequest;
 
-export const BODY_PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
+export const BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   body: { originId: 1 }
 } as BodyOriginAuthenticatedRequest;
