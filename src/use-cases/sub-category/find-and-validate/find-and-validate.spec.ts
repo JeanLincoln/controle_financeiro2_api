@@ -6,6 +6,9 @@ import { SubCategoryRepository } from "@domain/repositories/sub-category.reposit
 import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
 import {
   BODY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+  EMPTY_BODY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+  EMPTY_QUERY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+  NO_CONTENT_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   PARAM_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   QUERY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   USER_1_SUB_CATEGORIES_MOCK,
@@ -154,6 +157,100 @@ describe("FindAndValidateSubCategoryUseCase", () => {
       calledWith: [USER_MOCK.id, USER_1_SUB_CATEGORIES_MOCK.map((c) => c.id)]
     });
     testUtils.resultExpectations(response, true);
+  });
+
+  it("should return true if the request does not contain any type of subCategoryId", async () => {
+    const response = await sut.execute(
+      NO_CONTENT_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isParamSubCategoryRequest,
+      calledWith: [NO_CONTENT_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQuerySubCategoriesRequest,
+      calledWith: [NO_CONTENT_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodySubCategoriesRequest,
+      calledWith: [NO_CONTENT_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.notCalledExpectations([
+      sut.handleParamSubCategoryRequest,
+      sut.handleQuerySubCategoriesRequest,
+      sut.handleBodySubCategoriesRequest,
+      sut.validateRequest
+    ]);
+    testUtils.resultExpectations(response, true);
+  });
+
+  it("should return true and set an empty subCategories array if the request contains an empty subCategoriesIds array in query request type", async () => {
+    const result = await sut.execute(
+      EMPTY_QUERY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isParamSubCategoryRequest,
+      calledWith: [EMPTY_QUERY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQuerySubCategoriesRequest,
+      calledWith: [EMPTY_QUERY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodySubCategoriesRequest,
+      calledWith: [EMPTY_QUERY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.notCalledExpectations([
+      sut.handleParamSubCategoryRequest,
+      sut.handleBodySubCategoriesRequest,
+      sut.validateRequest
+    ]);
+    testUtils.resultExpectations(result, true);
+  });
+
+  it("should return true and set an empty subCategories array if the request contains an empty subCategoriesIds array in body request type", async () => {
+    const result = await sut.execute(
+      EMPTY_BODY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isParamSubCategoryRequest,
+      calledWith: [EMPTY_BODY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQuerySubCategoriesRequest,
+      calledWith: [EMPTY_BODY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodySubCategoriesRequest,
+      calledWith: [EMPTY_BODY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
+    });
+    testUtils.notCalledExpectations([
+      sut.handleParamSubCategoryRequest,
+      sut.handleQuerySubCategoriesRequest,
+      sut.validateRequest
+    ]);
+    testUtils.resultExpectations(result, true);
   });
 
   it("should return true if all subCategories are found and belong to the user", async () => {

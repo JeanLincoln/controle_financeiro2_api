@@ -105,6 +105,11 @@ export class FindAndValidateTransactionUseCase {
       ? transactionsIds.map(Number)
       : [Number(transactionsIds)];
 
+    if (formattedTransactionsIds.length === 0) {
+      request.transactions = [];
+      return true;
+    }
+
     const response = await this.validateRequest(
       userId,
       formattedTransactionsIds
@@ -131,6 +136,11 @@ export class FindAndValidateTransactionUseCase {
     request: BodyTransactionsAuthenticatedRequest
   ): Promise<boolean> {
     const transactionsIds = request.body.transactionsIds;
+
+    if (transactionsIds.length === 0) {
+      request.transactions = [];
+      return true;
+    }
 
     const response = await this.validateRequest(userId, transactionsIds);
 

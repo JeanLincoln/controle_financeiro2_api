@@ -109,3 +109,7 @@ export const BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   body: { originId: 1 }
 } as BodyOriginAuthenticatedRequest;
+
+export const NO_CONTENT_ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK
+} as ParamOriginAuthenticatedRequest;

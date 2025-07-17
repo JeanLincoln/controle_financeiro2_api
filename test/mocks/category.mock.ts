@@ -129,3 +129,21 @@ export const BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
     categoriesIds: USER_1_CATEGORIES_MOCK.map((category) => category.id)
   }
 } as BodyCategoriesAuthenticatedRequest;
+
+export const NO_CONTENT_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK
+} as ParamCategoryAuthenticatedRequest;
+
+export const EMPTY_QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  query: {
+    categoriesIds: [] as string[]
+  }
+} as QueryCategoryAuthenticatedRequest;
+
+export const EMPTY_BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  body: {
+    categoriesIds: [] as number[]
+  }
+} as BodyCategoriesAuthenticatedRequest;

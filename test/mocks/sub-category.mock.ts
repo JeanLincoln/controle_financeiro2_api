@@ -70,3 +70,21 @@ export const BODY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
     )
   }
 } as BodySubCategoriesAuthenticatedRequest;
+
+export const NO_CONTENT_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK
+} as ParamSubCategoryAuthenticatedRequest;
+
+export const EMPTY_QUERY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  query: {
+    subCategoriesIds: [] as string[]
+  }
+} as QuerySubCategoryAuthenticatedRequest;
+
+export const EMPTY_BODY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  body: {
+    subCategoriesIds: [] as number[]
+  }
+} as BodySubCategoriesAuthenticatedRequest;

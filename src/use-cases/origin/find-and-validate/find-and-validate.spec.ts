@@ -3,6 +3,7 @@ import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { OriginRepository } from "@domain/repositories/origin.repository";
 import {
   BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK,
+  NO_CONTENT_ORIGIN_AUTHENTICATED_REQUEST_MOCK,
   PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK,
   QUERY_ORIGIN_AUTHENTICATED_REQUEST_MOCK,
   USER_1_ORIGINS_MOCK,
@@ -144,6 +145,38 @@ describe("FindAndValidateOriginUseCase", () => {
       mockFunction: sut.validateRequest,
       calledWith: [USER_MOCK.id, USER_1_ORIGINS_MOCK[0].id]
     });
+    testUtils.resultExpectations(response, true);
+  });
+
+  it("should return true if the request does not contain any type of originId", async () => {
+    const response = await sut.execute(
+      NO_CONTENT_ORIGIN_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isParamOriginRequest,
+      calledWith: [NO_CONTENT_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryOriginRequest,
+      calledWith: [NO_CONTENT_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyOriginRequest,
+      calledWith: [NO_CONTENT_ORIGIN_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.notCalledExpectations([
+      sut.handleParamOriginRequest,
+      sut.handleQueryOriginRequest,
+      sut.handleBodyOriginRequest,
+      sut.validateRequest
+    ]);
     testUtils.resultExpectations(response, true);
   });
 

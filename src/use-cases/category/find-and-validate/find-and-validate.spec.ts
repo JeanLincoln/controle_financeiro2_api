@@ -4,6 +4,9 @@ import { CategoryRepository } from "@domain/repositories/category.repository";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import {
   BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+  EMPTY_BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+  EMPTY_QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+  NO_CONTENT_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   USER_1_CATEGORIES_MOCK,
@@ -154,6 +157,100 @@ describe("FindAndValidateCategoryUseCase", () => {
       calledWith: [USER_MOCK.id, USER_1_CATEGORIES_MOCK.map((c) => c.id)]
     });
     testUtils.resultExpectations(response, true);
+  });
+
+  it("should return true if the request does not contain any type of categoryId", async () => {
+    const response = await sut.execute(
+      NO_CONTENT_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isParamCategoryRequest,
+      calledWith: [NO_CONTENT_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryCategoriesRequest,
+      calledWith: [NO_CONTENT_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyCategoriesRequest,
+      calledWith: [NO_CONTENT_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.notCalledExpectations([
+      sut.handleParamCategoryRequest,
+      sut.handleQueryCategoriesRequest,
+      sut.handleBodyCategoriesRequest,
+      sut.validateRequest
+    ]);
+    testUtils.resultExpectations(response, true);
+  });
+
+  it("should return true and set an empty categories array if the request contains an empty categoriesIds array in query request type", async () => {
+    const result = await sut.execute(
+      EMPTY_QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isParamCategoryRequest,
+      calledWith: [EMPTY_QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryCategoriesRequest,
+      calledWith: [EMPTY_QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyCategoriesRequest,
+      calledWith: [EMPTY_QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.notCalledExpectations([
+      sut.handleParamCategoryRequest,
+      sut.handleBodyCategoriesRequest,
+      sut.validateRequest
+    ]);
+    testUtils.resultExpectations(result, true);
+  });
+
+  it("should return true and set an empty categories array if the request contains an empty categoriesIds array in body request type", async () => {
+    const result = await sut.execute(
+      EMPTY_BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isParamCategoryRequest,
+      calledWith: [EMPTY_BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryCategoriesRequest,
+      calledWith: [EMPTY_BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyCategoriesRequest,
+      calledWith: [EMPTY_BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
+    });
+    testUtils.notCalledExpectations([
+      sut.handleParamCategoryRequest,
+      sut.handleQueryCategoriesRequest,
+      sut.validateRequest
+    ]);
+    testUtils.resultExpectations(result, true);
   });
 
   it("should return true if all categories are found and belong to the user", async () => {

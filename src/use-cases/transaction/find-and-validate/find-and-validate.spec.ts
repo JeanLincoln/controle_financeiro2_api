@@ -9,7 +9,10 @@ import {
   PARAM_TRANSACTION_AUTHENTICATED_REQUEST_MOCK,
   QUERY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK,
   BODY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK,
-  USER_2_TRANSACTIONS_MOCK
+  USER_2_TRANSACTIONS_MOCK,
+  NO_CONTENT_TRANSACTION_AUTHENTICATED_REQUEST_MOCK,
+  EMPTY_QUERY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK,
+  EMPTY_BODY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK
 } from "@test/mocks/transaction.mock";
 
 describe("FindAndValidateTransactionUseCase", () => {
@@ -154,6 +157,100 @@ describe("FindAndValidateTransactionUseCase", () => {
       calledWith: [USER_MOCK.id, USER_1_TRANSACTIONS_MOCK.map((c) => c.id)]
     });
     testUtils.resultExpectations(response, true);
+  });
+
+  it("should return true if the request does not contain any type of transactionId", async () => {
+    const response = await sut.execute(
+      NO_CONTENT_TRANSACTION_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isParamTransactionRequest,
+      calledWith: [NO_CONTENT_TRANSACTION_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryTransactionsRequest,
+      calledWith: [NO_CONTENT_TRANSACTION_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyTransactionsRequest,
+      calledWith: [NO_CONTENT_TRANSACTION_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.notCalledExpectations([
+      sut.handleParamTransactionRequest,
+      sut.handleQueryTransactionsRequest,
+      sut.handleBodyTransactionsRequest,
+      sut.validateRequest
+    ]);
+    testUtils.resultExpectations(response, true);
+  });
+
+  it("should return true and set an empty transactions array if the request contains an empty transactionsIds array in query request type", async () => {
+    const result = await sut.execute(
+      EMPTY_QUERY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isParamTransactionRequest,
+      calledWith: [EMPTY_QUERY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryTransactionsRequest,
+      calledWith: [EMPTY_QUERY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyTransactionsRequest,
+      calledWith: [EMPTY_QUERY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.notCalledExpectations([
+      sut.handleParamTransactionRequest,
+      sut.handleBodyTransactionsRequest,
+      sut.validateRequest
+    ]);
+    testUtils.resultExpectations(result, true);
+  });
+
+  it("should return true and set an empty transactions array if the request contains an empty transactionsIds array in body request type", async () => {
+    const result = await sut.execute(
+      EMPTY_BODY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isParamTransactionRequest,
+      calledWith: [EMPTY_BODY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isQueryTransactionsRequest,
+      calledWith: [EMPTY_BODY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: false
+    });
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: sut.isBodyTransactionsRequest,
+      calledWith: [EMPTY_BODY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK],
+      returnedWith: true
+    });
+    testUtils.notCalledExpectations([
+      sut.handleParamTransactionRequest,
+      sut.handleQueryTransactionsRequest,
+      sut.validateRequest
+    ]);
+    testUtils.resultExpectations(result, true);
   });
 
   it("should return true if all transactions are found and belong to the user", async () => {

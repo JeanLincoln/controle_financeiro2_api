@@ -105,6 +105,11 @@ export class FindAndValidateSubCategoryUseCase {
       ? subCategoriesIds.map(Number)
       : [Number(subCategoriesIds)];
 
+    if (formattedSubCategoriesIds.length === 0) {
+      request.subCategories = [];
+      return true;
+    }
+
     const response = await this.validateRequest(
       userId,
       formattedSubCategoriesIds
@@ -131,6 +136,11 @@ export class FindAndValidateSubCategoryUseCase {
     request: BodySubCategoriesAuthenticatedRequest
   ): Promise<boolean> {
     const subCategoriesIds = request.body.subCategoriesIds;
+
+    if (subCategoriesIds.length === 0) {
+      request.subCategories = [];
+      return true;
+    }
 
     const response = await this.validateRequest(userId, subCategoriesIds);
 

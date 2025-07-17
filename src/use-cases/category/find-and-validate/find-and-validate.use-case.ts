@@ -100,6 +100,11 @@ export class FindAndValidateCategoryUseCase {
       ? categoriesIds.map(Number)
       : [Number(categoriesIds)];
 
+    if (formattedCategoriesIds.length === 0) {
+      request.categories = [];
+      return true;
+    }
+
     const response = await this.validateRequest(userId, formattedCategoriesIds);
 
     if (!response || !response.categories || response.categories.length === 0) {
@@ -119,6 +124,11 @@ export class FindAndValidateCategoryUseCase {
     request: BodyCategoriesAuthenticatedRequest
   ): Promise<boolean> {
     const categoriesIds = request.body.categoriesIds;
+
+    if (categoriesIds.length === 0) {
+      request.categories = [];
+      return true;
+    }
 
     const response = await this.validateRequest(userId, categoriesIds);
 

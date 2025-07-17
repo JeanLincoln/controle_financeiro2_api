@@ -121,3 +121,21 @@ export const BODY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK = {
     )
   }
 } as BodyTransactionsAuthenticatedRequest;
+
+export const NO_CONTENT_TRANSACTION_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK
+} as ParamTransactionAuthenticatedRequest;
+
+export const EMPTY_QUERY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  query: {
+    transactionsIds: [] as string[]
+  }
+} as QueryTransactionAuthenticatedRequest;
+
+export const EMPTY_BODY_TRANSACTION_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  body: {
+    transactionsIds: [] as number[]
+  }
+} as BodyTransactionsAuthenticatedRequest;
