@@ -4,7 +4,7 @@ import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
 import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
 import {
-  MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+  MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   USER_MOCK_1_SUB_CATEGORIES,
   USER_MOCK_2_SUB_CATEGORIES
 } from "@test/mocks/sub-category.mock";
@@ -32,12 +32,12 @@ describe("FindAndValidateManyFromBodySubCategoryUseCase", () => {
       .mockResolvedValue(USER_MOCK_1_SUB_CATEGORIES);
 
     const result = await sut.execute(
-      MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+      MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
     );
 
     testUtils.resultExpectations(result, true);
     testUtils.resultExpectations(
-      MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK.subCategories,
+      MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.subCategories,
       USER_MOCK_1_SUB_CATEGORIES
     );
     testUtils.notCalledExpectations([
@@ -48,7 +48,7 @@ describe("FindAndValidateManyFromBodySubCategoryUseCase", () => {
       times: 1,
       mockFunction: subSubCategoryRepository.findByIds,
       calledWith: [
-        MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.subCategoriesIds
+        MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.subCategoriesIds
       ]
     });
   });
@@ -57,7 +57,7 @@ describe("FindAndValidateManyFromBodySubCategoryUseCase", () => {
     jest.spyOn(subSubCategoryRepository, "findByIds").mockResolvedValue(null);
 
     const result = await sut.execute(
-      MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+      MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
     );
 
     testUtils.resultExpectations(result, false);
@@ -66,7 +66,7 @@ describe("FindAndValidateManyFromBodySubCategoryUseCase", () => {
       times: 1,
       mockFunction: subSubCategoryRepository.findByIds,
       calledWith: [
-        MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.subCategoriesIds
+        MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.subCategoriesIds
       ]
     });
     testUtils.timesCalledExpectations({
@@ -87,7 +87,7 @@ describe("FindAndValidateManyFromBodySubCategoryUseCase", () => {
       .mockResolvedValue([USER_MOCK_1_SUB_CATEGORIES[0]]);
 
     const result = await sut.execute(
-      MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+      MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
     );
 
     testUtils.resultExpectations(result, false);
@@ -96,7 +96,7 @@ describe("FindAndValidateManyFromBodySubCategoryUseCase", () => {
       times: 1,
       mockFunction: subSubCategoryRepository.findByIds,
       calledWith: [
-        MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.subCategoriesIds
+        MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.subCategoriesIds
       ]
     });
     testUtils.timesCalledExpectations({
@@ -114,7 +114,7 @@ describe("FindAndValidateManyFromBodySubCategoryUseCase", () => {
       .mockResolvedValue(USER_MOCK_2_SUB_CATEGORIES);
 
     const result = await sut.execute(
-      MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+      MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
     );
 
     testUtils.resultExpectations(result, false);
@@ -123,7 +123,7 @@ describe("FindAndValidateManyFromBodySubCategoryUseCase", () => {
       times: 1,
       mockFunction: subSubCategoryRepository.findByIds,
       calledWith: [
-        MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.subCategoriesIds
+        MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.body.subCategoriesIds
       ]
     });
     testUtils.timesCalledExpectations({

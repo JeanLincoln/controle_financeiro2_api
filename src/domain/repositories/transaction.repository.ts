@@ -49,7 +49,7 @@ export type TransactionFindAllFilters = {
   createdAt?: Date;
   updatedAt?: Date;
   originId?: number;
-  categoriesId?: number[];
+  categoriesIds?: number[];
   subCategoriesId?: number[];
 };
 

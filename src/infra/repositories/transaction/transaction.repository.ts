@@ -64,7 +64,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       createdAt,
       updatedAt,
       originId,
-      categoriesId,
+      categoriesIds,
       subCategoriesId
     }: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>> {
@@ -79,9 +79,9 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       ...(createdAt && { createdAt }),
       ...(updatedAt && { updatedAt }),
       ...(originId && { origin: { id: originId } }),
-      ...(categoriesId && {
+      ...(categoriesIds && {
         categories: {
-          id: In(Array.isArray(categoriesId) ? categoriesId : [categoriesId])
+          id: In(Array.isArray(categoriesIds) ? categoriesIds : [categoriesIds])
         }
       }),
       ...(subCategoriesId && {

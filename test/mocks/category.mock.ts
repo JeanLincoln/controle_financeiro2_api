@@ -13,9 +13,10 @@ import {
   PAGINATION_PARAMS_MOCK,
   PAGINATION_TO_REPOSITORY_PARAMS_MOCK
 } from "./pagination.mock";
-import type {
+import {
   ParamCategoryAuthenticatedRequest,
-  BodyCategoriesAuthenticatedRequest
+  BodyCategoriesAuthenticatedRequest,
+  QueryCategoryAuthenticatedRequest
 } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 
 export const CREATE_OR_UPDATE_CATEGORY_MOCK: CreateOrUpdateAllCategoryProps = {
@@ -106,14 +107,23 @@ export const USER_2_PAGINATED_CATEGORIES_MOCK: PaginatedResult<Category> = {
   pagination: CATEGORY_PAGINATION_META_MOCK
 };
 
-export const CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+export const PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   params: {
     categoryId: "1"
   }
 } as ParamCategoryAuthenticatedRequest;
 
-export const MANY_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+export const QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  query: {
+    categoriesIds: USER_1_CATEGORIES_MOCK.map((category) =>
+      category.id.toString()
+    )
+  }
+} as QueryCategoryAuthenticatedRequest;
+
+export const BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   body: {
     categoriesIds: USER_1_CATEGORIES_MOCK.map((category) => category.id)

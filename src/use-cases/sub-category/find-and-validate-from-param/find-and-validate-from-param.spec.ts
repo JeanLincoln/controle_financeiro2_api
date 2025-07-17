@@ -4,8 +4,8 @@ import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import {
-  SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
-  SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK_2,
+  SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+  SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK_2,
   SUB_CATEGORY_MOCK_1,
   SUB_CATEGORY_MOCK_2
 } from "@test/mocks/sub-category.mock";
@@ -33,11 +33,13 @@ describe("FindAndValidateFromParamSubCategoryUseCase", () => {
       .spyOn(subCategoryRepository, "findById")
       .mockResolvedValue(SUB_CATEGORY_MOCK_1);
 
-    const result = await sut.execute(SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
+    const result = await sut.execute(
+      SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
 
     testUtils.resultExpectations(result, true);
     testUtils.resultExpectations(
-      SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK.subCategory,
+      SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.subCategory,
       SUB_CATEGORY_MOCK_1
     );
     testUtils.notCalledExpectations([
@@ -55,7 +57,9 @@ describe("FindAndValidateFromParamSubCategoryUseCase", () => {
   it("should return false if the sub category is not found", async () => {
     jest.spyOn(subCategoryRepository, "findById").mockResolvedValue(null);
 
-    const result = await sut.execute(SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
+    const result = await sut.execute(
+      SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
 
     testUtils.resultExpectations(result, false);
     testUtils.notCalledExpectations([
@@ -79,7 +83,9 @@ describe("FindAndValidateFromParamSubCategoryUseCase", () => {
       .spyOn(subCategoryRepository, "findById")
       .mockResolvedValue(SUB_CATEGORY_MOCK_2);
 
-    const result = await sut.execute(SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
+    const result = await sut.execute(
+      SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
 
     testUtils.resultExpectations(result, false);
     testUtils.notCalledExpectations([
@@ -97,7 +103,9 @@ describe("FindAndValidateFromParamSubCategoryUseCase", () => {
       times: 1,
       mockFunction: subCategoryRepository.findById,
       calledWith: [
-        Number(SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK.params.subCategoryId)
+        Number(
+          SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK.params.subCategoryId
+        )
       ]
     });
   });
@@ -107,7 +115,9 @@ describe("FindAndValidateFromParamSubCategoryUseCase", () => {
       .spyOn(subCategoryRepository, "findById")
       .mockResolvedValue(SUB_CATEGORY_MOCK_1);
 
-    const result = await sut.execute(SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK_2);
+    const result = await sut.execute(
+      SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK_2
+    );
 
     testUtils.resultExpectations(result, false);
     testUtils.notCalledExpectations([

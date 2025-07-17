@@ -15,7 +15,7 @@ export interface ParamCategoryAuthenticatedRequest
 export interface QueryCategoryAuthenticatedRequest
   extends AuthenticatedRequest {
   query: {
-    categoriesId: string | string[];
+    categoriesIds: string | string[];
   };
   categories: Category[];
 }
@@ -44,16 +44,7 @@ export class FindAndValidateCategoryUseCase {
     private readonly exceptionsAdapter: ExceptionsAdapter
   ) {}
 
-  private handlers: Record<
-    string,
-    (userId: number, request: FindAndValidateRequestType) => boolean
-  > = {
-    param: this.handleParamCategoryRequest.bind(this),
-    body: this.handleBodyCategoriesRequest.bind(this),
-    query: this.handleQueryCategoriesRequest.bind(this)
-  };
-
-  private isParamCategoryRequest(request: FindAndValidateRequestType) {
+  isParamCategoryRequest(request: FindAndValidateRequestType) {
     return (
       "params" in request &&
       typeof request.params === "object" &&
@@ -61,7 +52,7 @@ export class FindAndValidateCategoryUseCase {
     );
   }
 
-  private isBodyCategoriesRequest(request: FindAndValidateRequestType) {
+  isBodyCategoriesRequest(request: FindAndValidateRequestType) {
     return (
       "body" in request &&
       request.body &&
@@ -70,7 +61,7 @@ export class FindAndValidateCategoryUseCase {
     );
   }
 
-  private isQueryCategoriesRequest(request: FindAndValidateRequestType) {
+  isQueryCategoriesRequest(request: FindAndValidateRequestType) {
     return (
       "query" in request &&
       typeof request.query === "object" &&
@@ -78,14 +69,7 @@ export class FindAndValidateCategoryUseCase {
     );
   }
 
-  private getRequestType(request: FindAndValidateRequestType): string | null {
-    if (this.isParamCategoryRequest(request)) return "param";
-    if (this.isBodyCategoriesRequest(request)) return "body";
-    if (this.isQueryCategoriesRequest(request)) return "query";
-    return null;
-  }
-
-  private async handleParamCategoryRequest(
+  async handleParamCategoryRequest(
     userId: number,
     request: ParamCategoryAuthenticatedRequest
   ): Promise<boolean> {
@@ -106,17 +90,17 @@ export class FindAndValidateCategoryUseCase {
     return true;
   }
 
-  private async handleQueryCategoriesRequest(
+  async handleQueryCategoriesRequest(
     userId: number,
     request: QueryCategoryAuthenticatedRequest
   ): Promise<boolean> {
     const validatedRequest = request;
-    const { categoriesId } = validatedRequest.query;
-    const categoriesIds = Array.isArray(categoriesId)
-      ? categoriesId.map(Number)
-      : [Number(categoriesId)];
+    const { categoriesIds } = validatedRequest.query;
+    const formattedCategoriesIds = Array.isArray(categoriesIds)
+      ? categoriesIds.map(Number)
+      : [Number(categoriesIds)];
 
-    const response = await this.validateRequest(userId, categoriesIds);
+    const response = await this.validateRequest(userId, formattedCategoriesIds);
 
     if (!response || !response.categories || response.categories.length === 0) {
       this.exceptionsAdapter.internalServerError({
@@ -130,7 +114,7 @@ export class FindAndValidateCategoryUseCase {
     return true;
   }
 
-  private async handleBodyCategoriesRequest(
+  async handleBodyCategoriesRequest(
     userId: number,
     request: BodyCategoriesAuthenticatedRequest
   ): Promise<boolean> {
@@ -146,11 +130,10 @@ export class FindAndValidateCategoryUseCase {
     }
 
     request.categories = response.categories;
-
     return true;
   }
 
-  private async validateRequest(
+  async validateRequest(
     userId: number,
     categoriesIds: number[]
   ): Promise<ValidateCategoriesUseCaseReturn | void> {
@@ -189,17 +172,36 @@ export class FindAndValidateCategoryUseCase {
   }
 
   async execute(request: FindAndValidateRequestType): Promise<boolean> {
-    const type = this.getRequestType(request);
     const { user } = request;
     const userId = user.id;
 
-    if (!type) {
-      this.exceptionsAdapter.internalServerError({
-        message: "Invalid request type for category validation"
-      });
-      return false;
-    }
+    const isAParamRequest = this.isParamCategoryRequest(request);
+    const isAQueryRequest = this.isQueryCategoriesRequest(request);
+    const isABodyRequest = this.isBodyCategoriesRequest(request);
 
-    return this.handlers[type](userId, request);
+    if (!isAParamRequest && !isABodyRequest && !isAQueryRequest) return true;
+
+    if (isAParamRequest)
+      return this.handleParamCategoryRequest(
+        userId,
+        request as ParamCategoryAuthenticatedRequest
+      );
+
+    if (isAQueryRequest)
+      return this.handleQueryCategoriesRequest(
+        userId,
+        request as QueryCategoryAuthenticatedRequest
+      );
+
+    if (isABodyRequest)
+      return this.handleBodyCategoriesRequest(
+        userId,
+        request as BodyCategoriesAuthenticatedRequest
+      );
+
+    this.exceptionsAdapter.internalServerError({
+      message: "Invalid request type for category validation"
+    });
+    return false;
   }
 }

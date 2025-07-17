@@ -119,7 +119,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
     required: false
   })
   @IsOptional()
-  categoriesId?: number[];
+  categoriesIds?: number[];
 
   @NumberArrayValidations({
     description:

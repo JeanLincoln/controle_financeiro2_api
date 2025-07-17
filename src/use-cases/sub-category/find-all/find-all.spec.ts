@@ -4,7 +4,7 @@ import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
 import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
 import { SUB_CATEGORIES_MOCK } from "@test/mocks/sub-category.mock";
-import { CATEGORY_AUTHENTICATED_REQUEST_MOCK } from "@test/mocks/category.mock";
+import { PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK } from "@test/mocks/category.mock";
 
 describe("FindAllSubCategoryUseCase", () => {
   let sut: FindAllSubCategoryUseCase;
@@ -27,7 +27,7 @@ describe("FindAllSubCategoryUseCase", () => {
       .spyOn(subCategoryRepository, "findAllByCategory")
       .mockResolvedValue(SUB_CATEGORIES_MOCK);
 
-    const result = await sut.execute(CATEGORY_AUTHENTICATED_REQUEST_MOCK);
+    const result = await sut.execute(PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.notCalledExpectations([exceptionAdapter.notFound]);
     testUtils.arrayExpectations({
@@ -42,7 +42,7 @@ describe("FindAllSubCategoryUseCase", () => {
       .spyOn(subCategoryRepository, "findAllByCategory")
       .mockResolvedValue([]);
 
-    const result = await sut.execute(CATEGORY_AUTHENTICATED_REQUEST_MOCK);
+    const result = await sut.execute(PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.notCalledExpectations([exceptionAdapter.notFound]);
     testUtils.arrayExpectations({

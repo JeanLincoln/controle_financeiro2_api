@@ -15,14 +15,11 @@ import {
 import { ApiCookieAuth } from "@nestjs/swagger";
 import { CreateTransactionUseCase } from "@use-cases/transaction/create/create.use-case";
 import { CreateTransactionDto } from "./dto/create.dto";
-import { OriginBodyGuard } from "@infra/commons/guards/origin/origin-body-validation.guard";
-import { OriginBodyAuthenticatedRequest } from "@use-cases/origin/find-and-validate-from-body/find-and-validate-from-body.use-case";
 import { ManySubCategoriesAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
 import { TransactionAuthenticatedRequest } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { FindTransactionByIdParamDto } from "./dto/find-by-id.dto";
 import { TransactionParamGuard } from "@infra/commons/guards/transaction/transaction-param-validation.guard";
 import { FindAllTransactionUseCase } from "@use-cases/transaction/find-all/find-all.use-case";
-import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 import { UpdateTransactionUseCase } from "@use-cases/transaction/update/update.use-case";
 import {
   UpdateTransactionBodyDto,
@@ -33,9 +30,17 @@ import { DeleteTransactionParamDto } from "./dto/delete.dto";
 import { Transaction } from "@domain/entities/transaction.entity";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { FindAllTransactionsQueryParamDto } from "./dto/find-all.dto";
-import { BodyCategoriesAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import {
+  BodyCategoriesAuthenticatedRequest,
+  QueryCategoryAuthenticatedRequest
+} from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 import { CategoryValidationGuard } from "@infra/commons/guards/category/category-validation.guard";
 import { SubCategoriesBodyGuard } from "@infra/commons/guards/sub-category/sub-categories-body-validation.guard";
+import { OriginValidationGuard } from "@infra/commons/guards/origin/origin-validation.guard";
+import {
+  BodyOriginAuthenticatedRequest,
+  QueryOriginAuthenticatedRequest
+} from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -48,11 +53,15 @@ export class TransactionController {
     private readonly deleteTransactionUseCase: DeleteTransactionUseCase
   ) {}
 
-  @UseGuards(CategoryValidationGuard, SubCategoriesBodyGuard, OriginBodyGuard)
+  @UseGuards(
+    CategoryValidationGuard,
+    SubCategoriesBodyGuard,
+    OriginValidationGuard
+  )
   @Post()
   async create(
     @Req()
-    req: OriginBodyAuthenticatedRequest &
+    req: BodyOriginAuthenticatedRequest &
       ManySubCategoriesAuthenticatedRequest &
       BodyCategoriesAuthenticatedRequest,
     @Body() TransactionData: CreateTransactionDto
@@ -76,9 +85,10 @@ export class TransactionController {
   }
 
   @Get()
-  @UseGuards(CategoryValidationGuard)
+  @UseGuards(CategoryValidationGuard, OriginValidationGuard)
   async findAll(
-    @Req() req: AuthenticatedRequest,
+    @Req()
+    req: QueryOriginAuthenticatedRequest & QueryCategoryAuthenticatedRequest,
     @Query()
     queryParams: FindAllTransactionsQueryParamDto
   ): Promise<PaginatedResult<Transaction> | void> {
@@ -89,13 +99,13 @@ export class TransactionController {
     TransactionParamGuard,
     CategoryValidationGuard,
     SubCategoriesBodyGuard,
-    OriginBodyGuard
+    OriginValidationGuard
   )
   @Put(":transactionId")
   async update(
     @Req()
     req: TransactionAuthenticatedRequest &
-      OriginBodyAuthenticatedRequest &
+      BodyOriginAuthenticatedRequest &
       ManySubCategoriesAuthenticatedRequest &
       BodyCategoriesAuthenticatedRequest,
     @Param() _: UpdateTransactionParamDto,

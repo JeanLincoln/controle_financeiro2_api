@@ -7,7 +7,7 @@ import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
 import { CREATE_SUB_CATEGORY_MOCK } from "@test/mocks/sub-category.mock";
 import {
-  CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+  PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   EXPENSE_CATEGORY_MOCK,
   USER_1_CATEGORIES_MOCK
 } from "@test/mocks/category.mock";
@@ -45,7 +45,7 @@ describe("CreateSubCategoryUseCase", () => {
     jest.spyOn(subCategoryRepository, "create");
 
     const result = await sut.execute(
-      CATEGORY_AUTHENTICATED_REQUEST_MOCK,
+      PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
       CREATE_SUB_CATEGORY_MOCK
     );
 

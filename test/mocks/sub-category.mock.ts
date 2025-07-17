@@ -46,7 +46,7 @@ export const USER_MOCK_2_SUB_CATEGORIES: SubCategory[] =
     (subCategory) => subCategory.category.user.id === USER_MOCK_2.id
   );
 
-export const SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+export const SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   params: {
     categoryId: EXPENSE_CATEGORY_MOCK.id.toString(),
@@ -54,7 +54,7 @@ export const SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   }
 } as SubParamCategoryAuthenticatedRequest;
 
-export const SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK_2 = {
+export const SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK_2 = {
   user: USER_MOCK,
   params: {
     categoryId: EXPENSE_CATEGORY_MOCK_2.id.toString(),
@@ -62,7 +62,7 @@ export const SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK_2 = {
   }
 } as SubParamCategoryAuthenticatedRequest;
 
-export const MANY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
+export const MANY_SUB_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   body: {
     subCategoriesIds: USER_MOCK_1_SUB_CATEGORIES.map(
