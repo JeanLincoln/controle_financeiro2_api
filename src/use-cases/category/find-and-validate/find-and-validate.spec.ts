@@ -6,7 +6,8 @@ import {
   BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
-  USER_1_CATEGORIES_MOCK
+  USER_1_CATEGORIES_MOCK,
+  USER_2_CATEGORIES_MOCK
 } from "@test/mocks/category.mock";
 import { FindAndValidateCategoryUseCase } from "./find-and-validate.use-case";
 import { USER_MOCK } from "@test/mocks/user.mock";
@@ -201,7 +202,7 @@ describe("FindAndValidateCategoryUseCase", () => {
   it("should return false if some categories do not belong to the user", async () => {
     jest
       .spyOn(categoryRepository, "findByIds")
-      .mockResolvedValue(USER_1_CATEGORIES_MOCK);
+      .mockResolvedValue(USER_2_CATEGORIES_MOCK);
 
     const result = await sut.execute(
       BODY_PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK
