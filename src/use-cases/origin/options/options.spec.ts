@@ -25,7 +25,7 @@ describe("OptionsOriginUseCase", () => {
     sut = new OptionsOriginUseCase(originRepository, paginationUseCase);
   });
 
-  it("should return all users origins options", async () => {
+  it("should return all user's origins options", async () => {
     jest.spyOn(originRepository, "options").mockResolvedValue({
       data: ORIGINS_OPTIONS_MOCK,
       total: ORIGINS_OPTIONS_MOCK.length
