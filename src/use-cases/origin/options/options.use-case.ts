@@ -1,8 +1,8 @@
-import { Origin } from "@domain/entities/origin.entity";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import {
   OriginRepository,
-  OriginOptionsToUseCaseParams
+  OriginOptionsToUseCaseParams,
+  type BaseOrigin
 } from "@domain/repositories/origin.repository";
 import { Injectable } from "@nestjs/common";
 import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
@@ -17,7 +17,7 @@ export class OptionsOriginUseCase {
   async execute(
     userId: number,
     queryParams: OriginOptionsToUseCaseParams
-  ): Promise<PaginatedResult<Origin> | void> {
+  ): Promise<PaginatedResult<BaseOrigin>> {
     const { sortOrder, limit, page, search } = queryParams;
 
     const { paginationParams, repositoryParams, createPaginationResult } =
