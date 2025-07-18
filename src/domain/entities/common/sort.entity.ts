@@ -3,7 +3,10 @@ export enum SortOrderEnum {
   DESC = "DESC"
 }
 
-export interface SortParams<T> {
+export interface SortOrderParam {
   sortOrder: SortOrderEnum;
+}
+
+export interface SortParams<T> extends SortOrderParam {
   sortBy: T;
 }

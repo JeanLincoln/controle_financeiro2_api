@@ -4,11 +4,16 @@ import {
   RepositoryToPaginationReturn,
   CommonPaginationParams
 } from "@domain/entities/common/pagination.entity";
-import { SortParams } from "@domain/entities/common/sort.entity";
+import {
+  SortParams,
+  SortOrderParam
+} from "@domain/entities/common/sort.entity";
+
+export type BaseOrigin = Omit<Origin, "transactions" | "user">;
 
 export type CreateOrUpdateAllOriginProps = Omit<
-  Origin,
-  "id" | "createdAt" | "updatedAt" | "transactions" | "user"
+  BaseOrigin,
+  "id" | "createdAt" | "updatedAt"
 >;
 
 export enum OriginsSortableFieldsEnum {
@@ -18,17 +23,33 @@ export enum OriginsSortableFieldsEnum {
   updatedAt = "updatedAt"
 }
 
+export interface OriginsSearchField {
+  search?: string;
+}
+
 export type OriginFindAllToUseCase = CommonPaginationParams &
   SortParams<OriginsSortableFieldsEnum>;
 
 export type OriginFindAllToRepositoryParams = RepositoryPaginationParams &
   SortParams<OriginsSortableFieldsEnum>;
 
+export type OriginOptionsToUseCaseParams = CommonPaginationParams &
+  SortOrderParam &
+  OriginsSearchField;
+
+export type OriginFindOptionsToRepositoryParams = RepositoryPaginationParams &
+  SortOrderParam &
+  OriginsSearchField;
+
 export abstract class OriginRepository {
   abstract findAll(
     userId: number,
     paginationParams: OriginFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Origin>>;
+  abstract options(
+    userId: number,
+    paginationParams: OriginFindOptionsToRepositoryParams
+  ): Promise<RepositoryToPaginationReturn<BaseOrigin>>;
   abstract findById(id: number): Promise<Origin | null>;
   abstract create(
     userId: number,

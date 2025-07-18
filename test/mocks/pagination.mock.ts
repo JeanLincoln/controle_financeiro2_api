@@ -3,6 +3,7 @@ import {
   PaginationParams,
   RepositoryPaginationParams
 } from "@domain/entities/common/pagination.entity";
+import { SortOrderEnum } from "@domain/entities/common/sort.entity";
 
 export const PAGINATION_PARAMS_MOCK: PaginationParams = {
   page: 1,
@@ -44,4 +45,14 @@ export const EMPTY_PAGINATION_META_MOCK: PaginationMeta = {
 export const PAGINATION_EMPTY_RESULT_MOCK = {
   data: [],
   pagination: EMPTY_PAGINATION_META_MOCK
+};
+
+export const OPTIONS_PAGINATION_AND_SORT_PARAMS_MOCK = {
+  ...PAGINATION_PARAMS_MOCK,
+  sortOrder: SortOrderEnum.ASC
+};
+
+export const OPTIONS_PAGINATION_TO_REPOSITORY_PARAMS_MOCK = {
+  ...PAGINATION_TO_REPOSITORY_PARAMS_MOCK,
+  sortOrder: SortOrderEnum.ASC
 };

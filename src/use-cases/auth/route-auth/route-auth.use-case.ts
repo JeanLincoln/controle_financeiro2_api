@@ -48,6 +48,7 @@ export class RouteAuthUseCase {
     }
 
     request.user = user;
+
     return true;
   }
 }
