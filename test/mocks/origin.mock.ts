@@ -2,7 +2,7 @@ import { Origin } from "@domain/entities/origin.entity";
 import {
   CreateOrUpdateAllOriginProps,
   OriginsSortableFieldsEnum,
-  type BaseOrigin
+  BaseOrigin
 } from "@domain/repositories/origin.repository";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 import {

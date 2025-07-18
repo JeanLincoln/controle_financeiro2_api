@@ -7,7 +7,7 @@ export class OriginRepositoryStub implements OriginRepository {
     return { data: [], total: 0 };
   }
 
-  async findOptions(): Promise<RepositoryToPaginationReturn<Origin>> {
+  async options(): Promise<RepositoryToPaginationReturn<Origin>> {
     return { data: [], total: 0 };
   }
 

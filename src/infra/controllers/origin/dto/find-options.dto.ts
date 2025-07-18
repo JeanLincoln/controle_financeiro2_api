@@ -4,7 +4,7 @@ import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { IsOptional, IsString } from "class-validator";
 
-export class FindOptionsOriginDto extends PaginationQueryDto {
+export class OptionsOriginDto extends PaginationQueryDto {
   @SortableOrderDto(SortOrderEnum.ASC)
   sortOrder: SortOrderEnum;
 

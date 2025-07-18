@@ -3,8 +3,8 @@ import {
   OriginRepository,
   CreateOrUpdateAllOriginProps,
   OriginFindAllToRepositoryParams,
-  type BaseOrigin,
-  type OriginFindOptionsToRepositoryParams
+  BaseOrigin,
+  OriginFindOptionsToRepositoryParams
 } from "@domain/repositories/origin.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ILike, Repository } from "typeorm";
@@ -39,7 +39,7 @@ export class TypeOrmOriginRepository implements OriginRepository {
     };
   }
 
-  async findOptions(
+  async options(
     userId: number,
     { skip, take, sortOrder, search }: OriginFindOptionsToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<BaseOrigin>> {

@@ -8,7 +8,7 @@ import {
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import {
   Transaction,
-  type TransactionType
+  TransactionType
 } from "@domain/entities/transaction.entity";
 import { SortParams } from "@domain/entities/common/sort.entity";
 

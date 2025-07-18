@@ -11,10 +11,10 @@ import {
   OPTIONS_PAGINATION_TO_REPOSITORY_PARAMS_MOCK,
   PAGINATION_EMPTY_RESULT_MOCK
 } from "@test/mocks/pagination.mock";
-import { FindOptionsOriginUseCase } from "./find-options.use-case";
+import { OptionsOriginUseCase } from "./options.use-case";
 
-describe("FindOptionsOriginUseCase", () => {
-  let sut: FindOptionsOriginUseCase;
+describe("OptionsOriginUseCase", () => {
+  let sut: OptionsOriginUseCase;
   let originRepository: OriginRepository;
   let paginationUseCase: PaginationUseCase;
 
@@ -22,11 +22,11 @@ describe("FindOptionsOriginUseCase", () => {
     originRepository = new OriginRepositoryStub();
     paginationUseCase = new PaginationUseCase();
 
-    sut = new FindOptionsOriginUseCase(originRepository, paginationUseCase);
+    sut = new OptionsOriginUseCase(originRepository, paginationUseCase);
   });
 
   it("should return all users origins options", async () => {
-    jest.spyOn(originRepository, "findOptions").mockResolvedValue({
+    jest.spyOn(originRepository, "options").mockResolvedValue({
       data: ORIGINS_OPTIONS_MOCK,
       total: ORIGINS_OPTIONS_MOCK.length
     });
@@ -39,14 +39,14 @@ describe("FindOptionsOriginUseCase", () => {
     testUtils.resultExpectations(result, PAGINATED_ORIGINS_OPTIONS_MOCK);
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: originRepository.findOptions,
+      mockFunction: originRepository.options,
       calledWith: [USER_MOCK.id, OPTIONS_PAGINATION_TO_REPOSITORY_PARAMS_MOCK]
     });
   });
 
   it("should return an empty array if the user has no origins options", async () => {
     jest
-      .spyOn(originRepository, "findOptions")
+      .spyOn(originRepository, "options")
       .mockResolvedValue({ data: [], total: 0 });
 
     const result = await sut.execute(
@@ -57,7 +57,7 @@ describe("FindOptionsOriginUseCase", () => {
     testUtils.resultExpectations(result, PAGINATION_EMPTY_RESULT_MOCK);
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: originRepository.findOptions,
+      mockFunction: originRepository.options,
       calledWith: [1, OPTIONS_PAGINATION_TO_REPOSITORY_PARAMS_MOCK]
     });
   });

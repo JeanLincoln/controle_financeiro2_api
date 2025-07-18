@@ -31,9 +31,9 @@ import {
   ParamOriginAuthenticatedRequest
 } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 import { OriginValidationGuard } from "@infra/commons/guards/origin/origin-validation.guard";
-import { FindOptionsOriginDto } from "./dto/find-options.dto";
+import { OptionsOriginDto } from "./dto/find-options.dto";
 import { BaseOrigin } from "@domain/repositories/origin.repository";
-import { FindOptionsOriginUseCase } from "@use-cases/origin/find-options/find-options.use-case";
+import { OptionsOriginUseCase } from "@use-cases/origin/options/options.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -44,7 +44,7 @@ export class OriginController {
     private readonly updateOriginUseCase: UpdateOriginUseCase,
     private readonly deleteOriginUseCase: DeleteOriginUseCase,
     private readonly findAllOriginUseCase: FindAllOriginUseCase,
-    private readonly findOptionsOriginUseCase: FindOptionsOriginUseCase
+    private readonly optionsOriginUseCase: OptionsOriginUseCase
   ) {}
 
   @Post()
@@ -63,12 +63,12 @@ export class OriginController {
     return this.findAllOriginUseCase.execute(req.user.id, queryParams);
   }
 
-  @Get("find-options")
-  async findOptions(
+  @Get("options")
+  async options(
     @Req() req: AuthenticatedRequest,
-    @Query() queryParams: FindOptionsOriginDto
+    @Query() queryParams: OptionsOriginDto
   ): Promise<PaginatedResult<BaseOrigin> | void> {
-    return this.findOptionsOriginUseCase.execute(req.user.id, queryParams);
+    return this.optionsOriginUseCase.execute(req.user.id, queryParams);
   }
 
   @UseGuards(OriginValidationGuard)
