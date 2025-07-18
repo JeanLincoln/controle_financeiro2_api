@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards
 } from "@nestjs/common";
@@ -32,6 +33,13 @@ import { CategoryValidationGuard } from "@infra/commons/guards/category/category
 import { ParamCategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 import { SubCategoryValidationGuard } from "@infra/commons/guards/sub-category/sub-category-validation.guard";
 import { ParamSubCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
+import {
+  OptionsSubCategoryQueryDto,
+  OptionsSubCategoryParamDto
+} from "./dto/options.dto";
+import { SubCategoryOption } from "@domain/repositories/sub-category.repository";
+import { PaginatedResult } from "@domain/entities/common/pagination.entity";
+import { OptionsSubCategoryUseCase } from "@use-cases/sub-category/options/options.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard, CategoryValidationGuard)
@@ -41,7 +49,8 @@ export class SubCategoryController {
     private readonly createSubCategoryUseCase: CreateSubCategoryUseCase,
     private readonly findAllSubCategoryUseCase: FindAllSubCategoryUseCase,
     private readonly deleteSubCategoryUseCase: DeleteSubCategoryUseCase,
-    private readonly updateSubCategoryUseCase: UpdateSubCategoryUseCase
+    private readonly updateSubCategoryUseCase: UpdateSubCategoryUseCase,
+    private readonly optionsSubCategoryUseCase: OptionsSubCategoryUseCase
   ) {}
 
   @Post(":categoryId")
@@ -53,6 +62,27 @@ export class SubCategoryController {
     return this.createSubCategoryUseCase.execute(req, createSubCategoryDto);
   }
 
+  @Get(":categoryId")
+  async findAll(
+    @Req() req: ParamCategoryAuthenticatedRequest,
+    @Param() _: FindAllSubCategoryParams
+  ) {
+    return this.findAllSubCategoryUseCase.execute(req);
+  }
+
+  @Get(":categoryId/options")
+  async options(
+    @Req() req: ParamCategoryAuthenticatedRequest,
+    @Param() _: OptionsSubCategoryParamDto,
+    @Query() queryParams: OptionsSubCategoryQueryDto
+  ): Promise<PaginatedResult<SubCategoryOption>> {
+    return this.optionsSubCategoryUseCase.execute(
+      req.user.id,
+      req.category.id,
+      queryParams
+    );
+  }
+
   @UseGuards(SubCategoryValidationGuard)
   @ExcludeFields("user")
   @Get(":categoryId/:subCategoryId")
@@ -61,14 +91,6 @@ export class SubCategoryController {
     @Param() _: FindSubCategoryByIdParamDto
   ) {
     return req.subCategory;
-  }
-
-  @Get(":categoryId")
-  async findAll(
-    @Req() req: ParamCategoryAuthenticatedRequest,
-    @Param() _: FindAllSubCategoryParams
-  ) {
-    return this.findAllSubCategoryUseCase.execute(req);
   }
 
   @UseGuards(SubCategoryValidationGuard)

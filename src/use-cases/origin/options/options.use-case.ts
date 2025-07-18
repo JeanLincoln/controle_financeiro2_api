@@ -2,7 +2,7 @@ import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import {
   OriginRepository,
   OriginOptionsToUseCaseParams,
-  type OriginOption
+  OriginOption
 } from "@domain/repositories/origin.repository";
 import { Injectable } from "@nestjs/common";
 import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";

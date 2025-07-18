@@ -9,6 +9,13 @@ export class SubCategoryRepositoryStub implements SubCategoryRepository {
     return Promise.resolve([]);
   }
 
+  async options() {
+    return Promise.resolve({
+      data: [],
+      total: 0
+    });
+  }
+
   async findById() {
     return Promise.resolve(null);
   }

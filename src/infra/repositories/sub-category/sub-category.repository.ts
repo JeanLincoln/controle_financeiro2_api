@@ -1,11 +1,15 @@
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import {
   SubCategoryRepository,
-  CreateOrUpdateAllSubCategoryProps
+  CreateOrUpdateAllSubCategoryProps,
+  SubCategoryOption,
+  SubCategoriesFindOptionsToRepositoryParams
 } from "@domain/repositories/sub-category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
-import { In, Repository } from "typeorm";
+import { ILike, In, Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
+import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
+import { sortQuery } from "../common/queries/sort.query";
 
 export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
   constructor(
@@ -34,6 +38,34 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
         }
       }
     });
+  }
+
+  async options(
+    userId: number,
+    categoryId: number,
+    {
+      skip,
+      take,
+      sortOrder,
+      search
+    }: SubCategoriesFindOptionsToRepositoryParams
+  ): Promise<RepositoryToPaginationReturn<SubCategoryOption>> {
+    const [subCategories, total] =
+      await this.subCategoryRepository.findAndCount({
+        where: {
+          category: { id: categoryId, user: { id: userId } },
+          ...(search && { name: ILike(`%${search}%`) })
+        },
+        select: ["id", "name"],
+        skip,
+        take,
+        order: sortQuery("name", sortOrder)
+      });
+
+    return {
+      data: subCategories,
+      total
+    };
   }
 
   async findById(id: number): Promise<SubCategory | null> {

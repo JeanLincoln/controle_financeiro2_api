@@ -23,7 +23,7 @@ export class OptionsCategoryUseCase {
     const { paginationParams, repositoryParams, createPaginationResult } =
       await this.paginationUseCase.execute(page, limit);
 
-    const paginatedCategorysOptions = await this.categoryRepository.options(
+    const paginatedCategoriesOptions = await this.categoryRepository.options(
       userId,
       {
         ...repositoryParams,
@@ -32,7 +32,7 @@ export class OptionsCategoryUseCase {
       }
     );
 
-    const { data: categoriesOptions, total } = paginatedCategorysOptions;
+    const { data: categoriesOptions, total } = paginatedCategoriesOptions;
 
     return createPaginationResult(categoriesOptions, paginationParams, total);
   }
