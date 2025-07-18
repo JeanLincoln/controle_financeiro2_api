@@ -55,14 +55,6 @@ export class OriginController {
     return this.createOriginUseCase.execute(req.user.id, body);
   }
 
-  @Get()
-  async findAll(
-    @Req() req: AuthenticatedRequest,
-    @Query() queryParams: FindAllOriginDto
-  ): Promise<PaginatedResult<Origin> | void> {
-    return this.findAllOriginUseCase.execute(req.user.id, queryParams);
-  }
-
   @Get("options")
   async options(
     @Req() req: AuthenticatedRequest,
@@ -79,6 +71,14 @@ export class OriginController {
     @Param() _: FindOriginByIdParamDto
   ) {
     return req.origin;
+  }
+
+  @Get()
+  async findAll(
+    @Req() req: AuthenticatedRequest,
+    @Query() queryParams: FindAllOriginDto
+  ): Promise<PaginatedResult<Origin> | void> {
+    return this.findAllOriginUseCase.execute(req.user.id, queryParams);
   }
 
   @UseGuards(OriginValidationGuard)
