@@ -66,7 +66,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       updatedAt,
       originId,
       categoriesIds,
-      subCategoriesId
+      subCategoriesIds
     }: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>> {
     const whereClause: FindOptionsWhere<Transaction> = {
@@ -86,10 +86,12 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
           id: In(Array.isArray(categoriesIds) ? categoriesIds : [categoriesIds])
         }
       }),
-      ...(subCategoriesId && {
+      ...(subCategoriesIds && {
         subCategories: {
           id: In(
-            Array.isArray(subCategoriesId) ? subCategoriesId : [subCategoriesId]
+            Array.isArray(subCategoriesIds)
+              ? subCategoriesIds
+              : [subCategoriesIds]
           )
         }
       })

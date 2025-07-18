@@ -62,14 +62,6 @@ export class SubCategoryController {
     return this.createSubCategoryUseCase.execute(req, createSubCategoryDto);
   }
 
-  @Get(":categoryId")
-  async findAll(
-    @Req() req: ParamCategoryAuthenticatedRequest,
-    @Param() _: FindAllSubCategoryParams
-  ) {
-    return this.findAllSubCategoryUseCase.execute(req);
-  }
-
   @Get(":categoryId/options")
   async options(
     @Req() req: ParamCategoryAuthenticatedRequest,
@@ -81,6 +73,14 @@ export class SubCategoryController {
       req.category.id,
       queryParams
     );
+  }
+
+  @Get(":categoryId")
+  async findAll(
+    @Req() req: ParamCategoryAuthenticatedRequest,
+    @Param() _: FindAllSubCategoryParams
+  ) {
+    return this.findAllSubCategoryUseCase.execute(req);
   }
 
   @UseGuards(SubCategoryValidationGuard)
