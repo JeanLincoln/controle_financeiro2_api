@@ -78,15 +78,6 @@ export class TransactionController {
     );
   }
 
-  @UseGuards(TransactionValidationGuard)
-  @Get(":transactionId")
-  async findById(
-    @Req() req: ParamTransactionAuthenticatedRequest,
-    @Param() _: FindTransactionByIdParamDto
-  ) {
-    return req.transaction;
-  }
-
   @Get()
   @UseGuards(
     CategoryValidationGuard,
@@ -102,6 +93,15 @@ export class TransactionController {
     queryParams: FindAllTransactionsQueryParamDto
   ): Promise<PaginatedResult<Transaction> | void> {
     return this.findAllTransactionUseCase.execute(req.user.id, queryParams);
+  }
+
+  @UseGuards(TransactionValidationGuard)
+  @Get(":transactionId")
+  async findById(
+    @Req() req: ParamTransactionAuthenticatedRequest,
+    @Param() _: FindTransactionByIdParamDto
+  ) {
+    return req.transaction;
   }
 
   @UseGuards(

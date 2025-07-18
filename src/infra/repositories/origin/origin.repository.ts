@@ -4,7 +4,7 @@ import {
   CreateOrUpdateAllOriginProps,
   OriginFindAllToRepositoryParams,
   OriginFindOptionsToRepositoryParams,
-  type OriginOption
+  OriginOption
 } from "@domain/repositories/origin.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ILike, Repository } from "typeorm";

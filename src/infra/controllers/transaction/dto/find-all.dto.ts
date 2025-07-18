@@ -139,7 +139,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
     required: false
   })
   @IsOptional()
-  subCategoriesId?: number[];
+  subCategoriesIds?: number[];
 
   @ApiPropertyOptional({
     description:

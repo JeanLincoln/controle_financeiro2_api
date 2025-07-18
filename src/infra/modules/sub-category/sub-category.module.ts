@@ -9,16 +9,25 @@ import { FindAllSubCategoryUseCase } from "@use-cases/sub-category/find-all/find
 import { DeleteSubCategoryUseCase } from "@use-cases/sub-category/delete/delete.use-case";
 import { UpdateSubCategoryUseCase } from "@use-cases/sub-category/update/update.use-case";
 import { FindAndValidateSubCategoryUseCase } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
+import { OptionsSubCategoryUseCase } from "@use-cases/sub-category/options/options.use-case";
+import { PaginationModule } from "../pagination/pagination.module";
 
 @Module({
-  imports: [DatabaseModule, ExceptionsModule, CategoryModule, AuthModule],
+  imports: [
+    DatabaseModule,
+    ExceptionsModule,
+    CategoryModule,
+    AuthModule,
+    PaginationModule
+  ],
   controllers: [SubCategoryController],
   providers: [
     CreateSubCategoryUseCase,
     FindAllSubCategoryUseCase,
     DeleteSubCategoryUseCase,
     UpdateSubCategoryUseCase,
-    FindAndValidateSubCategoryUseCase
+    FindAndValidateSubCategoryUseCase,
+    OptionsSubCategoryUseCase
   ],
   exports: [FindAndValidateSubCategoryUseCase]
 })

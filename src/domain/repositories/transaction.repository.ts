@@ -55,7 +55,7 @@ export type TransactionFindAllFilters = {
   updatedAt?: Date;
   originId?: number;
   categoriesIds?: number[];
-  subCategoriesId?: number[];
+  subCategoriesIds?: number[];
 };
 
 export type TransactionFindAllToUseCase = CommonPaginationParams &
