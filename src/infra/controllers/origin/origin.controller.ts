@@ -31,6 +31,9 @@ import {
   ParamOriginAuthenticatedRequest
 } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 import { OriginValidationGuard } from "@infra/commons/guards/origin/origin-validation.guard";
+import { FindOptionsOriginDto } from "./dto/find-options.dto";
+import { BaseOrigin } from "@domain/repositories/origin.repository";
+import { FindOptionsOriginUseCase } from "@use-cases/origin/find-options/find-options.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -40,7 +43,8 @@ export class OriginController {
     private readonly createOriginUseCase: CreateOriginUseCase,
     private readonly updateOriginUseCase: UpdateOriginUseCase,
     private readonly deleteOriginUseCase: DeleteOriginUseCase,
-    private readonly findAllOriginUseCase: FindAllOriginUseCase
+    private readonly findAllOriginUseCase: FindAllOriginUseCase,
+    private readonly findOptionsOriginUseCase: FindOptionsOriginUseCase
   ) {}
 
   @Post()
@@ -49,6 +53,22 @@ export class OriginController {
     @Body() body: CreateOriginBodyDto
   ) {
     return this.createOriginUseCase.execute(req.user.id, body);
+  }
+
+  @Get()
+  async findAll(
+    @Req() req: AuthenticatedRequest,
+    @Query() queryParams: FindAllOriginDto
+  ): Promise<PaginatedResult<Origin> | void> {
+    return this.findAllOriginUseCase.execute(req.user.id, queryParams);
+  }
+
+  @Get("find-options")
+  async findOptions(
+    @Req() req: AuthenticatedRequest,
+    @Query() queryParams: FindOptionsOriginDto
+  ): Promise<PaginatedResult<BaseOrigin> | void> {
+    return this.findOptionsOriginUseCase.execute(req.user.id, queryParams);
   }
 
   @UseGuards(OriginValidationGuard)
@@ -79,13 +99,5 @@ export class OriginController {
     @Param() _: DeleteOriginParamDto
   ) {
     return this.deleteOriginUseCase.execute(req.origin.id);
-  }
-
-  @Get()
-  async findAll(
-    @Req() req: AuthenticatedRequest,
-    @Query() queryParams: FindAllOriginDto
-  ): Promise<PaginatedResult<Origin> | void> {
-    return this.findAllOriginUseCase.execute(req.user.id, queryParams);
   }
 }

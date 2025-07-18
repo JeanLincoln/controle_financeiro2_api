@@ -2,10 +2,12 @@ import { Origin } from "@domain/entities/origin.entity";
 import {
   OriginRepository,
   CreateOrUpdateAllOriginProps,
-  OriginFindAllToRepositoryParams
+  OriginFindAllToRepositoryParams,
+  type BaseOrigin,
+  type OriginFindOptionsToRepositoryParams
 } from "@domain/repositories/origin.repository";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
@@ -29,6 +31,26 @@ export class TypeOrmOriginRepository implements OriginRepository {
       skip,
       take,
       order: sortQuery(sortBy, sortOrder)
+    });
+
+    return {
+      data: origins,
+      total
+    };
+  }
+
+  async findOptions(
+    userId: number,
+    { skip, take, sortOrder, search }: OriginFindOptionsToRepositoryParams
+  ): Promise<RepositoryToPaginationReturn<BaseOrigin>> {
+    const [origins, total] = await this.originRepository.findAndCount({
+      where: {
+        user: { id: userId },
+        ...(search && { name: ILike(`%${search}%`) })
+      },
+      skip,
+      take,
+      order: sortQuery("name", sortOrder)
     });
 
     return {

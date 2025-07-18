@@ -10,6 +10,7 @@ import { DeleteOriginUseCase } from "@use-cases/origin/delete/delete.use-case";
 import { FindAllOriginUseCase } from "@use-cases/origin/find-all/find-all.use-case";
 import { PaginationModule } from "../pagination/pagination.module";
 import { FindAndValidateOriginUseCase } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
+import { FindOptionsOriginUseCase } from "@use-cases/origin/find-options/find-options.use-case";
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { FindAndValidateOriginUseCase } from "@use-cases/origin/find-and-validat
     CreateOriginUseCase,
     UpdateOriginUseCase,
     DeleteOriginUseCase,
-    FindAllOriginUseCase
+    FindAllOriginUseCase,
+    FindOptionsOriginUseCase
   ],
   exports: [FindAndValidateOriginUseCase]
 })

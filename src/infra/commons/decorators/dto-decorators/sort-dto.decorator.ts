@@ -32,12 +32,14 @@ export function SortableFieldDto<T extends Record<string, string | number>>({
   };
 }
 
-export function SortableOrderDto() {
+export function SortableOrderDto(
+  defaultDirection: SortOrderEnum = SortOrderEnum.DESC
+) {
   return function (target: object, propertyKey: string) {
     ApiPropertyOptional({
       description: "Crescent or descending sorting",
-      default: SortOrderEnum.DESC,
-      example: SortOrderEnum.DESC,
+      default: defaultDirection,
+      example: defaultDirection,
       enum: SortOrderEnum
     })(target, propertyKey);
 
