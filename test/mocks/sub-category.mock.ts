@@ -1,6 +1,4 @@
 import { CreateOrUpdateAllSubCategoryProps } from "@domain/repositories/sub-category.repository";
-import { EXPENSE_CATEGORY_MOCK } from "./category.mock";
-import { INCOME_CATEGORY_MOCK } from "./category.mock";
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 import {
@@ -8,6 +6,10 @@ import {
   ParamSubCategoryAuthenticatedRequest,
   QuerySubCategoryAuthenticatedRequest
 } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
+import {
+  USER_1_CATEGORIES_MOCK,
+  USER_2_CATEGORIES_MOCK
+} from "./category.mock";
 
 export const CREATE_SUB_CATEGORY_MOCK: CreateOrUpdateAllSubCategoryProps = {
   name: "Sub Category",
@@ -29,7 +31,9 @@ export const SUB_CATEGORIES_MOCK: SubCategory[] = Array.from(
     icon: "🍎",
     transactions: [],
     category:
-      (index + 1) % 2 === 0 ? INCOME_CATEGORY_MOCK : EXPENSE_CATEGORY_MOCK
+      (index + 1) % 2 === 0
+        ? USER_1_CATEGORIES_MOCK[0]
+        : USER_2_CATEGORIES_MOCK[0]
   })
 );
 

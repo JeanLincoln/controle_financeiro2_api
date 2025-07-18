@@ -8,10 +8,6 @@ import {
 
 export class CreateCategoriesTable1750013754032 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
-                CREATE TYPE "public"."category_type_enum" AS ENUM ('INCOME', 'EXPENSE')
-            `);
-
     await queryRunner.createTable(
       new Table({
         name: "categories",
@@ -33,11 +29,6 @@ export class CreateCategoriesTable1750013754032 implements MigrationInterface {
             name: "description",
             type: "text",
             isNullable: true
-          },
-          {
-            name: "type",
-            type: "enum",
-            enum: ["INCOME", "EXPENSE"]
           },
           {
             name: "color",
@@ -83,14 +74,6 @@ export class CreateCategoriesTable1750013754032 implements MigrationInterface {
     await queryRunner.createIndex(
       "categories",
       new TableIndex({
-        name: "IDX_categories_type",
-        columnNames: ["type"]
-      })
-    );
-
-    await queryRunner.createIndex(
-      "categories",
-      new TableIndex({
         name: "IDX_categories_user",
         columnNames: ["user_id"]
       })
@@ -108,13 +91,8 @@ export class CreateCategoriesTable1750013754032 implements MigrationInterface {
 
     if (!userForeignKey) throw new Error("Foreign key user_id not found");
 
-    await queryRunner.dropIndex("categories", "IDX_categories_type");
     await queryRunner.dropIndex("categories", "IDX_categories_user");
     await queryRunner.dropForeignKey("categories", userForeignKey);
     await queryRunner.dropTable("categories");
-
-    await queryRunner.query(`
-                DROP TYPE "public"."category_type_enum";
-            `);
   }
 }

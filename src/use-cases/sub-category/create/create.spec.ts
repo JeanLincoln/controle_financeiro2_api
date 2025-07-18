@@ -8,7 +8,6 @@ import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category
 import { CREATE_SUB_CATEGORY_MOCK } from "@test/mocks/sub-category.mock";
 import {
   PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
-  EXPENSE_CATEGORY_MOCK,
   USER_1_CATEGORIES_MOCK
 } from "@test/mocks/category.mock";
 import { FindAndValidateCategoryUseCase } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
@@ -62,7 +61,7 @@ describe("CreateSubCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: subCategoryRepository.create,
-      calledWith: [EXPENSE_CATEGORY_MOCK.id, CREATE_SUB_CATEGORY_MOCK],
+      calledWith: [USER_1_CATEGORIES_MOCK[0].id, CREATE_SUB_CATEGORY_MOCK],
       times: 1
     });
   });

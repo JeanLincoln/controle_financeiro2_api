@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { CategoryType } from "@domain/entities/category.entity";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateCategoryDto {
   @ApiProperty({ example: "Food" })
@@ -12,12 +11,6 @@ export class CreateCategoryDto {
   @IsString()
   @IsOptional()
   description: string;
-
-  @ApiProperty({ example: CategoryType.EXPENSE })
-  @IsString()
-  @IsNotEmpty()
-  @IsEnum(CategoryType)
-  type: CategoryType;
 
   @ApiProperty({ example: "#FF0000" })
   @IsString()

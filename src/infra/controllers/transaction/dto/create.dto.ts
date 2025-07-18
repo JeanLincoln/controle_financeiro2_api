@@ -3,6 +3,7 @@ import { Transform } from "class-transformer";
 import {
   IsBoolean,
   IsDate,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -11,6 +12,7 @@ import {
 } from "class-validator";
 import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
 import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
+import { TransactionType } from "@domain/entities/transaction.entity";
 
 export class CreateTransactionDto {
   @ApiProperty({
@@ -28,6 +30,12 @@ export class CreateTransactionDto {
   @IsString()
   @IsNotEmpty()
   description: string;
+
+  @ApiProperty({ example: TransactionType.EXPENSE })
+  @IsString()
+  @IsNotEmpty()
+  @IsEnum(TransactionType)
+  type: TransactionType;
 
   @ApiProperty({
     description: "total amount of this transaction.",

@@ -14,6 +14,11 @@ import { User } from "./user.entity";
 import { Category } from "./category.entity";
 import { SubCategory } from "./sub-category.entity";
 
+export enum TransactionType {
+  INCOME = "INCOME",
+  EXPENSE = "EXPENSE"
+}
+
 @Entity("transactions")
 export class Transaction {
   @PrimaryGeneratedColumn({
@@ -33,6 +38,12 @@ export class Transaction {
     length: 255
   })
   description: string;
+
+  @Column({
+    type: "enum",
+    enum: TransactionType
+  })
+  type: TransactionType;
 
   @Column({
     type: "decimal",

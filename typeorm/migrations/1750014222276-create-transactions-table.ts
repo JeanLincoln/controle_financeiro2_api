@@ -10,6 +10,10 @@ export class CreateTransactionsTable1750014222276
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+                CREATE TYPE "public"."transactions_type_enum" AS ENUM ('INCOME', 'EXPENSE')
+            `);
+
     await queryRunner.createTable(
       new Table({
         name: "transactions",
@@ -30,6 +34,11 @@ export class CreateTransactionsTable1750014222276
             name: "description",
             type: "varchar",
             length: "255"
+          },
+          {
+            name: "type",
+            type: "enum",
+            enum: ["INCOME", "EXPENSE"]
           },
           {
             name: "origin_id",
@@ -109,6 +118,14 @@ export class CreateTransactionsTable1750014222276
         columnNames: ["origin_id"]
       })
     );
+
+    await queryRunner.createIndex(
+      "transactions",
+      new TableIndex({
+        name: "IDX_transactions_type",
+        columnNames: ["type"]
+      })
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -128,10 +145,15 @@ export class CreateTransactionsTable1750014222276
 
     if (!originForeignKey) throw new Error("Foreign key origin_id not found");
 
+    await queryRunner.dropIndex("transactions", "IDX_transactions_type");
     await queryRunner.dropIndex("transactions", "IDX_transactions_user");
     await queryRunner.dropIndex("transactions", "IDX_transactions_origin");
     await queryRunner.dropForeignKey("transactions", userForeignKey);
     await queryRunner.dropForeignKey("transactions", originForeignKey);
     await queryRunner.dropTable("transactions");
+
+    await queryRunner.query(`
+                DROP TYPE "public"."transactions_type_enum";
+            `);
   }
 }

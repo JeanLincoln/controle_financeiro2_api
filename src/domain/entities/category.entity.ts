@@ -13,11 +13,6 @@ import { SubCategory } from "./sub-category.entity";
 import { User } from "./user.entity";
 import { Transaction } from "./transaction.entity";
 
-export enum CategoryType {
-  INCOME = "INCOME",
-  EXPENSE = "EXPENSE"
-}
-
 @Entity("categories")
 export class Category {
   @PrimaryGeneratedColumn({
@@ -37,12 +32,6 @@ export class Category {
     nullable: true
   })
   description: string;
-
-  @Column({
-    type: "enum",
-    enum: CategoryType
-  })
-  type: CategoryType;
 
   @Column({
     type: "varchar",

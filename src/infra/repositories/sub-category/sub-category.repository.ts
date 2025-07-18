@@ -61,7 +61,6 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
           updatedAt: true,
           description: true,
           icon: true,
-          type: true,
           user: USER_WITHOUT_PASSWORD_SELECT
         }
       }

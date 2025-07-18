@@ -4,7 +4,10 @@ import {
   TransactionsSortableFieldsEnum
 } from "@domain/repositories/transaction.repository";
 import { ORIGIN_MOCK } from "./origin.mock";
-import { Transaction } from "@domain/entities/transaction.entity";
+import {
+  Transaction,
+  TransactionType
+} from "@domain/entities/transaction.entity";
 import {
   PaginatedResult,
   PaginationMeta
@@ -26,6 +29,7 @@ export const CREATE_OR_UPDATE_TRANSACTION_MOCK: CreateOrUpdateAllTransactionProp
     description: "Transaction description",
     amount: 100,
     startDate: new Date(),
+    type: TransactionType.INCOME,
     endDate: null,
     isRecurring: false
   };
@@ -36,6 +40,8 @@ export const TRANSACTIONS_MOCK: Transaction[] = Array.from(
     id: index + 1,
     name: `Transaction ${index + 1}`,
     description: `Transaction description ${index + 1}`,
+    type:
+      (index + 1) % 2 === 0 ? TransactionType.INCOME : TransactionType.EXPENSE,
     amount: (index + 1) * 10,
     startDate: new Date(),
     endDate: null,
@@ -49,6 +55,15 @@ export const TRANSACTIONS_MOCK: Transaction[] = Array.from(
     user: index % 2 === 0 ? USER_MOCK : USER_MOCK_2
   })
 );
+
+export const INCOME_TRANSACTIONS_MOCK: Transaction[] = TRANSACTIONS_MOCK.filter(
+  (transaction) => transaction.type === TransactionType.INCOME
+);
+
+export const EXPENSE_TRANSACTIONS_MOCK: Transaction[] =
+  TRANSACTIONS_MOCK.filter(
+    (transaction) => transaction.type === TransactionType.EXPENSE
+  );
 
 export const USER_1_TRANSACTIONS_MOCK: Transaction[] = TRANSACTIONS_MOCK.filter(
   (transaction) => transaction.user.id === USER_MOCK.id

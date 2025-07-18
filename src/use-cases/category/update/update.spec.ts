@@ -7,8 +7,8 @@ import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import {
   CREATE_OR_UPDATE_CATEGORY_MOCK,
-  EXPENSE_CATEGORY_MOCK,
-  INCOME_CATEGORY_MOCK
+  USER_1_CATEGORIES_MOCK,
+  USER_2_CATEGORIES_MOCK
 } from "@test/mocks/category.mock";
 import { USER_MOCK } from "@test/mocks/user.mock";
 describe("UpdateCategoryUseCase", () => {
@@ -31,14 +31,14 @@ describe("UpdateCategoryUseCase", () => {
   it("should be able to update a category", async () => {
     jest
       .spyOn(categoryRepository, "findById")
-      .mockResolvedValue(EXPENSE_CATEGORY_MOCK);
+      .mockResolvedValue(USER_1_CATEGORIES_MOCK[0]);
     jest.spyOn(userRepository, "findById").mockResolvedValue(USER_MOCK);
     jest.spyOn(exceptionsAdapter, "notFound");
     jest.spyOn(exceptionsAdapter, "forbidden");
 
     const result = await sut.execute(
       USER_MOCK.id,
-      EXPENSE_CATEGORY_MOCK.id,
+      USER_1_CATEGORIES_MOCK[0].id,
       CREATE_OR_UPDATE_CATEGORY_MOCK
     );
 
@@ -51,7 +51,7 @@ describe("UpdateCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: categoryRepository.findById,
-      calledWith: { id: EXPENSE_CATEGORY_MOCK.id },
+      calledWith: { id: USER_1_CATEGORIES_MOCK[0].id },
       times: 1
     });
 
@@ -70,7 +70,7 @@ describe("UpdateCategoryUseCase", () => {
 
     const result = await sut.execute(
       USER_MOCK.id,
-      EXPENSE_CATEGORY_MOCK.id,
+      USER_1_CATEGORIES_MOCK[0].id,
       CREATE_OR_UPDATE_CATEGORY_MOCK
     );
 
@@ -86,7 +86,7 @@ describe("UpdateCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: categoryRepository.findById,
-      calledWith: { id: EXPENSE_CATEGORY_MOCK.id },
+      calledWith: { id: USER_1_CATEGORIES_MOCK[0].id },
       times: 1
     });
 
@@ -100,14 +100,14 @@ describe("UpdateCategoryUseCase", () => {
   it("should not be able to update another user's category", async () => {
     jest
       .spyOn(categoryRepository, "findById")
-      .mockResolvedValue(INCOME_CATEGORY_MOCK);
+      .mockResolvedValue(USER_2_CATEGORIES_MOCK[0]);
     jest.spyOn(userRepository, "findById").mockResolvedValue(USER_MOCK);
     jest.spyOn(exceptionsAdapter, "notFound");
     jest.spyOn(exceptionsAdapter, "forbidden");
 
     const result = await sut.execute(
       USER_MOCK.id,
-      INCOME_CATEGORY_MOCK.id,
+      USER_2_CATEGORIES_MOCK[0].id,
       CREATE_OR_UPDATE_CATEGORY_MOCK
     );
 
@@ -123,7 +123,7 @@ describe("UpdateCategoryUseCase", () => {
 
     testUtils.timesCalledExpectations({
       mockFunction: categoryRepository.findById,
-      calledWith: { id: INCOME_CATEGORY_MOCK.id },
+      calledWith: { id: USER_2_CATEGORIES_MOCK[0].id },
       times: 1
     });
 
