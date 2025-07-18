@@ -10,6 +10,7 @@ import { UserModule } from "../user/user.module";
 import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-case";
 import { PaginationModule } from "../pagination/pagination.module";
 import { FindAndValidateCategoryUseCase } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import { OptionsCategoryUseCase } from "@use-cases/category/options/options.use-case";
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { FindAndValidateCategoryUseCase } from "@use-cases/category/find-and-val
     FindAllCategoryUseCase,
     UpdateCategoryUseCase,
     DeleteCategoryUseCase,
-    FindAndValidateCategoryUseCase
+    FindAndValidateCategoryUseCase,
+    OptionsCategoryUseCase
   ],
   exports: [FindAndValidateCategoryUseCase]
 })

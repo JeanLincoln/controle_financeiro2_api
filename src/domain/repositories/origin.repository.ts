@@ -16,6 +16,8 @@ export type CreateOrUpdateAllOriginProps = Omit<
   "id" | "createdAt" | "updatedAt"
 >;
 
+export type OriginOption = Pick<BaseOrigin, "id" | "name">;
+
 export enum OriginsSortableFieldsEnum {
   name = "name",
   description = "description",
@@ -49,7 +51,7 @@ export abstract class OriginRepository {
   abstract options(
     userId: number,
     paginationParams: OriginFindOptionsToRepositoryParams
-  ): Promise<RepositoryToPaginationReturn<BaseOrigin>>;
+  ): Promise<RepositoryToPaginationReturn<OriginOption>>;
   abstract findById(id: number): Promise<Origin | null>;
   abstract create(
     userId: number,
