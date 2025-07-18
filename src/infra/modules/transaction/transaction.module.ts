@@ -8,11 +8,11 @@ import { TransactionController } from "@infra/controllers/transaction/transactio
 import { CategoryModule } from "../category/category.module";
 import { SubCategoryModule } from "../sub-category/sub-category.module";
 import { OriginModule } from "../origin/origin.module";
-import { FindAndValidateFromParamTransactionUseCase } from "@use-cases/transaction/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { FindAllTransactionUseCase } from "@use-cases/transaction/find-all/find-all.use-case";
 import { UpdateTransactionUseCase } from "@use-cases/transaction/update/update.use-case";
 import { DeleteTransactionUseCase } from "@use-cases/transaction/delete/delete.use-case";
 import { PaginationModule } from "../pagination/pagination.module";
+import { FindAndValidateTransactionUseCase } from "@use-cases/transaction/find-and-validate/find-and-validate.use-case";
 
 @Module({
   imports: [
@@ -28,11 +28,11 @@ import { PaginationModule } from "../pagination/pagination.module";
   controllers: [TransactionController],
   providers: [
     CreateTransactionUseCase,
-    FindAndValidateFromParamTransactionUseCase,
+    FindAndValidateTransactionUseCase,
     FindAllTransactionUseCase,
     UpdateTransactionUseCase,
     DeleteTransactionUseCase
   ],
-  exports: [FindAndValidateFromParamTransactionUseCase]
+  exports: [FindAndValidateTransactionUseCase]
 })
 export class TransactionModule {}

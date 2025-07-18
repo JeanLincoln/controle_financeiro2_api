@@ -9,13 +9,16 @@ import { ApiPropertyOptional } from "@nestjs/swagger";
 import {
   IsBoolean,
   IsDate,
+  IsEnum,
   IsNumber,
   IsOptional,
-  IsString
+  IsString,
+  Min
 } from "class-validator";
 import { Transform } from "class-transformer";
 import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
 import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
+import { TransactionType } from "@domain/entities/transaction.entity";
 
 export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @SortableFieldDto({
@@ -52,6 +55,15 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   description?: string;
 
   @ApiPropertyOptional({
+    description: "Filter transactions that match this type.",
+    example: TransactionType.INCOME,
+    enum: TransactionType
+  })
+  @IsEnum(TransactionType)
+  @IsOptional()
+  type?: TransactionType;
+
+  @ApiPropertyOptional({
     description: "Filter transactions that  match this amount.",
     example: "100.20",
     required: false,
@@ -59,6 +71,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
     format: "number"
   })
   @IsNumber()
+  @Min(1)
   @Transform(({ value }) => (value ? Number(value) : value))
   @IsOptional()
   amount?: number;
@@ -105,6 +118,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
     format: "number"
   })
   @IsNumber()
+  @Min(1)
   @Transform(({ value }) => (value ? Number(value) : value))
   @IsOptional()
   originId?: number;
@@ -116,7 +130,7 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
     required: false
   })
   @IsOptional()
-  categoriesId?: number[];
+  categoriesIds?: number[];
 
   @NumberArrayValidations({
     description:

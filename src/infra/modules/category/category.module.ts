@@ -8,9 +8,8 @@ import { FindAllCategoryUseCase } from "@use-cases/category/find-all/find-all.us
 import { UpdateCategoryUseCase } from "@use-cases/category/update/update.use-case";
 import { UserModule } from "../user/user.module";
 import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-case";
-import { FindAndValidateFromParamCategoryUseCase } from "@use-cases/category/find-and-validate-from-param/find-and-validate-from-param.use-case";
-import { FindAndValidateManyFromBodyCategoryUseCase } from "@use-cases/category/find-and-validate-many-from-body/find-and-validate-many-from-body.use-case";
 import { PaginationModule } from "../pagination/pagination.module";
+import { FindAndValidateCategoryUseCase } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 
 @Module({
   imports: [
@@ -26,12 +25,8 @@ import { PaginationModule } from "../pagination/pagination.module";
     FindAllCategoryUseCase,
     UpdateCategoryUseCase,
     DeleteCategoryUseCase,
-    FindAndValidateFromParamCategoryUseCase,
-    FindAndValidateManyFromBodyCategoryUseCase
+    FindAndValidateCategoryUseCase
   ],
-  exports: [
-    FindAndValidateFromParamCategoryUseCase,
-    FindAndValidateManyFromBodyCategoryUseCase
-  ]
+  exports: [FindAndValidateCategoryUseCase]
 })
 export class CategoryModule {}

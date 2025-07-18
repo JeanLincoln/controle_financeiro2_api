@@ -3,9 +3,7 @@ import {
   CreateOrUpdateAllOriginProps,
   OriginsSortableFieldsEnum
 } from "@domain/repositories/origin.repository";
-import { OriginAuthenticatedRequest } from "@use-cases/origin/find-and-validate-from-param/find-and-validate-from-param.use-case";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
-import { OriginBodyAuthenticatedRequest } from "@use-cases/origin/find-and-validate-from-body/find-and-validate-from-body.use-case";
 import {
   PaginationMeta,
   PaginatedResult
@@ -15,6 +13,11 @@ import {
   PAGINATION_PARAMS_MOCK,
   PAGINATION_TO_REPOSITORY_PARAMS_MOCK
 } from "./pagination.mock";
+import {
+  BodyOriginAuthenticatedRequest,
+  ParamOriginAuthenticatedRequest,
+  QueryOriginAuthenticatedRequest
+} from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 
 export const CREATE_OR_UPDATE_ORIGIN_MOCK: CreateOrUpdateAllOriginProps = {
   name: "Origin",
@@ -93,9 +96,20 @@ export const PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
   params: {
     originId: "1"
   }
-} as OriginAuthenticatedRequest;
+} as ParamOriginAuthenticatedRequest;
+
+export const QUERY_ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK,
+  query: {
+    originId: "1"
+  }
+} as QueryOriginAuthenticatedRequest;
 
 export const BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
   body: { originId: 1 }
-} as OriginBodyAuthenticatedRequest;
+} as BodyOriginAuthenticatedRequest;
+
+export const NO_CONTENT_ORIGIN_AUTHENTICATED_REQUEST_MOCK = {
+  user: USER_MOCK
+} as ParamOriginAuthenticatedRequest;

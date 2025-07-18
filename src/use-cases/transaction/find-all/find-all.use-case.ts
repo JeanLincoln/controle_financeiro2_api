@@ -2,7 +2,7 @@ import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { Transaction } from "@domain/entities/transaction.entity";
 import {
   TransactionRepository,
-  type TransactionFindAllToUseCase
+  TransactionFindAllToUseCase
 } from "@domain/repositories/transaction.repository";
 import { Injectable } from "@nestjs/common";
 import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
@@ -19,7 +19,7 @@ export class FindAllTransactionUseCase {
     queryParams: TransactionFindAllToUseCase
   ): Promise<PaginatedResult<Transaction> | void> {
     const { page, limit, sortBy, sortOrder, ...filters } = queryParams;
-    console.log(filters);
+
     const { paginationParams, repositoryParams, createPaginationResult } =
       await this.paginationUseCase.execute(page, limit);
 

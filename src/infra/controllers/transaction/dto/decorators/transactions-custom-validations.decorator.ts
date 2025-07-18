@@ -1,5 +1,5 @@
-import { ValidateBy, type ValidationArguments } from "class-validator";
-import type { Transaction } from "@domain/entities/transaction.entity";
+import { ValidateBy, ValidationArguments } from "class-validator";
+import { Transaction } from "@domain/entities/transaction.entity";
 
 type DateRangeValidationArgs = ValidationArguments & {
   object: {

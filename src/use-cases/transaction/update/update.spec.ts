@@ -1,7 +1,7 @@
 import { TransactionRepository } from "@domain/repositories/transaction.repository";
 import { USER_1_CATEGORIES_MOCK } from "@test/mocks/category.mock";
 import { ORIGIN_MOCK } from "@test/mocks/origin.mock";
-import { USER_MOCK_1_SUB_CATEGORIES } from "@test/mocks/sub-category.mock";
+import { USER_1_SUB_CATEGORIES_MOCK } from "@test/mocks/sub-category.mock";
 import { USER_1_TRANSACTIONS_MOCK } from "@test/mocks/transaction.mock";
 import { USER_MOCK } from "@test/mocks/user.mock";
 import { TransactionRepositoryStub } from "@test/stubs/repositories/transaction.stub";
@@ -24,7 +24,7 @@ describe("Update Transaction Use Case", () => {
       USER_MOCK.id,
       ORIGIN_MOCK,
       USER_1_CATEGORIES_MOCK,
-      USER_MOCK_1_SUB_CATEGORIES,
+      USER_1_SUB_CATEGORIES_MOCK,
       USER_1_TRANSACTIONS_MOCK[0]
     );
 
@@ -37,7 +37,7 @@ describe("Update Transaction Use Case", () => {
         USER_MOCK.id,
         ORIGIN_MOCK,
         USER_1_CATEGORIES_MOCK,
-        USER_MOCK_1_SUB_CATEGORIES,
+        USER_1_SUB_CATEGORIES_MOCK,
         USER_1_TRANSACTIONS_MOCK[0]
       ]
     });

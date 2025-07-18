@@ -59,12 +59,13 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       endDate,
       name,
       description,
+      type,
       amount,
       isRecurring,
       createdAt,
       updatedAt,
       originId,
-      categoriesId,
+      categoriesIds,
       subCategoriesId
     }: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>> {
@@ -74,16 +75,23 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       ...(endDate && { endDate: LessThanOrEqual(endDate) }),
       ...(name && { name: ILike(`%${name}%`) }),
       ...(description && { description: ILike(`%${description}%`) }),
+      ...(type && { type }),
       ...(amount && { amount }),
       ...(isRecurring !== undefined && { isRecurring }),
       ...(createdAt && { createdAt }),
       ...(updatedAt && { updatedAt }),
       ...(originId && { origin: { id: originId } }),
-      ...(categoriesId && {
-        categories: { id: In(categoriesId) }
+      ...(categoriesIds && {
+        categories: {
+          id: In(Array.isArray(categoriesIds) ? categoriesIds : [categoriesIds])
+        }
       }),
       ...(subCategoriesId && {
-        subCategories: { id: In(subCategoriesId) }
+        subCategories: {
+          id: In(
+            Array.isArray(subCategoriesId) ? subCategoriesId : [subCategoriesId]
+          )
+        }
       })
     };
 
@@ -107,6 +115,16 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
     return this.transactionRepository.findOne({
       where: { id },
       relations: ["user", "origin", "categories", "subCategories"],
+      select: {
+        user: USER_WITHOUT_PASSWORD_SELECT
+      }
+    });
+  }
+
+  async findByIds(id: number[]): Promise<Transaction[] | null> {
+    return this.transactionRepository.find({
+      where: { id: In(id) },
+      relations: ["user"],
       select: {
         user: USER_WITHOUT_PASSWORD_SELECT
       }

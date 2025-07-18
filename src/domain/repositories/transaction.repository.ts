@@ -6,7 +6,10 @@ import {
   RepositoryPaginationParams
 } from "@domain/entities/common/pagination.entity";
 import { SubCategory } from "@domain/entities/sub-category.entity";
-import { Transaction } from "@domain/entities/transaction.entity";
+import {
+  Transaction,
+  type TransactionType
+} from "@domain/entities/transaction.entity";
 import { SortParams } from "@domain/entities/common/sort.entity";
 
 export type CreateOrUpdateAllTransactionProps = Omit<
@@ -30,6 +33,7 @@ export type TransactionsFieldsEnum = {
 export enum TransactionsSortableFieldsEnum {
   name = "name",
   description = "description",
+  type = "type",
   amount = "amount",
   startDate = "startDate",
   isRecurring = "isRecurring",
@@ -42,6 +46,7 @@ export enum TransactionsSortableFieldsEnum {
 export type TransactionFindAllFilters = {
   name?: string;
   description?: string;
+  type?: TransactionType;
   amount?: number;
   isRecurring?: boolean;
   startDate?: Date;
@@ -49,7 +54,7 @@ export type TransactionFindAllFilters = {
   createdAt?: Date;
   updatedAt?: Date;
   originId?: number;
-  categoriesId?: number[];
+  categoriesIds?: number[];
   subCategoriesId?: number[];
 };
 
@@ -67,6 +72,7 @@ export abstract class TransactionRepository {
     queryParams: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>>;
   abstract findById(id: number): Promise<Transaction | null>;
+  abstract findByIds(id: number[]): Promise<Transaction[] | null>;
   abstract create(
     userId: number,
     origin: Origin,

@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import { IsArray, IsNumber } from "class-validator";
+import { IsArray, IsNumber, Min } from "class-validator";
 
 interface NumberArrayValidationsProps {
   required?: boolean;
@@ -24,11 +24,14 @@ export const NumberArrayValidations =
     })(target, propertyKey);
     IsArray()(target, propertyKey);
     IsNumber({}, { each: true })(target, propertyKey);
-    Transform(({ value }: { value: number[] }) => {
+    Min(1, { each: true })(target, propertyKey);
+    Transform(({ value }: { value: number[] | number }) => {
       const valueIsAnArray = Array.isArray(value);
 
       if (!valueIsAnArray && !!value) return [Number(value)];
 
-      return value.length ? value.map((item) => Number(item)) : [];
+      return valueIsAnArray && !!value.length
+        ? value.map((item) => Number(item))
+        : [];
     })(target, propertyKey);
   };

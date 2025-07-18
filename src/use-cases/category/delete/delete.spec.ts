@@ -5,11 +5,11 @@ import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { DeleteCategoryUseCase } from "./delete.use-case";
-import {
-  EXPENSE_CATEGORY_MOCK,
-  INCOME_CATEGORY_MOCK
-} from "@test/mocks/category.mock";
 import { USER_MOCK } from "@test/mocks/user.mock";
+import {
+  USER_1_CATEGORIES_MOCK,
+  USER_2_CATEGORIES_MOCK
+} from "@test/mocks/category.mock";
 describe("DeleteCategoryUseCase", () => {
   let sut: DeleteCategoryUseCase;
   let categoryRepository: CategoryRepository;
@@ -33,11 +33,14 @@ describe("DeleteCategoryUseCase", () => {
   it("should be able to delete a category", async () => {
     jest
       .spyOn(categoryRepository, "findById")
-      .mockResolvedValue(EXPENSE_CATEGORY_MOCK);
+      .mockResolvedValue(USER_1_CATEGORIES_MOCK[0]);
     jest.spyOn(categoryRepository, "delete");
     jest.spyOn(userRepository, "findById").mockResolvedValue(USER_MOCK);
 
-    const result = await sut.execute(USER_MOCK.id, EXPENSE_CATEGORY_MOCK.id);
+    const result = await sut.execute(
+      USER_MOCK.id,
+      USER_1_CATEGORIES_MOCK[0].id
+    );
 
     testUtils.resultExpectations(result, undefined);
     testUtils.notCalledExpectations([
@@ -52,12 +55,12 @@ describe("DeleteCategoryUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.findById,
-      calledWith: [EXPENSE_CATEGORY_MOCK.id]
+      calledWith: [USER_1_CATEGORIES_MOCK[0].id]
     });
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.delete,
-      calledWith: [EXPENSE_CATEGORY_MOCK.id]
+      calledWith: [USER_1_CATEGORIES_MOCK[0].id]
     });
   });
 
@@ -66,7 +69,10 @@ describe("DeleteCategoryUseCase", () => {
     jest.spyOn(categoryRepository, "delete");
     jest.spyOn(userRepository, "findById").mockResolvedValue(USER_MOCK);
 
-    const result = await sut.execute(USER_MOCK.id, EXPENSE_CATEGORY_MOCK.id);
+    const result = await sut.execute(
+      USER_MOCK.id,
+      USER_1_CATEGORIES_MOCK[0].id
+    );
 
     testUtils.resultExpectations(result, undefined);
     testUtils.notCalledExpectations([
@@ -81,7 +87,7 @@ describe("DeleteCategoryUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.findById,
-      calledWith: [EXPENSE_CATEGORY_MOCK.id]
+      calledWith: [USER_1_CATEGORIES_MOCK[0].id]
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -93,11 +99,14 @@ describe("DeleteCategoryUseCase", () => {
   it("should not be able to delete a category of another user", async () => {
     jest
       .spyOn(categoryRepository, "findById")
-      .mockResolvedValue(INCOME_CATEGORY_MOCK);
+      .mockResolvedValue(USER_2_CATEGORIES_MOCK[0]);
     jest.spyOn(categoryRepository, "delete");
     jest.spyOn(userRepository, "findById").mockResolvedValue(USER_MOCK);
 
-    const result = await sut.execute(USER_MOCK.id, INCOME_CATEGORY_MOCK.id);
+    const result = await sut.execute(
+      USER_MOCK.id,
+      USER_2_CATEGORIES_MOCK[0].id
+    );
 
     testUtils.resultExpectations(result, undefined);
     testUtils.notCalledExpectations([
@@ -112,7 +121,7 @@ describe("DeleteCategoryUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.findById,
-      calledWith: [INCOME_CATEGORY_MOCK.id]
+      calledWith: [USER_2_CATEGORIES_MOCK[0].id]
     });
     testUtils.timesCalledExpectations({
       times: 1,

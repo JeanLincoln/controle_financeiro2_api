@@ -5,8 +5,8 @@ import {
   CREATE_SUB_CATEGORY_MOCK,
   SUB_CATEGORY_MOCK_1
 } from "@test/mocks/sub-category.mock";
-import { INCOME_CATEGORY_MOCK } from "@test/mocks/category.mock";
 import { USER_MOCK } from "@test/mocks/user.mock";
+import { USER_1_CATEGORIES_MOCK } from "@test/mocks/category.mock";
 
 describe("UpdateSubCategoryUseCase", () => {
   let sut: UpdateSubCategoryUseCase;
@@ -22,7 +22,7 @@ describe("UpdateSubCategoryUseCase", () => {
 
     const result = await sut.execute(
       SUB_CATEGORY_MOCK_1.id,
-      INCOME_CATEGORY_MOCK.id,
+      USER_1_CATEGORIES_MOCK[0].id,
       CREATE_SUB_CATEGORY_MOCK
     );
 
@@ -30,7 +30,7 @@ describe("UpdateSubCategoryUseCase", () => {
     testUtils.timesCalledExpectations({
       calledWith: [
         USER_MOCK.id,
-        INCOME_CATEGORY_MOCK.id,
+        USER_1_CATEGORIES_MOCK[0].id,
         CREATE_SUB_CATEGORY_MOCK
       ],
       mockFunction: subCategoryRepository.update,
