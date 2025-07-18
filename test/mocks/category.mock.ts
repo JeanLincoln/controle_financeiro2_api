@@ -2,7 +2,8 @@ import { Category } from "@domain/entities/category.entity";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 import {
   CategoriesSortableFieldsEnum,
-  CreateOrUpdateAllCategoryProps
+  CreateOrUpdateAllCategoryProps,
+  CategoryOption
 } from "@domain/repositories/category.repository";
 import {
   PaginatedResult,
@@ -43,6 +44,14 @@ export const CATEGORIES_MOCK: Category[] = Array.from(
   })
 );
 
+export const CATEGORIES_OPTIONS_MOCK: CategoryOption[] = Array.from(
+  { length: 5 },
+  (_, index) => ({
+    id: index + 1,
+    name: `Category ${index + 1}`
+  })
+);
+
 export const USER_1_CATEGORIES_MOCK: Category[] = CATEGORIES_MOCK.filter(
   (category) => category.user.id === USER_MOCK.id
 );
@@ -78,6 +87,12 @@ export const CATEGORIES_PAGINATION_AND_SORT_TO_REPOSITORY_PARAMS_MOCK = {
   ...PAGINATION_TO_REPOSITORY_PARAMS_MOCK,
   ...CATEGORIES_SORT_MOCK
 };
+
+export const PAGINATED_CATEGORIES_OPTIONS_MOCK: PaginatedResult<CategoryOption> =
+  {
+    data: CATEGORIES_OPTIONS_MOCK,
+    pagination: CATEGORY_PAGINATION_META_MOCK
+  };
 
 export const USER_1_PAGINATED_CATEGORIES_MOCK: PaginatedResult<Category> = {
   data: USER_1_CATEGORIES_MOCK,

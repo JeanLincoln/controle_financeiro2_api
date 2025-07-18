@@ -2,7 +2,7 @@ import { Origin } from "@domain/entities/origin.entity";
 import {
   CreateOrUpdateAllOriginProps,
   OriginsSortableFieldsEnum,
-  BaseOrigin
+  OriginOption
 } from "@domain/repositories/origin.repository";
 import { USER_MOCK, USER_MOCK_2 } from "./user.mock";
 import {
@@ -42,16 +42,11 @@ export const ORIGINS_MOCK: Origin[] = Array.from(
   })
 );
 
-export const ORIGINS_OPTIONS_MOCK: BaseOrigin[] = Array.from(
+export const ORIGINS_OPTIONS_MOCK: OriginOption[] = Array.from(
   { length: 5 },
   (_, index) => ({
     id: index + 1,
-    name: `Origin ${index + 1}`,
-    description: `Origin ${index + 1} description`,
-    color: "#FF0000",
-    icon: "test-icon",
-    createdAt: new Date(),
-    updatedAt: new Date()
+    name: `Origin ${index + 1}`
   })
 );
 
@@ -95,7 +90,7 @@ export const ORIGINS_PAGINATION_AND_SORT_TO_REPOSITORY_PARAMS_MOCK = {
   ...ORIGINS_SORT_MOCK
 };
 
-export const PAGINATED_ORIGINS_OPTIONS_MOCK: PaginatedResult<BaseOrigin> = {
+export const PAGINATED_ORIGINS_OPTIONS_MOCK: PaginatedResult<OriginOption> = {
   data: ORIGINS_OPTIONS_MOCK,
   pagination: ORIGIN_PAGINATION_META_MOCK
 };

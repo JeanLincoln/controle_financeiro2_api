@@ -3,10 +3,12 @@ import { User } from "@domain/entities/user.entity";
 import {
   CreateOrUpdateAllCategoryProps,
   CategoryRepository,
-  CategoryFindAllToRepositoryParams
+  CategoryFindAllToRepositoryParams,
+  CategoryFindOptionsToRepositoryParams,
+  CategoryOption
 } from "@domain/repositories/category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, In } from "typeorm";
+import { Repository, In, ILike } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
@@ -26,6 +28,27 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
       skip,
       take,
       order: sortQuery(sortBy, sortOrder)
+    });
+
+    return {
+      data: categories,
+      total
+    };
+  }
+
+  async options(
+    userId: number,
+    { skip, take, sortOrder, search }: CategoryFindOptionsToRepositoryParams
+  ): Promise<RepositoryToPaginationReturn<CategoryOption>> {
+    const [categories, total] = await this.categoryRepository.findAndCount({
+      where: {
+        user: { id: userId },
+        ...(search && { name: ILike(`%${search}%`) })
+      },
+      select: ["id", "name"],
+      skip,
+      take,
+      order: sortQuery("name", sortOrder)
     });
 
     return {

@@ -31,9 +31,9 @@ import {
   ParamOriginAuthenticatedRequest
 } from "@use-cases/origin/find-and-validate/find-and-validate.use-case";
 import { OriginValidationGuard } from "@infra/commons/guards/origin/origin-validation.guard";
-import { OptionsOriginDto } from "./dto/find-options.dto";
-import { BaseOrigin } from "@domain/repositories/origin.repository";
+import { OptionsOriginDto } from "./dto/options.dto";
 import { OptionsOriginUseCase } from "@use-cases/origin/options/options.use-case";
+import { OriginOption } from "@domain/repositories/origin.repository";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -67,7 +67,7 @@ export class OriginController {
   async options(
     @Req() req: AuthenticatedRequest,
     @Query() queryParams: OptionsOriginDto
-  ): Promise<PaginatedResult<BaseOrigin>> {
+  ): Promise<PaginatedResult<OriginOption>> {
     return this.optionsOriginUseCase.execute(req.user.id, queryParams);
   }
 

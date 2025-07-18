@@ -3,8 +3,8 @@ import {
   OriginRepository,
   CreateOrUpdateAllOriginProps,
   OriginFindAllToRepositoryParams,
-  BaseOrigin,
-  OriginFindOptionsToRepositoryParams
+  OriginFindOptionsToRepositoryParams,
+  type OriginOption
 } from "@domain/repositories/origin.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ILike, Repository } from "typeorm";
@@ -42,12 +42,13 @@ export class TypeOrmOriginRepository implements OriginRepository {
   async options(
     userId: number,
     { skip, take, sortOrder, search }: OriginFindOptionsToRepositoryParams
-  ): Promise<RepositoryToPaginationReturn<BaseOrigin>> {
+  ): Promise<RepositoryToPaginationReturn<OriginOption>> {
     const [origins, total] = await this.originRepository.findAndCount({
       where: {
         user: { id: userId },
         ...(search && { name: ILike(`%${search}%`) })
       },
+      select: ["id", "name"],
       skip,
       take,
       order: sortQuery("name", sortOrder)

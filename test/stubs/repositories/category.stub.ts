@@ -11,6 +11,10 @@ export class CategoryRepositoryStub implements CategoryRepository {
     return Promise.resolve({ data: [], total: 0 });
   }
 
+  async options(): Promise<RepositoryToPaginationReturn<Category>> {
+    return Promise.resolve({ data: [], total: 0 });
+  }
+
   async findById(): Promise<Category | null> {
     return Promise.resolve(null);
   }

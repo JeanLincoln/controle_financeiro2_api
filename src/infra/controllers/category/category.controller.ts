@@ -28,6 +28,9 @@ import { Category } from "@domain/entities/category.entity";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { FindAllCategoriesQueryParamDto } from "./dto/find-all.dto";
 import { ParamCategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import { OptionsCategoryDto } from "./dto/options.dto";
+import { CategoryOption } from "@domain/repositories/category.repository";
+import { OptionsCategoryUseCase } from "@use-cases/category/options/options.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -37,7 +40,8 @@ export class CategoryController {
     private readonly createCategoryUseCase: CreateCategoryUseCase,
     private readonly findAllCategoryUseCase: FindAllCategoryUseCase,
     private readonly updateCategoryUseCase: UpdateCategoryUseCase,
-    private readonly deleteCategoryUseCase: DeleteCategoryUseCase
+    private readonly deleteCategoryUseCase: DeleteCategoryUseCase,
+    private readonly optionsCategoryUseCase: OptionsCategoryUseCase
   ) {}
 
   @Post()
@@ -54,6 +58,14 @@ export class CategoryController {
     @Query() queryParams: FindAllCategoriesQueryParamDto
   ): Promise<PaginatedResult<Category> | void> {
     return this.findAllCategoryUseCase.execute(req.user.id, queryParams);
+  }
+
+  @Get("options")
+  async options(
+    @Req() req: AuthenticatedRequest,
+    @Query() queryParams: OptionsCategoryDto
+  ): Promise<PaginatedResult<CategoryOption>> {
+    return this.optionsCategoryUseCase.execute(req.user.id, queryParams);
   }
 
   @ExcludeFields("user")
