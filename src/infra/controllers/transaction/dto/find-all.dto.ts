@@ -15,7 +15,6 @@ import {
   Min
 } from "class-validator";
 import { Transform } from "class-transformer";
-import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
 import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
 import { TransactionType } from "@domain/entities/transaction.entity";
 
@@ -85,22 +84,8 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
-  @DateRangeValidation()
   @IsOptional()
-  startDate?: Date;
-
-  @ApiPropertyOptional({
-    description:
-      "Filter transactions that start before or on this date (inclusive). Format: YYYY-MM-DD",
-    example: "2025-02-01",
-    required: false,
-    type: String,
-    format: "date"
-  })
-  @Transform(({ value }) => (value ? new Date(value) : value))
-  @IsDate()
-  @IsOptional()
-  endDate?: Date;
+  transactionDate?: Date;
 
   @ApiPropertyOptional({
     description: "Filter transactions that was originated from this origin id.",
@@ -142,7 +127,6 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
-  @DateRangeValidation()
   @IsOptional()
   createdAt?: Date;
 
@@ -156,7 +140,6 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
-  @DateRangeValidation()
   @IsOptional()
   updatedAt?: Date;
 }

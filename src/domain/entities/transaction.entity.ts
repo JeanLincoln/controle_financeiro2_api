@@ -54,17 +54,9 @@ export class Transaction {
 
   @Column({
     type: "date",
-    name: "start_date"
+    name: "transaction_date"
   })
-  startDate: Date;
-
-  @Column({
-    type: "date",
-    name: "end_date",
-    nullable: true,
-    default: null
-  })
-  endDate?: Date | null;
+  transactionDate: Date;
 
   @Column({
     type: "int",

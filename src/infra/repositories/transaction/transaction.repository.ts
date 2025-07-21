@@ -20,8 +20,7 @@ import {
   FindOptionsWhere,
   ILike,
   In,
-  IsNull,
-  Or
+  And
 } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
@@ -63,8 +62,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       take,
       sortBy,
       sortOrder,
-      startDate,
-      endDate,
+      transactionDate,
       name,
       description,
       type,
@@ -78,8 +76,9 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
   ): Promise<RepositoryToPaginationReturn<Transaction>> {
     const whereClause: FindOptionsWhere<Transaction> = {
       user: { id: userId },
-      ...(startDate && { startDate: MoreThanOrEqual(startDate) }),
-      ...(endDate && { endDate: LessThanOrEqual(endDate) }),
+      ...(transactionDate && {
+        transactionDate: MoreThanOrEqual(transactionDate)
+      }),
       ...(name && { name: ILike(`%${name}%`) }),
       ...(description && { description: ILike(`%${description}%`) }),
       ...(type && { type }),
@@ -172,8 +171,10 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.EXPENSE,
-        startDate: MoreThanOrEqual(currentMonthStart),
-        endDate: Or(LessThanOrEqual(currentMonthEnd), IsNull())
+        transactionDate: And(
+          MoreThanOrEqual(currentMonthStart),
+          LessThanOrEqual(currentMonthEnd)
+        )
       },
       select: {
         amount: true
@@ -184,8 +185,10 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.INCOME,
-        startDate: MoreThanOrEqual(currentMonthStart),
-        endDate: Or(LessThanOrEqual(currentMonthEnd), IsNull())
+        transactionDate: And(
+          MoreThanOrEqual(currentMonthStart),
+          LessThanOrEqual(currentMonthEnd)
+        )
       },
       select: {
         amount: true
@@ -196,8 +199,10 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.EXPENSE,
-        startDate: MoreThanOrEqual(lastMonthStart),
-        endDate: Or(LessThanOrEqual(lastMonthEnd), IsNull())
+        transactionDate: And(
+          MoreThanOrEqual(lastMonthStart),
+          LessThanOrEqual(lastMonthEnd)
+        )
       },
       select: {
         amount: true
@@ -208,8 +213,10 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.INCOME,
-        startDate: MoreThanOrEqual(lastMonthStart),
-        endDate: Or(LessThanOrEqual(lastMonthEnd), IsNull())
+        transactionDate: And(
+          MoreThanOrEqual(lastMonthStart),
+          LessThanOrEqual(lastMonthEnd)
+        )
       },
       select: {
         amount: true

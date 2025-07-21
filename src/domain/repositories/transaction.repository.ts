@@ -35,8 +35,7 @@ export enum TransactionsSortableFieldsEnum {
   description = "description",
   type = "type",
   amount = "amount",
-  startDate = "startDate",
-  endDate = "endDate",
+  transactionDate = "transactionDate",
   createdAt = "createdAt",
   updatedAt = "updatedAt",
   originName = "origin.name"
@@ -47,8 +46,7 @@ export type TransactionFindAllFilters = {
   description?: string;
   type?: TransactionType;
   amount?: number;
-  startDate?: Date;
-  endDate?: Date;
+  transactionDate?: Date;
   createdAt?: Date;
   updatedAt?: Date;
   originId?: number;
