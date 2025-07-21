@@ -86,7 +86,9 @@ const calculatePercentageVariation = (
 
   if (monthsHasNoTransactions || infiniteGrowth || totalDrop) return null;
 
-  return ((current - previous) / Math.abs(previous)) * 100;
+  const percentage = ((current - previous) / Math.abs(previous)) * 100;
+
+  return Number(percentage.toFixed(2));
 };
 
 export const handleCurrentAndLastVariations = ({
