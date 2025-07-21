@@ -7,7 +7,6 @@ import {
 import { SortOrderEnum } from "@domain/entities/common/sort.entity";
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import {
-  IsBoolean,
   IsDate,
   IsEnum,
   IsNumber,
@@ -75,14 +74,6 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @Transform(({ value }) => (value ? Number(value) : value))
   @IsOptional()
   amount?: number;
-
-  @ApiPropertyOptional({
-    description: "Filter transactions that are recurring."
-  })
-  @IsOptional()
-  @IsBoolean()
-  @Transform(({ value }) => value === "true" || value === true)
-  isRecurring?: boolean;
 
   @ApiPropertyOptional({
     description:

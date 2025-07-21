@@ -20,24 +20,8 @@ interface HandleCurrentAndLastVariationsProps {
   lastMonthTotalIncomesAmount: number;
 }
 
-interface HandleMonthsCountsProps {
-  currentMonthTotalExpensesTransactions: number;
-  currentMonthTotalIncomesTransactions: number;
-  currentMonthTotalRecurringTransactions: number;
-  currentMonthTotalNonRecurringTransactions: number;
-  lastMonthTotalExpensesTransactions: number;
-  lastMonthTotalIncomesTransactions: number;
-  lastMonthTotalRecurringTransactions: number;
-  lastMonthTotalNonRecurringTransactions: number;
-}
-
 type HandleCurrentBalanceProps = CurrentMonthTransactions &
-  LastMonthTransactions & {
-    currentMonthNonRecurringTransactions: number;
-    currentMonthRecurringTransactions: number;
-    lastMonthNonRecurringTransactions: number;
-    lastMonthRecurringTransactions: number;
-  };
+  LastMonthTransactions;
 
 export const handleLastMonthTransactions = ({
   lastMonthExpenses,
@@ -148,44 +132,11 @@ export const handleCurrentAndLastVariations = ({
   };
 };
 
-export const handleMonthsCounts = ({
-  currentMonthTotalExpensesTransactions,
-  currentMonthTotalIncomesTransactions,
-  currentMonthTotalRecurringTransactions,
-  currentMonthTotalNonRecurringTransactions,
-  lastMonthTotalExpensesTransactions,
-  lastMonthTotalIncomesTransactions,
-  lastMonthTotalRecurringTransactions,
-  lastMonthTotalNonRecurringTransactions
-}: HandleMonthsCountsProps) => {
-  const totalTransactions =
-    currentMonthTotalExpensesTransactions +
-    currentMonthTotalIncomesTransactions -
-    (lastMonthTotalExpensesTransactions + lastMonthTotalIncomesTransactions);
-
-  const recurringTransactions =
-    currentMonthTotalRecurringTransactions -
-    lastMonthTotalRecurringTransactions;
-  const nonRecurringTransactions =
-    currentMonthTotalNonRecurringTransactions -
-    lastMonthTotalNonRecurringTransactions;
-
-  return {
-    totalTransactions,
-    recurringTransactions,
-    nonRecurringTransactions
-  };
-};
-
 export const handleCurrentBalance = ({
   lastMonthExpenses,
   lastMonthIncomes,
   currentMonthExpenses,
-  currentMonthIncomes,
-  currentMonthNonRecurringTransactions,
-  currentMonthRecurringTransactions,
-  lastMonthNonRecurringTransactions,
-  lastMonthRecurringTransactions
+  currentMonthIncomes
 }: HandleCurrentBalanceProps): CurrentBalance => {
   const {
     lastMonthTotalTransactions,
@@ -221,35 +172,18 @@ export const handleCurrentBalance = ({
     lastMonthTotalIncomesAmount
   });
 
-  const { nonRecurringTransactions, recurringTransactions, totalTransactions } =
-    handleMonthsCounts({
-      currentMonthTotalExpensesTransactions: currentMonthExpenses[1],
-      currentMonthTotalIncomesTransactions: currentMonthIncomes[1],
-      currentMonthTotalNonRecurringTransactions:
-        currentMonthNonRecurringTransactions,
-      currentMonthTotalRecurringTransactions: currentMonthRecurringTransactions,
-      lastMonthTotalExpensesTransactions: lastMonthExpenses[1],
-      lastMonthTotalIncomesTransactions: lastMonthIncomes[1],
-      lastMonthTotalNonRecurringTransactions: lastMonthNonRecurringTransactions,
-      lastMonthTotalRecurringTransactions: lastMonthRecurringTransactions
-    });
-
   return {
     lastMonth: {
       totalExpenses: lastMonthTotalExpensesAmount,
       totalIncomes: lastMonthTotalIncomesAmount,
       totalBalance: lastMonthTotalBalance,
-      totalTransactions: lastMonthTotalTransactions,
-      totalRecurringTransactions: lastMonthRecurringTransactions,
-      totalNonRecurringTransactions: lastMonthNonRecurringTransactions
+      totalTransactions: lastMonthTotalTransactions
     },
     currentMonth: {
       totalExpenses: currentMonthTotalExpensesAmount,
       totalIncomes: currentMonthTotalIncomesAmount,
       totalBalance: currentMonthTotalBalance,
-      totalTransactions: currentMonthTotalTransactions,
-      totalRecurringTransactions: currentMonthRecurringTransactions,
-      totalNonRecurringTransactions: currentMonthNonRecurringTransactions
+      totalTransactions: currentMonthTotalTransactions
     },
     variation: {
       expenses: {
@@ -263,10 +197,7 @@ export const handleCurrentBalance = ({
       balance: {
         total: balanceVariation,
         percentage: balancePercentageVariation
-      },
-      transactions: totalTransactions,
-      recurringTransactions,
-      nonRecurringTransactions
+      }
     }
   };
 };

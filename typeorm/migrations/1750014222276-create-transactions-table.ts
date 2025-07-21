@@ -56,11 +56,6 @@ export class CreateTransactionsTable1750014222276
             type: "date"
           },
           {
-            name: "is_recurring",
-            type: "boolean",
-            default: false
-          },
-          {
             name: "end_date",
             type: "date",
             isNullable: true

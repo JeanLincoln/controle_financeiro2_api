@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import {
-  IsBoolean,
   IsDate,
   IsEnum,
   IsNotEmpty,
@@ -74,14 +73,6 @@ export class CreateTransactionDto {
   @IsDate()
   @IsOptional()
   endDate?: Date;
-
-  @ApiProperty({
-    example: "true",
-    description: "Indicates if the transaction is recurring"
-  })
-  @IsNotEmpty()
-  @IsBoolean()
-  isRecurring: boolean;
 
   @ApiProperty({
     example: "1",

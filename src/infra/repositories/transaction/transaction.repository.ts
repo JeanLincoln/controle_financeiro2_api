@@ -69,7 +69,6 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       description,
       type,
       amount,
-      isRecurring,
       createdAt,
       updatedAt,
       originId,
@@ -85,7 +84,6 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       ...(description && { description: ILike(`%${description}%`) }),
       ...(type && { type }),
       ...(amount && { amount }),
-      ...(isRecurring !== undefined && { isRecurring }),
       ...(createdAt && { createdAt }),
       ...(updatedAt && { updatedAt }),
       ...(originId && { origin: { id: originId } }),
@@ -218,55 +216,11 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       }
     });
 
-    const currentMonthRecurringTransactions =
-      await this.transactionRepository.count({
-        where: {
-          user: { id: userId },
-          isRecurring: true,
-          startDate: MoreThanOrEqual(currentMonthStart),
-          endDate: Or(LessThanOrEqual(currentMonthEnd), IsNull())
-        }
-      });
-
-    const currentMonthNonRecurringTransactions =
-      await this.transactionRepository.count({
-        where: {
-          user: { id: userId },
-          isRecurring: false,
-          startDate: MoreThanOrEqual(currentMonthStart),
-          endDate: Or(LessThanOrEqual(currentMonthEnd), IsNull())
-        }
-      });
-
-    const lastMonthRecurringTransactions =
-      await this.transactionRepository.count({
-        where: {
-          user: { id: userId },
-          isRecurring: true,
-          startDate: MoreThanOrEqual(lastMonthStart),
-          endDate: Or(LessThanOrEqual(lastMonthEnd), IsNull())
-        }
-      });
-
-    const lastMonthNonRecurringTransactions =
-      await this.transactionRepository.count({
-        where: {
-          user: { id: userId },
-          isRecurring: false,
-          startDate: MoreThanOrEqual(lastMonthStart),
-          endDate: Or(LessThanOrEqual(lastMonthEnd), IsNull())
-        }
-      });
-
     const currentBalance = handleCurrentBalance({
       lastMonthExpenses,
       lastMonthIncomes,
       currentMonthExpenses,
-      currentMonthIncomes,
-      currentMonthNonRecurringTransactions,
-      currentMonthRecurringTransactions,
-      lastMonthNonRecurringTransactions,
-      lastMonthRecurringTransactions
+      currentMonthIncomes
     });
 
     return currentBalance;
