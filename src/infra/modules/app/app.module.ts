@@ -11,6 +11,7 @@ import { CategoryModule } from "../category/category.module";
 import { SubCategoryModule } from "../sub-category/sub-category.module";
 import { OriginModule } from "../origin/origin.module";
 import { TransactionModule } from "../transaction/transaction.module";
+import { DashboardModule } from "../dashboard/dashboard.module";
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { TransactionModule } from "../transaction/transaction.module";
     CategoryModule,
     SubCategoryModule,
     OriginModule,
-    TransactionModule
+    TransactionModule,
+    DashboardModule
   ]
 })
 export class AppModule {}
