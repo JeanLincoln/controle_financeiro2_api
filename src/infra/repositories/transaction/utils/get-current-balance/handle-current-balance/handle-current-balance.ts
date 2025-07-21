@@ -100,9 +100,7 @@ const calculatePercentageVariation = (
   const infiniteGrowth = previous === 0 && current > 0;
   const totalDrop = previous > 0 && current === 0;
 
-  if (monthsHasNoTransactions) return null;
-  if (infiniteGrowth) return 100;
-  if (totalDrop) return -100;
+  if (monthsHasNoTransactions || infiniteGrowth || totalDrop) return null;
 
   return ((current - previous) / Math.abs(previous)) * 100;
 };
