@@ -2,7 +2,8 @@ import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination
 import { Transaction } from "@domain/entities/transaction.entity";
 import {
   TransactionRepository,
-  type CurrentBalance
+  type CurrentMonthTransactions,
+  type LastMonthTransactions
 } from "@domain/repositories/transaction.repository";
 
 export class TransactionRepositoryStub implements TransactionRepository {
@@ -30,35 +31,14 @@ export class TransactionRepositoryStub implements TransactionRepository {
     return Promise.resolve([]);
   }
 
-  getCurrentBalance(): Promise<CurrentBalance> {
+  getCurrentBalance(): Promise<
+    CurrentMonthTransactions & LastMonthTransactions
+  > {
     return Promise.resolve({
-      currentMonth: {
-        totalExpenses: 0,
-        totalIncomes: 0,
-        totalBalance: 0,
-        totalTransactions: 0
-      },
-      lastMonth: {
-        totalExpenses: 0,
-        totalIncomes: 0,
-        totalBalance: 0,
-        totalTransactions: 0
-      },
-      variation: {
-        expenses: {
-          total: 0,
-          percentage: 0
-        },
-        incomes: {
-          total: 0,
-          percentage: 0
-        },
-        balance: {
-          total: 0,
-          percentage: 0
-        },
-        transactions: 0
-      }
+      currentMonthExpenses: [[], 0],
+      currentMonthIncomes: [[], 0],
+      lastMonthExpenses: [[], 0],
+      lastMonthIncomes: [[], 0]
     });
   }
 }
