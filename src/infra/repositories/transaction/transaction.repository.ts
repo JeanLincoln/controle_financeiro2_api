@@ -9,7 +9,8 @@ import {
   TransactionRepository,
   CreateOrUpdateAllTransactionProps,
   TransactionFindAllToRepositoryParams,
-  CurrentBalance
+  type CurrentMonthTransactions,
+  type LastMonthTransactions
 } from "@domain/repositories/transaction.repository";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -25,7 +26,6 @@ import {
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
-import { handleCurrentBalance } from "./utils/get-current-balance/handle-current-balance/handle-current-balance";
 import { getLastAndCurrentDates } from "src/utils/get-last-and-current-dates/get-last-and-current-dates";
 
 @Injectable()
@@ -163,7 +163,9 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
     await this.transactionRepository.delete(transactionToDelete.id);
   }
 
-  async getCurrentBalance(userId: number): Promise<CurrentBalance> {
+  async getCurrentBalance(
+    userId: number
+  ): Promise<CurrentMonthTransactions & LastMonthTransactions> {
     const { currentMonthStart, currentMonthEnd, lastMonthStart, lastMonthEnd } =
       getLastAndCurrentDates();
 
@@ -223,13 +225,11 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       }
     });
 
-    const currentBalance = handleCurrentBalance({
+    return {
       lastMonthExpenses,
       lastMonthIncomes,
       currentMonthExpenses,
       currentMonthIncomes
-    });
-
-    return currentBalance;
+    };
   }
 }

@@ -62,33 +62,16 @@ export type TransactionFindAllToRepositoryParams = RepositoryPaginationParams &
   SortParams<TransactionsSortableFieldsEnum> &
   TransactionFindAllFilters;
 
-export interface CurrentBalance {
-  currentMonth: {
-    totalExpenses: number;
-    totalIncomes: number;
-    totalBalance: number;
-    totalTransactions: number;
-  };
-  lastMonth: {
-    totalExpenses: number;
-    totalIncomes: number;
-    totalBalance: number;
-    totalTransactions: number;
-  };
-  variation: {
-    expenses: {
-      total: number;
-      percentage: number | null;
-    };
-    incomes: {
-      total: number;
-      percentage: number | null;
-    };
-    balance: {
-      total: number;
-      percentage: number | null;
-    };
-  };
+export type TransactionFindAndCount = [Transaction[], number];
+
+export interface CurrentMonthTransactions {
+  currentMonthExpenses: TransactionFindAndCount;
+  currentMonthIncomes: TransactionFindAndCount;
+}
+
+export interface LastMonthTransactions {
+  lastMonthExpenses: TransactionFindAndCount;
+  lastMonthIncomes: TransactionFindAndCount;
 }
 
 export abstract class TransactionRepository {
@@ -114,5 +97,7 @@ export abstract class TransactionRepository {
     updateData: CreateOrUpdateAllTransactionProps
   ): Promise<void>;
   abstract delete(transactionToDelete: Transaction): Promise<void>;
-  abstract getCurrentBalance(userId: number): Promise<CurrentBalance>;
+  abstract getCurrentBalance(
+    userId: number
+  ): Promise<CurrentMonthTransactions & LastMonthTransactions>;
 }
