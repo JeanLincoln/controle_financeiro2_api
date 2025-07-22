@@ -132,13 +132,16 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
       .orderBy("SUM(transaction.amount)", "DESC")
       .limit(TOP_FIVE_CATEGORIES)
       .select([
-        "ROW_NUMBER() OVER (ORDER BY SUM(transaction.amount) DESC) as ranking",
         "category.id",
         "category.name",
         "category.icon",
         "category.color",
         "SUM(transaction.amount) as totalAmount"
       ])
+      .addSelect(
+        `ROW_NUMBER() OVER (ORDER BY SUM(transaction.amount) DESC)`,
+        "ranking"
+      )
       .getRawMany();
   }
 }
