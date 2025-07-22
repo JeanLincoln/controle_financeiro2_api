@@ -1,16 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import {
-  IsBoolean,
   IsDate,
   IsEnum,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsString,
   Min
 } from "class-validator";
-import { DateRangeValidation } from "./decorators/transactions-custom-validations.decorator";
 import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
 import { TransactionType } from "@domain/entities/transaction.entity";
 
@@ -59,29 +56,7 @@ export class CreateTransactionDto {
   })
   @Transform(({ value }) => (value ? new Date(value) : value))
   @IsDate()
-  @DateRangeValidation()
-  startDate: Date;
-
-  @ApiProperty({
-    description:
-      "Filter transactions that start before or on this date (inclusive). Format: YYYY-MM-DD",
-    example: "2025-02-01",
-    required: false,
-    type: String,
-    format: "date"
-  })
-  @Transform(({ value }) => (value ? new Date(value) : value))
-  @IsDate()
-  @IsOptional()
-  endDate?: Date;
-
-  @ApiProperty({
-    example: "true",
-    description: "Indicates if the transaction is recurring"
-  })
-  @IsNotEmpty()
-  @IsBoolean()
-  isRecurring: boolean;
+  transactionDate: Date;
 
   @ApiProperty({
     example: "1",

@@ -35,9 +35,7 @@ export enum TransactionsSortableFieldsEnum {
   description = "description",
   type = "type",
   amount = "amount",
-  startDate = "startDate",
-  isRecurring = "isRecurring",
-  endDate = "endDate",
+  transactionDate = "transactionDate",
   createdAt = "createdAt",
   updatedAt = "updatedAt",
   originName = "origin.name"
@@ -48,9 +46,7 @@ export type TransactionFindAllFilters = {
   description?: string;
   type?: TransactionType;
   amount?: number;
-  isRecurring?: boolean;
-  startDate?: Date;
-  endDate?: Date;
+  transactionDate?: Date;
   createdAt?: Date;
   updatedAt?: Date;
   originId?: number;
@@ -72,16 +68,12 @@ export interface CurrentBalance {
     totalIncomes: number;
     totalBalance: number;
     totalTransactions: number;
-    totalRecurringTransactions: number;
-    totalNonRecurringTransactions: number;
   };
   lastMonth: {
     totalExpenses: number;
     totalIncomes: number;
     totalBalance: number;
     totalTransactions: number;
-    totalRecurringTransactions: number;
-    totalNonRecurringTransactions: number;
   };
   variation: {
     expenses: {
@@ -96,9 +88,6 @@ export interface CurrentBalance {
       total: number;
       percentage: number | null;
     };
-    transactions: number;
-    recurringTransactions: number;
-    nonRecurringTransactions: number;
   };
 }
 

@@ -36,17 +36,13 @@ export class TransactionRepositoryStub implements TransactionRepository {
         totalExpenses: 0,
         totalIncomes: 0,
         totalBalance: 0,
-        totalTransactions: 0,
-        totalRecurringTransactions: 0,
-        totalNonRecurringTransactions: 0
+        totalTransactions: 0
       },
       lastMonth: {
         totalExpenses: 0,
         totalIncomes: 0,
         totalBalance: 0,
-        totalTransactions: 0,
-        totalRecurringTransactions: 0,
-        totalNonRecurringTransactions: 0
+        totalTransactions: 0
       },
       variation: {
         expenses: {
@@ -61,9 +57,7 @@ export class TransactionRepositoryStub implements TransactionRepository {
           total: 0,
           percentage: 0
         },
-        transactions: 0,
-        recurringTransactions: 0,
-        nonRecurringTransactions: 0
+        transactions: 0
       }
     });
   }

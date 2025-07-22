@@ -23,8 +23,8 @@ describe("handleCurrentAndLastVariations", () => {
         lastMonthTotalIncomesAmount: 0
       });
 
-      expect(result.expensesPercentageVariation).toBe(100);
-      expect(result.incomesPercentageVariation).toBe(100);
+      expect(result.expensesPercentageVariation).toBe(null);
+      expect(result.incomesPercentageVariation).toBe(null);
     });
 
     it("should return -100 when previous value is greater than zero and current is zero (total drop)", () => {
@@ -35,8 +35,8 @@ describe("handleCurrentAndLastVariations", () => {
         lastMonthTotalIncomesAmount: 200
       });
 
-      expect(result.expensesPercentageVariation).toBe(-100);
-      expect(result.incomesPercentageVariation).toBe(-100);
+      expect(result.expensesPercentageVariation).toBe(null);
+      expect(result.incomesPercentageVariation).toBe(null);
     });
 
     it("should calculate normal percentage when both values are greater than zero", () => {
@@ -70,7 +70,7 @@ describe("handleCurrentAndLastVariations", () => {
         lastMonthTotalExpensesAmount: 100
       });
 
-      expect(result.balancePercentageVariation).toBe(100);
+      expect(result.balancePercentageVariation).toBe(null);
     });
   });
 

@@ -20,14 +20,13 @@ import {
   FindOptionsWhere,
   ILike,
   In,
-  IsNull,
-  Or
+  And
 } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
-import { getLastAndCurrentDates } from "./utils/get-current-balance/get-last-and-current-dates/get-last-and-current-dates";
 import { handleCurrentBalance } from "./utils/get-current-balance/handle-current-balance/handle-current-balance";
+import { getLastAndCurrentDates } from "src/utils/get-last-and-current-dates/get-last-and-current-dates";
 
 @Injectable()
 export class TypeOrmTransactionRepository implements TransactionRepository {
@@ -63,13 +62,11 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       take,
       sortBy,
       sortOrder,
-      startDate,
-      endDate,
+      transactionDate,
       name,
       description,
       type,
       amount,
-      isRecurring,
       createdAt,
       updatedAt,
       originId,
@@ -79,13 +76,13 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
   ): Promise<RepositoryToPaginationReturn<Transaction>> {
     const whereClause: FindOptionsWhere<Transaction> = {
       user: { id: userId },
-      ...(startDate && { startDate: MoreThanOrEqual(startDate) }),
-      ...(endDate && { endDate: LessThanOrEqual(endDate) }),
+      ...(transactionDate && {
+        transactionDate: MoreThanOrEqual(transactionDate)
+      }),
       ...(name && { name: ILike(`%${name}%`) }),
       ...(description && { description: ILike(`%${description}%`) }),
       ...(type && { type }),
       ...(amount && { amount }),
-      ...(isRecurring !== undefined && { isRecurring }),
       ...(createdAt && { createdAt }),
       ...(updatedAt && { updatedAt }),
       ...(originId && { origin: { id: originId } }),
@@ -174,8 +171,10 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.EXPENSE,
-        startDate: MoreThanOrEqual(currentMonthStart),
-        endDate: Or(LessThanOrEqual(currentMonthEnd), IsNull())
+        transactionDate: And(
+          MoreThanOrEqual(currentMonthStart),
+          LessThanOrEqual(currentMonthEnd)
+        )
       },
       select: {
         amount: true
@@ -186,8 +185,10 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.INCOME,
-        startDate: MoreThanOrEqual(currentMonthStart),
-        endDate: Or(LessThanOrEqual(currentMonthEnd), IsNull())
+        transactionDate: And(
+          MoreThanOrEqual(currentMonthStart),
+          LessThanOrEqual(currentMonthEnd)
+        )
       },
       select: {
         amount: true
@@ -198,8 +199,10 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.EXPENSE,
-        startDate: MoreThanOrEqual(lastMonthStart),
-        endDate: Or(LessThanOrEqual(lastMonthEnd), IsNull())
+        transactionDate: And(
+          MoreThanOrEqual(lastMonthStart),
+          LessThanOrEqual(lastMonthEnd)
+        )
       },
       select: {
         amount: true
@@ -210,63 +213,21 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.INCOME,
-        startDate: MoreThanOrEqual(lastMonthStart),
-        endDate: Or(LessThanOrEqual(lastMonthEnd), IsNull())
+        transactionDate: And(
+          MoreThanOrEqual(lastMonthStart),
+          LessThanOrEqual(lastMonthEnd)
+        )
       },
       select: {
         amount: true
       }
     });
 
-    const currentMonthRecurringTransactions =
-      await this.transactionRepository.count({
-        where: {
-          user: { id: userId },
-          isRecurring: true,
-          startDate: MoreThanOrEqual(currentMonthStart),
-          endDate: Or(LessThanOrEqual(currentMonthEnd), IsNull())
-        }
-      });
-
-    const currentMonthNonRecurringTransactions =
-      await this.transactionRepository.count({
-        where: {
-          user: { id: userId },
-          isRecurring: false,
-          startDate: MoreThanOrEqual(currentMonthStart),
-          endDate: Or(LessThanOrEqual(currentMonthEnd), IsNull())
-        }
-      });
-
-    const lastMonthRecurringTransactions =
-      await this.transactionRepository.count({
-        where: {
-          user: { id: userId },
-          isRecurring: true,
-          startDate: MoreThanOrEqual(lastMonthStart),
-          endDate: Or(LessThanOrEqual(lastMonthEnd), IsNull())
-        }
-      });
-
-    const lastMonthNonRecurringTransactions =
-      await this.transactionRepository.count({
-        where: {
-          user: { id: userId },
-          isRecurring: false,
-          startDate: MoreThanOrEqual(lastMonthStart),
-          endDate: Or(LessThanOrEqual(lastMonthEnd), IsNull())
-        }
-      });
-
     const currentBalance = handleCurrentBalance({
       lastMonthExpenses,
       lastMonthIncomes,
       currentMonthExpenses,
-      currentMonthIncomes,
-      currentMonthNonRecurringTransactions,
-      currentMonthRecurringTransactions,
-      lastMonthNonRecurringTransactions,
-      lastMonthRecurringTransactions
+      currentMonthIncomes
     });
 
     return currentBalance;

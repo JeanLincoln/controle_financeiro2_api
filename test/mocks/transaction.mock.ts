@@ -28,10 +28,8 @@ export const CREATE_OR_UPDATE_TRANSACTION_MOCK: CreateOrUpdateAllTransactionProp
     name: "Transaction",
     description: "Transaction description",
     amount: 100,
-    startDate: new Date(),
-    type: TransactionType.INCOME,
-    endDate: null,
-    isRecurring: false
+    transactionDate: new Date(),
+    type: TransactionType.INCOME
   };
 
 export const TRANSACTIONS_MOCK: Transaction[] = Array.from(
@@ -43,9 +41,7 @@ export const TRANSACTIONS_MOCK: Transaction[] = Array.from(
     type:
       (index + 1) % 2 === 0 ? TransactionType.INCOME : TransactionType.EXPENSE,
     amount: (index + 1) * 10,
-    startDate: new Date(),
-    endDate: null,
-    isRecurring: index % 2 === 0,
+    transactionDate: new Date(),
     categories: [],
     subCategories: [],
     createdAt: new Date(),

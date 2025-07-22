@@ -1,6 +1,9 @@
 import { Category } from "@domain/entities/category.entity";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
-import { CategoryRepository } from "@domain/repositories/category.repository";
+import {
+  CategoryRepository,
+  type CategoryRanking
+} from "@domain/repositories/category.repository";
 
 export class CategoryRepositoryStub implements CategoryRepository {
   async create(): Promise<void> {
@@ -33,5 +36,9 @@ export class CategoryRepositoryStub implements CategoryRepository {
 
   async deleteByUserId(): Promise<void> {
     return Promise.resolve();
+  }
+
+  async getCurrentMonthCategories(): Promise<CategoryRanking> {
+    return Promise.resolve([]);
   }
 }

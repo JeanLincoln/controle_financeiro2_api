@@ -52,18 +52,8 @@ export class CreateTransactionsTable1750014222276
             scale: 2
           },
           {
-            name: "start_date",
+            name: "transaction_date",
             type: "date"
-          },
-          {
-            name: "is_recurring",
-            type: "boolean",
-            default: false
-          },
-          {
-            name: "end_date",
-            type: "date",
-            isNullable: true
           },
           {
             name: "user_id",

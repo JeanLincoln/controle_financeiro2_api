@@ -48,6 +48,13 @@ export type CategoryFindOptionsToRepositoryParams = RepositoryPaginationParams &
   SortOrderParam &
   CategoriesSearchField;
 
+interface RankedCategory extends Omit<BaseCategory, "createdAt" | "updatedAt"> {
+  ranking: number;
+  totalAmount: number;
+}
+
+export type CategoryRanking = RankedCategory[];
+
 export abstract class CategoryRepository {
   abstract findAll(
     userId: number,
@@ -70,4 +77,5 @@ export abstract class CategoryRepository {
   ): Promise<void>;
   abstract delete(id: number): Promise<void>;
   abstract deleteByUserId(userId: number): Promise<void>;
+  abstract getCurrentMonthCategories(userId: number): Promise<CategoryRanking>;
 }

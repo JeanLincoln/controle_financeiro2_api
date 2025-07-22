@@ -54,24 +54,9 @@ export class Transaction {
 
   @Column({
     type: "date",
-    name: "start_date"
+    name: "transaction_date"
   })
-  startDate: Date;
-
-  @Column({
-    type: "boolean",
-    default: false,
-    name: "is_recurring"
-  })
-  isRecurring: boolean;
-
-  @Column({
-    type: "date",
-    name: "end_date",
-    nullable: true,
-    default: null
-  })
-  endDate?: Date | null;
+  transactionDate: Date;
 
   @Column({
     type: "int",
