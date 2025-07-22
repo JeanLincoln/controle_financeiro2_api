@@ -102,10 +102,10 @@ export class BalanceUseCase {
     };
   }
 
-  private calculatePercentageVariation = (
+  private calculatePercentageVariation(
     current: number,
     previous: number
-  ): number | null => {
+  ): number | null {
     const monthsHasNoTransactions = current === 0 && previous === 0;
     const infiniteGrowth = previous === 0 && current > 0;
     const totalDrop = previous > 0 && current === 0;
@@ -115,7 +115,7 @@ export class BalanceUseCase {
     const percentage = ((current - previous) / Math.abs(previous)) * 100;
 
     return Number(percentage.toFixed(2));
-  };
+  }
 
   private handleCurrentAndLastVariations({
     currentMonthTotalExpensesAmount,
