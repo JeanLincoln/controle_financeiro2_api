@@ -1,5 +1,5 @@
-import type { Transaction } from "@domain/entities/transaction.entity";
-import type { CurrentBalance } from "@domain/repositories/transaction.repository";
+import { Transaction } from "@domain/entities/transaction.entity";
+import { CurrentBalance } from "@domain/repositories/transaction.repository";
 
 type TransactionFindAndCount = [Transaction[], number];
 

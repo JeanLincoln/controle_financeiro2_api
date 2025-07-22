@@ -25,8 +25,8 @@ import {
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
-import { getLastAndCurrentDates } from "./utils/get-current-balance/get-last-and-current-dates/get-last-and-current-dates";
 import { handleCurrentBalance } from "./utils/get-current-balance/handle-current-balance/handle-current-balance";
+import { getLastAndCurrentDates } from "src/utils/get-last-and-current-dates/get-last-and-current-dates";
 
 @Injectable()
 export class TypeOrmTransactionRepository implements TransactionRepository {

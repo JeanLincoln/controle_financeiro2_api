@@ -5,13 +5,15 @@ import {
   CategoryRepository,
   CategoryFindAllToRepositoryParams,
   CategoryFindOptionsToRepositoryParams,
-  CategoryOption
+  CategoryOption,
+  type CategoryRanking
 } from "@domain/repositories/category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In, ILike } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
+import { getLastAndCurrentDates } from "src/utils/get-last-and-current-dates/get-last-and-current-dates";
 
 export class TypeOrmCategoryRepository implements CategoryRepository {
   constructor(
@@ -108,5 +110,35 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
 
   async deleteByUserId(userId: number): Promise<void> {
     await this.categoryRepository.delete({ user: { id: userId } });
+  }
+
+  async getCurrentMonthCategories(userId: number): Promise<CategoryRanking> {
+    const { currentMonthStart, currentMonthEnd } = getLastAndCurrentDates();
+    const TOP_FIVE_CATEGORIES = 5;
+
+    return await this.categoryRepository
+      .createQueryBuilder("category")
+      .leftJoin("category.transactions", "transaction")
+      .leftJoin("category.user", "user")
+      .where("user.id = :userId", { userId })
+      .andWhere("transaction.transactionDate >= :start", {
+        start: currentMonthStart
+      })
+      .andWhere("transaction.transactionDate <= :end", { end: currentMonthEnd })
+      .groupBy("category.id")
+      .addGroupBy("category.name")
+      .addGroupBy("category.icon")
+      .addGroupBy("category.color")
+      .orderBy("SUM(transaction.amount)", "DESC")
+      .limit(TOP_FIVE_CATEGORIES)
+      .select([
+        "ROW_NUMBER() OVER (ORDER BY SUM(transaction.amount) DESC) as ranking",
+        "category.id",
+        "category.name",
+        "category.icon",
+        "category.color",
+        "SUM(transaction.amount) as totalAmount"
+      ])
+      .getRawMany();
   }
 }
