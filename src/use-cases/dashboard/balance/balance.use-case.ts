@@ -48,10 +48,10 @@ type HandleCurrentBalanceProps = CurrentMonthTransactions &
 export class BalanceUseCase {
   constructor(private readonly transactionRepository: TransactionRepository) {}
 
-  private handleLastMonthTransactions = ({
+  private handleLastMonthTransactions({
     lastMonthExpenses,
     lastMonthIncomes
-  }: LastMonthTransactions) => {
+  }: LastMonthTransactions) {
     const lastMonthTotalExpensesAmount = lastMonthExpenses[0].reduce(
       (acc, transaction) => acc + Number(transaction.amount),
       0
@@ -73,12 +73,12 @@ export class BalanceUseCase {
       lastMonthTotalBalance,
       lastMonthTotalTransactions
     };
-  };
+  }
 
-  private handleCurrentMonthTransactions = ({
+  private handleCurrentMonthTransactions({
     currentMonthExpenses,
     currentMonthIncomes
-  }: CurrentMonthTransactions) => {
+  }: CurrentMonthTransactions) {
     const currentMonthTotalExpensesAmount = currentMonthExpenses[0].reduce(
       (acc, transaction) => acc + Number(transaction.amount),
       0
@@ -100,7 +100,7 @@ export class BalanceUseCase {
       currentMonthTotalBalance,
       currentMonthTotalTransactions
     };
-  };
+  }
 
   private calculatePercentageVariation = (
     current: number,
@@ -117,12 +117,12 @@ export class BalanceUseCase {
     return Number(percentage.toFixed(2));
   };
 
-  private handleCurrentAndLastVariations = ({
+  private handleCurrentAndLastVariations({
     currentMonthTotalExpensesAmount,
     currentMonthTotalIncomesAmount,
     lastMonthTotalExpensesAmount,
     lastMonthTotalIncomesAmount
-  }: HandleCurrentAndLastVariationsProps) => {
+  }: HandleCurrentAndLastVariationsProps) {
     const expensesVariation =
       currentMonthTotalExpensesAmount - lastMonthTotalExpensesAmount;
     const incomesVariation =
@@ -158,14 +158,14 @@ export class BalanceUseCase {
       incomesPercentageVariation,
       balancePercentageVariation
     };
-  };
+  }
 
-  private handleCurrentBalance = ({
+  private handleCurrentBalance({
     lastMonthExpenses,
     lastMonthIncomes,
     currentMonthExpenses,
     currentMonthIncomes
-  }: HandleCurrentBalanceProps): CurrentBalance => {
+  }: HandleCurrentBalanceProps): CurrentBalance {
     const {
       lastMonthTotalTransactions,
       lastMonthTotalBalance,
@@ -228,7 +228,7 @@ export class BalanceUseCase {
         }
       }
     };
-  };
+  }
 
   async execute(userId: number): Promise<CurrentBalance> {
     const {
