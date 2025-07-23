@@ -1,8 +1,8 @@
-import type {
+import {
   CurrentMonthTransactions,
   LastMonthTransactions
 } from "@domain/repositories/transaction.repository";
-import type { CurrentBalance } from "@use-cases/dashboard/balance/balance.use-case";
+import { CurrentBalance } from "@use-cases/dashboard/balance/balance.use-case";
 import { USER_1_TRANSACTIONS_MOCK } from "./transaction.mock";
 import { TransactionType } from "@domain/entities/transaction.entity";
 
