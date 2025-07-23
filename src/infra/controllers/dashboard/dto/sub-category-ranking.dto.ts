@@ -1,15 +1,12 @@
 import { TransactionType } from "@domain/entities/transaction.entity";
-import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsEnum, IsOptional } from "class-validator";
+import { TransactionTypeValidations } from "@infra/commons/decorators/dto-decorators/transaction-type-validation.decorator";
+import { IsOptional } from "class-validator";
 
 export class SubCategoryRankingQueryDto {
-  @ApiPropertyOptional({
-    description: "Type of transaction to filter the ranking",
-    example: TransactionType.EXPENSE,
-    enum: TransactionType,
+  @TransactionTypeValidations({
+    description: "Type of transaction to filter the ranking.",
     required: false
   })
-  @IsEnum(TransactionType, { message: "Type must be a valid transaction type" })
   @IsOptional()
   type?: TransactionType;
 }

@@ -6,17 +6,11 @@ import {
 } from "@infra/commons/decorators/dto-decorators/sort-dto.decorator";
 import { SortOrderEnum } from "@domain/entities/common/sort.entity";
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import {
-  IsDate,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Min
-} from "class-validator";
+import { IsDate, IsNumber, IsOptional, IsString, Min } from "class-validator";
 import { Transform } from "class-transformer";
 import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
 import { TransactionType } from "@domain/entities/transaction.entity";
+import { TransactionTypeValidations } from "@infra/commons/decorators/dto-decorators/transaction-type-validation.decorator";
 
 export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @SortableFieldDto({
@@ -52,12 +46,10 @@ export class FindAllTransactionsQueryParamDto extends PaginationQueryDto {
   @IsOptional()
   description?: string;
 
-  @ApiPropertyOptional({
-    description: "Filter transactions that match this type.",
-    example: TransactionType.INCOME,
-    enum: TransactionType
+  @TransactionTypeValidations({
+    description: "Type of transaction to filter the ranking.",
+    required: false
   })
-  @IsEnum(TransactionType)
   @IsOptional()
   type?: TransactionType;
 
