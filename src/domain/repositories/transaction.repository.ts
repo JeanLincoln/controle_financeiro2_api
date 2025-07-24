@@ -75,7 +75,7 @@ export interface LastMonthTransactions {
 interface RankedTransaction
   extends Omit<BaseTransaction, "createdAt" | "updatedAt"> {
   ranking: number;
-  totalAmount: number;
+  amount: number;
 }
 
 export type TransactionRanking = RankedTransaction[];
