@@ -41,4 +41,8 @@ export class TransactionRepositoryStub implements TransactionRepository {
       lastMonthIncomes: [[], 0]
     });
   }
+
+  getCurrentMonthTopFiveTransactions() {
+    return Promise.resolve([]);
+  }
 }

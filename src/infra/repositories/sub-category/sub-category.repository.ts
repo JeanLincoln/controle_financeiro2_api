@@ -118,7 +118,7 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
     await this.subCategoryRepository.delete(id);
   }
 
-  async getCurrentMonthTopFiveCategories(
+  async getCurrentMonthTopFiveSubCategories(
     userId: number,
     type?: TransactionType
   ): Promise<SubCategoryRanking> {
@@ -127,8 +127,8 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
 
     const queryBuilder = this.subCategoryRepository
       .createQueryBuilder("subCategory")
-      .leftJoin("subCategory.category", "categories")
-      .leftJoin("subCategory.transactions", "transaction")
+      .innerJoin("subCategory.category", "categories")
+      .innerJoin("subCategory.transactions", "transaction")
       .where("categories.user.id = :userId", { userId })
       .andWhere("transaction.transactionDate >= :start", {
         start: currentMonthStart
@@ -149,11 +149,11 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
       .orderBy("SUM(transaction.amount)", "DESC")
       .limit(TOP_FIVE_SUB_CATEGORIES)
       .select([
-        "subCategory.id",
-        "subCategory.name",
-        "subCategory.icon",
-        "subCategory.color",
-        "SUM(transaction.amount) as totalAmount"
+        "subCategory.id as id",
+        "subCategory.name as name",
+        "subCategory.icon as icon",
+        "subCategory.color as color",
+        "SUM(transaction.amount) as total_amount"
       ])
       .addSelect(
         `ROW_NUMBER() OVER (ORDER BY SUM(transaction.amount) DESC)`,

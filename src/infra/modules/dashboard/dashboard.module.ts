@@ -6,10 +6,16 @@ import { ExceptionsModule } from "../exceptions/exceptions.module";
 import { DashboardController } from "@infra/controllers/dashboard/dashboard.controller";
 import { CategoryRankingUseCase } from "@use-cases/dashboard/category-ranking/category-ranking.use-case";
 import { SubCategoryRankingUseCase } from "@use-cases/dashboard/sub-category-ranking/sub-category-ranking.use-case";
+import { TransactionRankingUseCase } from "@use-cases/dashboard/transaction-ranking/transaction-ranking.use-case";
 
 @Module({
   imports: [DatabaseModule, AuthModule, ExceptionsModule],
   controllers: [DashboardController],
-  providers: [BalanceUseCase, CategoryRankingUseCase, SubCategoryRankingUseCase]
+  providers: [
+    BalanceUseCase,
+    CategoryRankingUseCase,
+    SubCategoryRankingUseCase,
+    TransactionRankingUseCase
+  ]
 })
 export class DashboardModule {}
