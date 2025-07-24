@@ -1,12 +1,3 @@
-import { TransactionType } from "@domain/entities/transaction.entity";
-import { TransactionTypeValidations } from "@infra/commons/decorators/dto-decorators/transaction-type-validation.decorator";
-import { IsOptional } from "class-validator";
+import { CategoryRankingQueryDto } from "./category-ranking.dto";
 
-export class SubCategoryRankingQueryDto {
-  @TransactionTypeValidations({
-    description: "Type of transaction to filter the ranking.",
-    required: false
-  })
-  @IsOptional()
-  type?: TransactionType;
-}
+export class SubCategoryRankingQueryDto extends CategoryRankingQueryDto {}

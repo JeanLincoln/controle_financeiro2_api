@@ -1,3 +1,4 @@
+import { TransactionType } from "@domain/entities/transaction.entity";
 import {
   CategoryRepository,
   CategoryRanking
@@ -8,7 +9,10 @@ import { Injectable } from "@nestjs/common";
 export class CategoryRankingUseCase {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  async execute(userId: number): Promise<CategoryRanking> {
-    return this.categoryRepository.getCurrentMonthCategories(userId);
+  async execute(
+    userId: number,
+    type?: TransactionType
+  ): Promise<CategoryRanking> {
+    return this.categoryRepository.getCurrentMonthCategories(userId, type);
   }
 }

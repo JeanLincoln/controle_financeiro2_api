@@ -6,6 +6,7 @@ import { BalanceUseCase } from "@use-cases/dashboard/balance/balance.use-case";
 import { CategoryRankingUseCase } from "@use-cases/dashboard/category-ranking/category-ranking.use-case";
 import { SubCategoryRankingUseCase } from "@use-cases/dashboard/sub-category-ranking/sub-category-ranking.use-case";
 import { SubCategoryRankingQueryDto } from "./dto/sub-category-ranking.dto";
+import { CategoryRankingQueryDto } from "./dto/category-ranking.dto";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -23,8 +24,11 @@ export class DashboardController {
   }
 
   @Get("category-ranking")
-  async getCategoryRanking(@Req() req: AuthenticatedRequest) {
-    return this.categoryRankingUseCase.execute(req.user.id);
+  async getCategoryRanking(
+    @Req() req: AuthenticatedRequest,
+    @Query() { type }: CategoryRankingQueryDto
+  ) {
+    return this.categoryRankingUseCase.execute(req.user.id, type);
   }
 
   @Get("sub-category-ranking")

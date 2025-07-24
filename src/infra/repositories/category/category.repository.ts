@@ -14,6 +14,7 @@ import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.select
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
 import { getLastAndCurrentDates } from "src/utils/get-last-and-current-dates/get-last-and-current-dates";
+import { TransactionType } from "@domain/entities/transaction.entity";
 
 export class TypeOrmCategoryRepository implements CategoryRepository {
   constructor(
@@ -112,11 +113,14 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     await this.categoryRepository.delete({ user: { id: userId } });
   }
 
-  async getCurrentMonthCategories(userId: number): Promise<CategoryRanking> {
+  async getCurrentMonthCategories(
+    userId: number,
+    type?: TransactionType
+  ): Promise<CategoryRanking> {
     const { currentMonthStart, currentMonthEnd } = getLastAndCurrentDates();
     const TOP_FIVE_CATEGORIES = 5;
 
-    return await this.categoryRepository
+    const query = await this.categoryRepository
       .createQueryBuilder("category")
       .leftJoin("category.transactions", "transaction")
       .leftJoin("category.user", "user")
@@ -124,7 +128,15 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
       .andWhere("transaction.transactionDate >= :start", {
         start: currentMonthStart
       })
-      .andWhere("transaction.transactionDate <= :end", { end: currentMonthEnd })
+      .andWhere("transaction.transactionDate <= :end", {
+        end: currentMonthEnd
+      });
+
+    if (type) {
+      query.andWhere("transaction.type = :type", { type });
+    }
+
+    return query
       .groupBy("category.id")
       .addGroupBy("category.name")
       .addGroupBy("category.icon")
