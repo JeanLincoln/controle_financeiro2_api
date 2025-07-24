@@ -8,6 +8,7 @@ import {
   SortParams,
   SortOrderParam
 } from "@domain/entities/common/sort.entity";
+import { TransactionType } from "@domain/entities/transaction.entity";
 
 export type BaseOrigin = Omit<Origin, "transactions" | "user">;
 
@@ -43,6 +44,13 @@ export type OriginFindOptionsToRepositoryParams = RepositoryPaginationParams &
   SortOrderParam &
   OriginsSearchField;
 
+interface RankedOrigin extends Omit<BaseOrigin, "createdAt" | "updatedAt"> {
+  ranking: number;
+  totalAmount: number;
+}
+
+export type OriginRanking = RankedOrigin[];
+
 export abstract class OriginRepository {
   abstract findAll(
     userId: number,
@@ -63,4 +71,8 @@ export abstract class OriginRepository {
     origin: CreateOrUpdateAllOriginProps
   ): Promise<void>;
   abstract delete(id: number): Promise<void>;
+  abstract getCurrentMonthTopFiveOrigins(
+    userId: number,
+    type?: TransactionType
+  ): Promise<OriginRanking>;
 }

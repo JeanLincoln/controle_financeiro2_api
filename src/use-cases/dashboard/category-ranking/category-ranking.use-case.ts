@@ -13,6 +13,9 @@ export class CategoryRankingUseCase {
     userId: number,
     type?: TransactionType
   ): Promise<CategoryRanking> {
-    return this.categoryRepository.getCurrentMonthCategories(userId, type);
+    return this.categoryRepository.getCurrentMonthTopFiveCategories(
+      userId,
+      type
+    );
   }
 }

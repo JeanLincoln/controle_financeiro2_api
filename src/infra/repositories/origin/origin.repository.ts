@@ -4,13 +4,16 @@ import {
   CreateOrUpdateAllOriginProps,
   OriginFindAllToRepositoryParams,
   OriginFindOptionsToRepositoryParams,
-  OriginOption
+  OriginOption,
+  type OriginRanking
 } from "@domain/repositories/origin.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ILike, Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
+import { TransactionType } from "@domain/entities/transaction.entity";
+import { getLastAndCurrentDates } from "src/utils/get-last-and-current-dates/get-last-and-current-dates";
 
 export class TypeOrmOriginRepository implements OriginRepository {
   constructor(
@@ -97,5 +100,51 @@ export class TypeOrmOriginRepository implements OriginRepository {
 
   async delete(id: number): Promise<void> {
     await this.originRepository.delete(id);
+  }
+
+  async getCurrentMonthTopFiveOrigins(
+    userId: number,
+    type?: TransactionType
+  ): Promise<OriginRanking> {
+    const { currentMonthStart, currentMonthEnd } = getLastAndCurrentDates();
+    const TOP_FIVE_ORIGINS = 5;
+
+    const query = await this.originRepository
+      .createQueryBuilder("origin")
+      .innerJoin("origin.user", "user")
+      .innerJoin("origin.transactions", "transaction")
+      .where("user.id = :userId", { userId })
+      .andWhere("transaction.transactionDate >= :start", {
+        start: currentMonthStart
+      })
+      .andWhere("transaction.transactionDate <= :end", {
+        end: currentMonthEnd
+      });
+
+    if (type) {
+      query.andWhere("transaction.type = :type", { type });
+    }
+
+    return query
+      .groupBy("origin.id")
+      .addGroupBy("origin.name")
+      .addGroupBy("origin.description")
+      .addGroupBy("origin.color")
+      .addGroupBy("origin.icon")
+      .orderBy("SUM(transaction.amount)", "DESC")
+      .limit(TOP_FIVE_ORIGINS)
+      .select([
+        "origin.id as id",
+        "origin.name as name",
+        "origin.name as description",
+        "origin.color as color",
+        "origin.icon as icon",
+        "SUM(transaction.amount) as total_amount"
+      ])
+      .addSelect(
+        `ROW_NUMBER() OVER (ORDER BY SUM(transaction.amount) DESC)`,
+        "ranking"
+      )
+      .getRawMany();
   }
 }

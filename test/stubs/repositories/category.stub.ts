@@ -38,7 +38,7 @@ export class CategoryRepositoryStub implements CategoryRepository {
     return Promise.resolve();
   }
 
-  async getCurrentMonthCategories(): Promise<CategoryRanking> {
+  async getCurrentMonthTopFiveCategories(): Promise<CategoryRanking> {
     return Promise.resolve([]);
   }
 }

@@ -7,6 +7,7 @@ import { DashboardController } from "@infra/controllers/dashboard/dashboard.cont
 import { CategoryRankingUseCase } from "@use-cases/dashboard/category-ranking/category-ranking.use-case";
 import { SubCategoryRankingUseCase } from "@use-cases/dashboard/sub-category-ranking/sub-category-ranking.use-case";
 import { TransactionRankingUseCase } from "@use-cases/dashboard/transaction-ranking/transaction-ranking.use-case";
+import { OriginRankingUseCase } from "@use-cases/dashboard/origin-ranking/origin-ranking.use-case";
 
 @Module({
   imports: [DatabaseModule, AuthModule, ExceptionsModule],
@@ -15,7 +16,8 @@ import { TransactionRankingUseCase } from "@use-cases/dashboard/transaction-rank
     BalanceUseCase,
     CategoryRankingUseCase,
     SubCategoryRankingUseCase,
-    TransactionRankingUseCase
+    TransactionRankingUseCase,
+    OriginRankingUseCase
   ]
 })
 export class DashboardModule {}

@@ -9,6 +9,8 @@ import { SubCategoryRankingQueryDto } from "./dto/sub-category-ranking.dto";
 import { CategoryRankingQueryDto } from "./dto/category-ranking.dto";
 import { TransactionRankingQueryDto } from "./dto/transaction-ranking.dto";
 import { TransactionRankingUseCase } from "@use-cases/dashboard/transaction-ranking/transaction-ranking.use-case";
+import { OriginRankingUseCase } from "@use-cases/dashboard/origin-ranking/origin-ranking.use-case";
+import { OriginRankingQueryDto } from "./dto/origin-ranking.dto";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -18,7 +20,8 @@ export class DashboardController {
     private readonly balanceUseCase: BalanceUseCase,
     private readonly categoryRankingUseCase: CategoryRankingUseCase,
     private readonly subCategoryRankingUseCase: SubCategoryRankingUseCase,
-    private readonly transactionRankingUseCase: TransactionRankingUseCase
+    private readonly transactionRankingUseCase: TransactionRankingUseCase,
+    private readonly originRankingUseCase: OriginRankingUseCase
   ) {}
 
   @Get("balance")
@@ -48,5 +51,13 @@ export class DashboardController {
     @Query() { type }: TransactionRankingQueryDto
   ) {
     return this.transactionRankingUseCase.execute(req.user.id, type);
+  }
+
+  @Get("origin-ranking")
+  async getOriginRanking(
+    @Req() req: AuthenticatedRequest,
+    @Query() { type }: OriginRankingQueryDto
+  ) {
+    return this.originRankingUseCase.execute(req.user.id, type);
   }
 }

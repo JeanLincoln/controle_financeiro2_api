@@ -113,7 +113,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     await this.categoryRepository.delete({ user: { id: userId } });
   }
 
-  async getCurrentMonthCategories(
+  async getCurrentMonthTopFiveCategories(
     userId: number,
     type?: TransactionType
   ): Promise<CategoryRanking> {
