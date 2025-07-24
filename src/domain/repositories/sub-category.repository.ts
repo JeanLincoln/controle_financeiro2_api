@@ -5,6 +5,7 @@ import {
 } from "@domain/entities/common/pagination.entity";
 import { SortOrderParam } from "@domain/entities/common/sort.entity";
 import { SubCategory } from "@domain/entities/sub-category.entity";
+import { TransactionType } from "@domain/entities/transaction.entity";
 
 export type BaseSubCategory = Omit<
   SubCategory,
@@ -29,6 +30,14 @@ export type SubCategoryOptionsToUseCaseParams = CommonPaginationParams &
 export type SubCategoriesFindOptionsToRepositoryParams =
   RepositoryPaginationParams & SortOrderParam & SubCategoriesSearchField;
 
+interface RankedSubCategory
+  extends Omit<BaseSubCategory, "createdAt" | "updatedAt"> {
+  ranking: number;
+  totalAmount: number;
+}
+
+export type SubCategoryRanking = RankedSubCategory[];
+
 export abstract class SubCategoryRepository {
   abstract findAllByCategory(categoryId: number): Promise<SubCategory[]>;
   abstract options(
@@ -48,4 +57,8 @@ export abstract class SubCategoryRepository {
     subCategory: CreateOrUpdateAllSubCategoryProps
   ): Promise<void>;
   abstract delete(id: number): Promise<void>;
+  abstract getCurrentMonthTopFiveCategories(
+    userId: number,
+    type?: TransactionType
+  ): Promise<SubCategoryRanking>;
 }

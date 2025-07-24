@@ -1,15 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import {
-  IsDate,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Min
-} from "class-validator";
+import { IsDate, IsNotEmpty, IsNumber, IsString, Min } from "class-validator";
 import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
 import { TransactionType } from "@domain/entities/transaction.entity";
+import { TransactionTypeValidations } from "@infra/commons/decorators/dto-decorators/transaction-type-validation.decorator";
 
 export class CreateTransactionDto {
   @ApiProperty({
@@ -28,10 +22,11 @@ export class CreateTransactionDto {
   @IsNotEmpty()
   description: string;
 
-  @ApiProperty({ example: TransactionType.EXPENSE })
-  @IsString()
+  @TransactionTypeValidations({
+    description: "Type of transaction to filter the ranking.",
+    required: true
+  })
   @IsNotEmpty()
-  @IsEnum(TransactionType)
   type: TransactionType;
 
   @ApiProperty({

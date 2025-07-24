@@ -8,6 +8,7 @@ import {
   SortParams,
   SortOrderParam
 } from "@domain/entities/common/sort.entity";
+import { TransactionType } from "@domain/entities/transaction.entity";
 import { User } from "@domain/entities/user.entity";
 
 export type BaseCategory = Omit<
@@ -77,5 +78,8 @@ export abstract class CategoryRepository {
   ): Promise<void>;
   abstract delete(id: number): Promise<void>;
   abstract deleteByUserId(userId: number): Promise<void>;
-  abstract getCurrentMonthCategories(userId: number): Promise<CategoryRanking>;
+  abstract getCurrentMonthCategories(
+    userId: number,
+    type?: TransactionType
+  ): Promise<CategoryRanking>;
 }

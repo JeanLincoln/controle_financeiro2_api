@@ -15,12 +15,12 @@ describe("CategoryRankingUseCase", () => {
   it("should return category ranking for the current month", async () => {
     jest.spyOn(categoryRepository, "getCurrentMonthCategories");
 
-    await sut.execute(USER_MOCK.id);
+    await sut.execute(USER_MOCK.id, undefined);
 
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: categoryRepository.getCurrentMonthCategories,
-      calledWith: [USER_MOCK.id]
+      calledWith: [USER_MOCK.id, undefined]
     });
   });
 });

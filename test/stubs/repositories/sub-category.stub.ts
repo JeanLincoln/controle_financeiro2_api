@@ -31,4 +31,8 @@ export class SubCategoryRepositoryStub implements SubCategoryRepository {
   async delete() {
     return Promise.resolve();
   }
+
+  async getCurrentMonthTopFiveCategories() {
+    return Promise.resolve([]);
+  }
 }
