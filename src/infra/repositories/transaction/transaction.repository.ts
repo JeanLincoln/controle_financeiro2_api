@@ -256,22 +256,16 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
     }
 
     return query
-      .groupBy("transaction.id")
-      .addGroupBy("transaction.name")
-      .addGroupBy("transaction.description")
-      .addGroupBy("transaction.type")
-      .addGroupBy("transaction.transactionDate")
-      .orderBy("SUM(transaction.amount)", "DESC")
       .limit(TOP_FIVE_TRANSACTIONS)
       .select([
         "transaction.name as name",
         "transaction.description as description",
         "transaction.type as type",
         "transaction.transactionDate as transaction_date",
-        "SUM(transaction.amount) as total_amount"
+        "transaction.amount as amount"
       ])
       .addSelect(
-        `ROW_NUMBER() OVER (ORDER BY SUM(transaction.amount) DESC)`,
+        `ROW_NUMBER() OVER (ORDER BY transaction.amount DESC)`,
         "ranking"
       )
       .getRawMany();
