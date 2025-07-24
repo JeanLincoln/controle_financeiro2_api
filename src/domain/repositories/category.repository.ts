@@ -78,7 +78,7 @@ export abstract class CategoryRepository {
   ): Promise<void>;
   abstract delete(id: number): Promise<void>;
   abstract deleteByUserId(userId: number): Promise<void>;
-  abstract getCurrentMonthCategories(
+  abstract getCurrentMonthTopFiveCategories(
     userId: number,
     type?: TransactionType
   ): Promise<CategoryRanking>;

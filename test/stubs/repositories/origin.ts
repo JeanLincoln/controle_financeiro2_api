@@ -26,4 +26,8 @@ export class OriginRepositoryStub implements OriginRepository {
   async delete(): Promise<void> {
     return;
   }
+
+  async getCurrentMonthTopFiveOrigins() {
+    return [];
+  }
 }
