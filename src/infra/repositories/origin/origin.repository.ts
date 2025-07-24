@@ -136,7 +136,7 @@ export class TypeOrmOriginRepository implements OriginRepository {
       .select([
         "origin.id as id",
         "origin.name as name",
-        "origin.name as description",
+        "origin.description as description",
         "origin.color as color",
         "origin.icon as icon",
         "SUM(transaction.amount) as total_amount"
