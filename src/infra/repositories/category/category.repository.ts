@@ -122,8 +122,8 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
 
     const query = await this.categoryRepository
       .createQueryBuilder("category")
-      .leftJoin("category.transactions", "transaction")
-      .leftJoin("category.user", "user")
+      .innerJoin("category.user", "user")
+      .innerJoin("category.transactions", "transaction")
       .where("user.id = :userId", { userId })
       .andWhere("transaction.transactionDate >= :start", {
         start: currentMonthStart
@@ -144,11 +144,11 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
       .orderBy("SUM(transaction.amount)", "DESC")
       .limit(TOP_FIVE_CATEGORIES)
       .select([
-        "category.id",
-        "category.name",
-        "category.icon",
-        "category.color",
-        "SUM(transaction.amount) as totalAmount"
+        "category.id as id",
+        "category.name as name",
+        "category.icon as icon",
+        "category.color as color",
+        "SUM(transaction.amount) as total_amount"
       ])
       .addSelect(
         `ROW_NUMBER() OVER (ORDER BY SUM(transaction.amount) DESC)`,

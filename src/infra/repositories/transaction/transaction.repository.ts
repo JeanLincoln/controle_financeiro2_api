@@ -232,4 +232,42 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       currentMonthIncomes
     };
   }
+
+  async getCurrentMonthTopFiveTransactions(
+    userId: number,
+    type?: TransactionType
+  ) {
+    const { currentMonthStart, currentMonthEnd } = getLastAndCurrentDates();
+    const TOP_FIVE_TRANSACTIONS = 5;
+
+    const query = await this.transactionRepository
+      .createQueryBuilder("transaction")
+      .innerJoin("transaction.user", "user")
+      .where("user.id = :userId", { userId })
+      .andWhere("transaction.transactionDate >= :start", {
+        start: currentMonthStart
+      })
+      .andWhere("transaction.transactionDate <= :end", {
+        end: currentMonthEnd
+      });
+
+    if (type) {
+      query.andWhere("transaction.type = :type", { type });
+    }
+
+    return query
+      .limit(TOP_FIVE_TRANSACTIONS)
+      .select([
+        "transaction.name as name",
+        "transaction.description as description",
+        "transaction.type as type",
+        "transaction.transactionDate as transaction_date",
+        "transaction.amount as amount"
+      ])
+      .addSelect(
+        `ROW_NUMBER() OVER (ORDER BY transaction.amount DESC)`,
+        "ranking"
+      )
+      .getRawMany();
+  }
 }

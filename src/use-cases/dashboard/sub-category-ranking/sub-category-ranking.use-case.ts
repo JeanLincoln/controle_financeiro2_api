@@ -13,7 +13,7 @@ export class SubCategoryRankingUseCase {
     userId: number,
     type?: TransactionType
   ): Promise<SubCategoryRanking> {
-    return this.subCategoryRepository.getCurrentMonthTopFiveCategories(
+    return this.subCategoryRepository.getCurrentMonthTopFiveSubCategories(
       userId,
       type
     );

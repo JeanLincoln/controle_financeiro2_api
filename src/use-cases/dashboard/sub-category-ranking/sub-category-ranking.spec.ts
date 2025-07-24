@@ -13,13 +13,13 @@ describe("SubCategoryRankingUseCase", () => {
   });
 
   it("should return subCategory ranking for the current month", async () => {
-    jest.spyOn(subCategoryRepository, "getCurrentMonthTopFiveCategories");
+    jest.spyOn(subCategoryRepository, "getCurrentMonthTopFiveSubCategories");
 
     await sut.execute(USER_MOCK.id);
 
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: subCategoryRepository.getCurrentMonthTopFiveCategories,
+      mockFunction: subCategoryRepository.getCurrentMonthTopFiveSubCategories,
       calledWith: [USER_MOCK.id, undefined]
     });
   });

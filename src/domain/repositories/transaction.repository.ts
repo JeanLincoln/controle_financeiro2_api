@@ -12,16 +12,14 @@ import {
 } from "@domain/entities/transaction.entity";
 import { SortParams } from "@domain/entities/common/sort.entity";
 
-export type CreateOrUpdateAllTransactionProps = Omit<
+export type BaseTransaction = Omit<
   Transaction,
-  | "id"
-  | "createdAt"
-  | "updatedAt"
-  | "user"
-  | "origin"
-  | "categories"
-  | "subCategories"
-  | "userId"
+  "user" | "origin" | "categories" | "subCategories" | "userId"
+>;
+
+export type CreateOrUpdateAllTransactionProps = Omit<
+  BaseTransaction,
+  "id" | "createdAt" | "updatedAt"
 >;
 
 export type TransactionsFields = keyof Transaction;
@@ -74,6 +72,14 @@ export interface LastMonthTransactions {
   lastMonthIncomes: TransactionFindAndCount;
 }
 
+interface RankedTransaction
+  extends Omit<BaseTransaction, "createdAt" | "updatedAt"> {
+  ranking: number;
+  amount: number;
+}
+
+export type TransactionRanking = RankedTransaction[];
+
 export abstract class TransactionRepository {
   abstract findAll(
     userId: number,
@@ -100,4 +106,8 @@ export abstract class TransactionRepository {
   abstract getCurrentBalance(
     userId: number
   ): Promise<CurrentMonthTransactions & LastMonthTransactions>;
+  abstract getCurrentMonthTopFiveTransactions(
+    userId: number,
+    type?: TransactionType
+  ): Promise<TransactionRanking>;
 }

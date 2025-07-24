@@ -32,7 +32,7 @@ export class SubCategoryRepositoryStub implements SubCategoryRepository {
     return Promise.resolve();
   }
 
-  async getCurrentMonthTopFiveCategories() {
+  async getCurrentMonthTopFiveSubCategories() {
     return Promise.resolve([]);
   }
 }

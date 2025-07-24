@@ -57,7 +57,7 @@ export abstract class SubCategoryRepository {
     subCategory: CreateOrUpdateAllSubCategoryProps
   ): Promise<void>;
   abstract delete(id: number): Promise<void>;
-  abstract getCurrentMonthTopFiveCategories(
+  abstract getCurrentMonthTopFiveSubCategories(
     userId: number,
     type?: TransactionType
   ): Promise<SubCategoryRanking>;
