@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { TransactionRepository } from "@domain/repositories/transaction.repository";
 import { TransactionType } from "@domain/entities/transaction.entity";
-import { handleDateDiff } from "../../../utils/get-last-and-current-dates/get-last-and-current-dates";
+import { handleUTCTime } from "../../../utils/time/handleUTCTime";
 import { MILLISECONDS_IN_A_DAY } from "../../../utils/time/milliseconds";
 
 export interface TransactionGraphDataPoint {
@@ -41,7 +41,7 @@ export class TransactionGraphUseCase {
 
     return {
       formattedStartDate: convertedStartDate,
-      formattedEndDate: handleDateDiff(convertedEndDate)
+      formattedEndDate: handleUTCTime(convertedEndDate)
     };
   }
 

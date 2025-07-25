@@ -13,7 +13,7 @@ import { Repository, In, ILike } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
-import { getLastAndCurrentDates } from "src/utils/get-last-and-current-dates/get-last-and-current-dates";
+import { getLastAndCurrentDates } from "src/utils/time/get-last-and-current-dates";
 import { TransactionType } from "@domain/entities/transaction.entity";
 
 export class TypeOrmCategoryRepository implements CategoryRepository {

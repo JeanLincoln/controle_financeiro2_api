@@ -5,7 +5,7 @@ import {
 import { CurrentBalance } from "@use-cases/dashboard/balance/balance.use-case";
 import { USER_1_TRANSACTIONS_MOCK } from "./transaction.mock";
 import { TransactionType } from "@domain/entities/transaction.entity";
-import { handleDateDiff } from "../../src/utils/get-last-and-current-dates/get-last-and-current-dates";
+import { handleUTCTime } from "../../src/utils/time/handleUTCTime";
 
 export const EMPTY_INCOMES_AND_EXPENSES_MOCK: CurrentMonthTransactions &
   LastMonthTransactions = {
@@ -265,7 +265,7 @@ export const CreateFormattedMockDate = (
 ) => {
   const formattedDate = new Date(date);
   formattedDate.setHours(hours, minutes, seconds);
-  return handleDateDiff(formattedDate);
+  return handleUTCTime(formattedDate);
 };
 
 export const TRANSACTION_GRAPH_FILTERS = {
