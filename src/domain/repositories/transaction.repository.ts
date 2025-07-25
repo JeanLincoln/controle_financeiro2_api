@@ -80,6 +80,19 @@ interface RankedTransaction
 
 export type TransactionRanking = RankedTransaction[];
 
+export interface TransactionGraphDataPoint {
+  date: string;
+  type: TransactionType;
+  totalAmount: number;
+  transactionCount: number;
+}
+
+export interface TransactionGraphFilters {
+  startDate: Date;
+  endDate: Date;
+  type?: TransactionType;
+}
+
 export abstract class TransactionRepository {
   abstract findAll(
     userId: number,
@@ -110,4 +123,8 @@ export abstract class TransactionRepository {
     userId: number,
     type?: TransactionType
   ): Promise<TransactionRanking>;
+  abstract getTransactionGraphData(
+    userId: number,
+    filters: TransactionGraphFilters
+  ): Promise<TransactionGraphDataPoint[]>;
 }

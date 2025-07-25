@@ -13,7 +13,7 @@ import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.select
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
 import { TransactionType } from "@domain/entities/transaction.entity";
-import { getLastAndCurrentDates } from "src/utils/get-last-and-current-dates/get-last-and-current-dates";
+import { getLastAndCurrentDates } from "src/utils/time/get-last-and-current-dates";
 
 export class TypeOrmOriginRepository implements OriginRepository {
   constructor(

@@ -5,6 +5,7 @@ import {
 import { CurrentBalance } from "@use-cases/dashboard/balance/balance.use-case";
 import { USER_1_TRANSACTIONS_MOCK } from "./transaction.mock";
 import { TransactionType } from "@domain/entities/transaction.entity";
+import { handleUTCTime } from "../../src/utils/time/handleUTCTime";
 
 export const EMPTY_INCOMES_AND_EXPENSES_MOCK: CurrentMonthTransactions &
   LastMonthTransactions = {
@@ -253,5 +254,55 @@ export const MIXED_BALANCE_MOCK: CurrentBalance = {
       total: -150,
       percentage: -150
     }
+  }
+};
+
+export const CreateFormattedMockDate = (
+  date: Date,
+  hours = 0,
+  minutes = 0,
+  seconds = 0
+) => {
+  const formattedDate = new Date(date);
+  formattedDate.setHours(hours, minutes, seconds);
+  return handleUTCTime(formattedDate);
+};
+
+export const TRANSACTION_GRAPH_FILTERS = {
+  startDate: CreateFormattedMockDate(new Date(2025, 0, 1)),
+  endDate: CreateFormattedMockDate(new Date(2025, 0, 1), 23, 59, 59),
+  type: TransactionType.EXPENSE
+};
+
+export const TRANSACTION_GRAPH_DATA_MOCK = [
+  {
+    date: "2025-01-01",
+    type: TransactionType.EXPENSE,
+    totalAmount: 100.5,
+    transactionCount: 2
+  },
+  {
+    date: "2025-01-02",
+    type: TransactionType.EXPENSE,
+    totalAmount: 200.75,
+    transactionCount: 3
+  }
+];
+
+export const TRANSACTION_GRAPH_RETURN_MOCK = {
+  data: TRANSACTION_GRAPH_DATA_MOCK,
+  summary: {
+    totalAmount: 301.25,
+    totalTransactions: 5,
+    averagePerDay: 150.63
+  }
+};
+
+export const TRANSACTION_GRAPH_EMPTY_RETURN_MOCK = {
+  data: [],
+  summary: {
+    totalAmount: 0,
+    totalTransactions: 0,
+    averagePerDay: 0
   }
 };
