@@ -2,7 +2,7 @@ import * as dateFns from "date-fns";
 
 const aMinuteInMilliseconds = 60000;
 
-const handleDateDiff = (date: Date) => {
+export const handleDateDiff = (date: Date) => {
   const parsedDate = new Date(date);
   const timezoneOffset = parsedDate.getTimezoneOffset();
   const dateTime = parsedDate.getTime();

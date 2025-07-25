@@ -45,4 +45,8 @@ export class TransactionRepositoryStub implements TransactionRepository {
   getCurrentMonthTopFiveTransactions() {
     return Promise.resolve([]);
   }
+
+  getTransactionGraphData() {
+    return Promise.resolve([]);
+  }
 }

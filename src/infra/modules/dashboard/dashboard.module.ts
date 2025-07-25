@@ -8,6 +8,7 @@ import { CategoryRankingUseCase } from "@use-cases/dashboard/category-ranking/ca
 import { SubCategoryRankingUseCase } from "@use-cases/dashboard/sub-category-ranking/sub-category-ranking.use-case";
 import { TransactionRankingUseCase } from "@use-cases/dashboard/transaction-ranking/transaction-ranking.use-case";
 import { OriginRankingUseCase } from "@use-cases/dashboard/origin-ranking/origin-ranking.use-case";
+import { TransactionGraphUseCase } from "@use-cases/dashboard/transaction-graph/transaction-graph.use-case";
 
 @Module({
   imports: [DatabaseModule, AuthModule, ExceptionsModule],
@@ -17,7 +18,8 @@ import { OriginRankingUseCase } from "@use-cases/dashboard/origin-ranking/origin
     CategoryRankingUseCase,
     SubCategoryRankingUseCase,
     TransactionRankingUseCase,
-    OriginRankingUseCase
+    OriginRankingUseCase,
+    TransactionGraphUseCase
   ]
 })
 export class DashboardModule {}

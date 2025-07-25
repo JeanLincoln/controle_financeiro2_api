@@ -11,6 +11,8 @@ import { TransactionRankingQueryDto } from "./dto/transaction-ranking.dto";
 import { TransactionRankingUseCase } from "@use-cases/dashboard/transaction-ranking/transaction-ranking.use-case";
 import { OriginRankingUseCase } from "@use-cases/dashboard/origin-ranking/origin-ranking.use-case";
 import { OriginRankingQueryDto } from "./dto/origin-ranking.dto";
+import { TransactionGraphUseCase } from "@use-cases/dashboard/transaction-graph/transaction-graph.use-case";
+import { TransactionGraphQueryDto } from "./dto/transaction-graph.dto";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard)
@@ -21,7 +23,8 @@ export class DashboardController {
     private readonly categoryRankingUseCase: CategoryRankingUseCase,
     private readonly subCategoryRankingUseCase: SubCategoryRankingUseCase,
     private readonly transactionRankingUseCase: TransactionRankingUseCase,
-    private readonly originRankingUseCase: OriginRankingUseCase
+    private readonly originRankingUseCase: OriginRankingUseCase,
+    private readonly transactionGraphUseCase: TransactionGraphUseCase
   ) {}
 
   @Get("balance")
@@ -59,5 +62,17 @@ export class DashboardController {
     @Query() { type }: OriginRankingQueryDto
   ) {
     return this.originRankingUseCase.execute(req.user.id, type);
+  }
+
+  @Get("transaction-graph")
+  async getTransactionGraph(
+    @Req() req: AuthenticatedRequest,
+    @Query() { startDate, endDate, type }: TransactionGraphQueryDto
+  ) {
+    return this.transactionGraphUseCase.execute(req.user.id, {
+      startDate,
+      endDate,
+      type
+    });
   }
 }

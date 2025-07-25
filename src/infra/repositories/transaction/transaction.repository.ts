@@ -9,8 +9,10 @@ import {
   TransactionRepository,
   CreateOrUpdateAllTransactionProps,
   TransactionFindAllToRepositoryParams,
-  type CurrentMonthTransactions,
-  type LastMonthTransactions
+  CurrentMonthTransactions,
+  LastMonthTransactions,
+  TransactionGraphFilters,
+  TransactionGraphDataPoint
 } from "@domain/repositories/transaction.repository";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -269,5 +271,41 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
         "ranking"
       )
       .getRawMany();
+  }
+
+  async getTransactionGraphData(
+    userId: number,
+    filters: TransactionGraphFilters
+  ): Promise<TransactionGraphDataPoint[]> {
+    const query = this.transactionRepository
+      .createQueryBuilder("transaction")
+      .where("transaction.userId = :userId", { userId })
+      .andWhere("transaction.transactionDate >= :startDate", {
+        startDate: filters.startDate
+      })
+      .andWhere("transaction.transactionDate <= :endDate", {
+        endDate: filters.endDate
+      });
+
+    if (filters.type) {
+      query.andWhere("transaction.type = :type", { type: filters.type });
+    }
+
+    const result = await query
+      .select("TO_CHAR(transaction.transactionDate, 'MM-YYYY')", "date")
+      .addSelect("SUM(transaction.amount)", "totalAmount")
+      .addSelect("COUNT(transaction.id)", "transactionCount")
+      .addSelect("transaction.type", "type")
+      .groupBy("transaction.type")
+      .addGroupBy("TO_CHAR(transaction.transactionDate, 'MM-YYYY')")
+      .orderBy("TO_CHAR(transaction.transactionDate, 'MM-YYYY')", "ASC")
+      .getRawMany();
+
+    return result.map((row: TransactionGraphDataPoint) => ({
+      date: row.date,
+      type: row.type,
+      totalAmount: Number(row.totalAmount) || 0,
+      transactionCount: Number(row.transactionCount) || 0
+    }));
   }
 }
