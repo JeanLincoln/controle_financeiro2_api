@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { TransactionRepository } from "@domain/repositories/transaction.repository";
 import { TransactionType } from "@domain/entities/transaction.entity";
 import { handleDateDiff } from "../../../utils/get-last-and-current-dates/get-last-and-current-dates";
+import { MILLISECONDS_IN_A_DAY } from "../../../utils/time/milliseconds";
 
 export interface TransactionGraphDataPoint {
   date: string;
@@ -65,16 +66,6 @@ export class TransactionGraphUseCase {
     endDate: Date,
     totalAmount: number
   ): number {
-    const MILLISECONDS_IN_A_SECOND = 1000;
-    const SECONDS_IN_A_MINUTE = 60;
-    const MINUTES_IN_AN_HOUR = 60;
-    const HOURS_IN_A_DAY = 24;
-    const MILLISECONDS_IN_A_DAY =
-      MILLISECONDS_IN_A_SECOND *
-      SECONDS_IN_A_MINUTE *
-      MINUTES_IN_AN_HOUR *
-      HOURS_IN_A_DAY;
-
     const daysDifference =
       Math.ceil(
         (endDate.getTime() - startDate.getTime()) / MILLISECONDS_IN_A_DAY
