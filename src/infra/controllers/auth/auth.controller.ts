@@ -15,19 +15,16 @@ export class AuthController {
 
   @Post("login")
   @HttpCode(200)
-  async login(@Res() res: Response, @Body() { email, password }: LoginDto) {
+  async login(
+    @Res({ passthrough: true }) res: Response,
+    @Body() { email, password }: LoginDto
+  ) {
     await this.loginUseCase.execute(email, password, res);
-    res.status(200).send({
-      message: "Login successful"
-    });
   }
 
   @Post("logout")
   @HttpCode(200)
-  async logout(@Res() res: Response) {
+  async logout(@Res({ passthrough: true }) res: Response) {
     await this.logoutUseCase.execute(res);
-    res.status(200).send({
-      message: "Logout successful"
-    });
   }
 }
