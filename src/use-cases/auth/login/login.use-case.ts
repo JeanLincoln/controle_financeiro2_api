@@ -1,8 +1,16 @@
 import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { JwtAdapter } from "@domain/adapters/jwt.adapter";
-import { UserRepository } from "@domain/repositories/user.repository";
+import {
+  UserRepository,
+  UserWithoutPassword
+} from "@domain/repositories/user.repository";
 import { Injectable } from "@nestjs/common";
+import { Response } from "express";
+
+const TWO_DAYS_IN_MS = 2 * 24 * 60 * 60 * 1000;
+const COOKIE_EXPIRATION = TWO_DAYS_IN_MS;
+const TOKEN_EXPIRATION = "2 days";
 
 @Injectable()
 export class LoginUseCase {
@@ -13,7 +21,11 @@ export class LoginUseCase {
     private readonly cryptographyAdapter: CryptographyAdapter
   ) {}
 
-  async execute(email: string, password: string) {
+  async execute(
+    email: string,
+    password: string,
+    response: Response
+  ): Promise<UserWithoutPassword | void> {
     const user = await this.userRepository.findUserWithAllProps({
       email: email
     });
@@ -38,15 +50,28 @@ export class LoginUseCase {
         id: user.id.toString()
       },
       {
-        expiresIn: "2 days",
+        expiresIn: TOKEN_EXPIRATION,
         subject: user.id.toString(),
         issuer: "controle-financeiro",
         audience: "users"
       }
     );
 
+    response.cookie("Authorization", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: COOKIE_EXPIRATION
+    });
+
     return {
-      accessToken: `Bearer ${accessToken}`
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      birthDate: user.birthDate,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
     };
   }
 }

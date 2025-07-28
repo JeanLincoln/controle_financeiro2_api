@@ -6,8 +6,11 @@ import { UserRepositoryStub } from "@test/stubs/repositories/user.stub";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { JwtAdapterStub } from "@test/stubs/adapters/jwt.stub";
 import { USER_MOCK } from "@test/mocks/user.mock";
-import { REQUEST_MOCK } from "@test/mocks/auth.mock";
-import { INVALID_TOKEN_MOCK } from "@test/mocks/auth.mock";
+import {
+  AUTHENTICATED_REQUEST_MOCK,
+  NON_AUTHENTICATED_REQUEST_MOCK
+} from "@test/mocks/auth.mock";
+
 describe("RouteAuthUseCase", () => {
   let sut: RouteAuthUseCase;
   let jwtAdapter: JwtAdapter;
@@ -31,14 +34,14 @@ describe("RouteAuthUseCase", () => {
       .spyOn(userRepository, "findUserWithAllProps")
       .mockResolvedValue(USER_MOCK);
 
-    const result = await sut.execute(REQUEST_MOCK);
+    const result = await sut.execute(AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, true);
     testUtils.notCalledExpectations([exceptionAdapter.forbidden]);
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: jwtAdapter.verifyToken,
-      calledWith: { token: "token" }
+      calledWith: { token: "some_token" }
     });
     testUtils.timesCalledExpectations({
       times: 1,
@@ -53,7 +56,7 @@ describe("RouteAuthUseCase", () => {
     jest.spyOn(exceptionAdapter, "forbidden");
     jest.spyOn(exceptionAdapter, "unauthorized");
 
-    const result = await sut.execute(INVALID_TOKEN_MOCK);
+    const result = await sut.execute(NON_AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, false);
 
@@ -76,7 +79,7 @@ describe("RouteAuthUseCase", () => {
     jest.spyOn(exceptionAdapter, "forbidden");
     jest.spyOn(exceptionAdapter, "unauthorized");
 
-    const result = await sut.execute(REQUEST_MOCK);
+    const result = await sut.execute(AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, false);
 
@@ -100,7 +103,7 @@ describe("RouteAuthUseCase", () => {
     });
     jest.spyOn(userRepository, "findUserWithAllProps").mockResolvedValue(null);
 
-    const result = await sut.execute(REQUEST_MOCK);
+    const result = await sut.execute(AUTHENTICATED_REQUEST_MOCK);
 
     testUtils.resultExpectations(result, false);
     testUtils.notCalledExpectations([exceptionAdapter.unauthorized]);
@@ -112,7 +115,7 @@ describe("RouteAuthUseCase", () => {
     testUtils.timesCalledExpectations({
       times: 1,
       mockFunction: jwtAdapter.verifyToken,
-      calledWith: { token: "token" }
+      calledWith: { token: "some_token" }
     });
     testUtils.timesCalledExpectations({
       times: 1,
