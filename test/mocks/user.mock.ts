@@ -4,6 +4,7 @@ import {
 } from "@domain/entities/common/pagination.entity";
 import { User } from "@domain/entities/user.entity";
 import { BaseCreateOrUpdateUserProps } from "@domain/repositories/user.repository";
+import { UserWithoutRelations } from "@infra/repositories/common/selects/user/user.selects";
 
 export const CREATE_OR_UPDATE_USER_PARAMS_MOCK: BaseCreateOrUpdateUserProps = {
   firstName: "John",
@@ -26,6 +27,16 @@ export const USERS_MOCK: User[] = Array.from({ length: 10 }, (_, index) => ({
   origins: [],
   categories: []
 }));
+
+export const BASE_USER_MOCK: UserWithoutRelations = {
+  id: USERS_MOCK[0].id,
+  firstName: USERS_MOCK[0].firstName,
+  lastName: USERS_MOCK[0].lastName,
+  email: USERS_MOCK[0].email,
+  birthDate: USERS_MOCK[0].birthDate,
+  createdAt: USERS_MOCK[0].createdAt,
+  updatedAt: USERS_MOCK[0].updatedAt
+};
 
 export const USER_MOCK: User = USERS_MOCK[0];
 

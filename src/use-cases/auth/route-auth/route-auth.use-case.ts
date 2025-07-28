@@ -21,15 +21,33 @@ export class RouteAuthUseCase {
     private readonly userRepository: UserRepository
   ) {}
 
-  async execute(request: AuthenticatedRequest) {
-    const authorization = request.headers.cookie;
+  private parseCookies(cookieHeader: string): Record<string, string> {
+    return cookieHeader
+      .split(";")
+      .reduce((acc: Record<string, string>, cookie) => {
+        const [name, ...rest] = cookie.trim().split("=");
+        if (name && rest.length > 0) {
+          acc[name] = rest.join("=");
+        }
+        return acc;
+      }, {});
+  }
 
-    if (!authorization) {
+  async execute(request: AuthenticatedRequest) {
+    const cookieHeader = request.headers.cookie;
+
+    if (!cookieHeader) {
       this.exceptionAdapter.unauthorized({ message: "Unauthorized" });
       return false;
     }
 
-    const [, token] = authorization.split("=");
+    const cookies = this.parseCookies(cookieHeader);
+    const token = cookies.Authorization;
+
+    if (!token) {
+      this.exceptionAdapter.unauthorized({ message: "Unauthorized" });
+      return false;
+    }
 
     const userPayload = await this.jwtAdapter.verifyToken(token);
 

@@ -7,8 +7,8 @@ import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { CryptographyAdapter } from "@domain/adapters/cryptography.adapter";
 import { CryptographyAdapterStub } from "@test/stubs/adapters/cryptography.stub";
-import { USER_MOCK } from "@test/mocks/user.mock";
-import { LOGIN_PARAMS } from "@test/mocks/auth.mock";
+import { BASE_USER_MOCK, USER_MOCK } from "@test/mocks/user.mock";
+import { generateResponseMock, LOGIN_PARAMS } from "@test/mocks/auth.mock";
 
 describe("LoginUseCase", () => {
   let sut: LoginUseCase;
@@ -38,11 +38,15 @@ describe("LoginUseCase", () => {
     jest.spyOn(jwtAdapter, "generateToken").mockResolvedValue("token");
     jest.spyOn(cryptographyAdapter, "compare").mockResolvedValue(true);
 
-    const result = await sut.execute(LOGIN_PARAMS.email, LOGIN_PARAMS.password);
+    const RES_MOCK = generateResponseMock();
 
-    testUtils.resultExpectations(result, {
-      accessToken: "Bearer token"
-    });
+    const result = await sut.execute(
+      LOGIN_PARAMS.email,
+      LOGIN_PARAMS.password,
+      RES_MOCK
+    );
+
+    testUtils.resultExpectations(result, BASE_USER_MOCK);
 
     testUtils.notCalledExpectations([exceptionAdapter.forbidden]);
 
@@ -79,12 +83,19 @@ describe("LoginUseCase", () => {
     jest.spyOn(jwtAdapter, "generateToken");
     jest.spyOn(cryptographyAdapter, "compare");
 
-    const result = await sut.execute(LOGIN_PARAMS.email, LOGIN_PARAMS.password);
+    const RES_MOCK = generateResponseMock();
+
+    const result = await sut.execute(
+      LOGIN_PARAMS.email,
+      LOGIN_PARAMS.password,
+      RES_MOCK
+    );
 
     testUtils.resultExpectations(result, undefined);
     testUtils.notCalledExpectations([
       jwtAdapter.generateToken,
-      cryptographyAdapter.compare
+      cryptographyAdapter.compare,
+      RES_MOCK.cookie
     ]);
     testUtils.timesCalledExpectations({
       times: 1,
