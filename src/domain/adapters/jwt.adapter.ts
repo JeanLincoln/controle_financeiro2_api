@@ -1,5 +1,5 @@
 export interface JwtSignOptions {
-  expiresIn: string;
+  expiresIn: string | number;
   subject: string;
   issuer: string;
   audience: string;
