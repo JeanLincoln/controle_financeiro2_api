@@ -10,7 +10,7 @@ import { Response } from "express";
 
 const TWO_DAYS_IN_MS = 2 * 24 * 60 * 60 * 1000;
 const COOKIE_EXPIRATION = TWO_DAYS_IN_MS;
-const JWT_ADAPTER_EXPIRATION = "2 days";
+const TOKEN_EXPIRATION = "2 days";
 
 @Injectable()
 export class LoginUseCase {
@@ -50,7 +50,7 @@ export class LoginUseCase {
         id: user.id.toString()
       },
       {
-        expiresIn: JWT_ADAPTER_EXPIRATION,
+        expiresIn: TOKEN_EXPIRATION,
         subject: user.id.toString(),
         issuer: "controle-financeiro",
         audience: "users"
