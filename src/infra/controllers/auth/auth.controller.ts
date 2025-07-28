@@ -19,7 +19,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
     @Body() { email, password }: LoginDto
   ) {
-    await this.loginUseCase.execute(email, password, res);
+    return this.loginUseCase.execute(email, password, res);
   }
 
   @Post("logout")

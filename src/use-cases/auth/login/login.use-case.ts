@@ -9,9 +9,7 @@ import { Injectable } from "@nestjs/common";
 import { Response } from "express";
 
 const TWO_DAYS_IN_MS = 2 * 24 * 60 * 60 * 1000;
-const COOKIE_EXPIRATION = TWO_DAYS_IN_MS;
-const TOKEN_EXPIRATION = "2 days";
-
+const TOKEN_EXPIRATION = TWO_DAYS_IN_MS;
 @Injectable()
 export class LoginUseCase {
   constructor(
@@ -61,7 +59,7 @@ export class LoginUseCase {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      maxAge: COOKIE_EXPIRATION
+      maxAge: TOKEN_EXPIRATION
     });
 
     return {
