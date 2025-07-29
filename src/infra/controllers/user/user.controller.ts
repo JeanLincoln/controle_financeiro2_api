@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   Req,
+  Res,
   UseGuards
 } from "@nestjs/common";
 import { CreateUserUseCase } from "@use-cases/user/create/create.use-case";
@@ -25,11 +26,10 @@ import { FindUserByIdParamDto } from "./dto/find-by-id.dto";
 import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { UserWithoutPassword } from "@domain/repositories/user.repository";
+import type { Response } from "express";
 
 @ApiTags("Users")
-@ApiCookieAuth()
 @Controller("users")
-@UseGuards(AuthGuard)
 export class UserController {
   constructor(
     private readonly createUserUseCase: CreateUserUseCase,
@@ -40,10 +40,15 @@ export class UserController {
   ) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    return this.createUserUseCase.execute(createUserDto);
+  async create(
+    @Res({ passthrough: true }) Res: Response,
+    @Body() createUserDto: CreateUserDto
+  ) {
+    return this.createUserUseCase.execute(createUserDto, Res);
   }
 
+  @ApiCookieAuth()
+  @UseGuards(AuthGuard)
   @Get()
   async findAll(
     @Query() { page, limit }: PaginationQueryDto
@@ -51,6 +56,8 @@ export class UserController {
     return this.findAllUserUseCase.execute(page, limit);
   }
 
+  @ApiCookieAuth()
+  @UseGuards(AuthGuard)
   @Get(":userId")
   async findById(
     @Req() req: AuthenticatedRequest,
@@ -59,6 +66,8 @@ export class UserController {
     return this.findByIdUserUseCase.execute(userId);
   }
 
+  @ApiCookieAuth()
+  @UseGuards(AuthGuard)
   @Put()
   async update(
     @Req() req: AuthenticatedRequest,
@@ -67,6 +76,8 @@ export class UserController {
     return this.updateUserUseCase.execute(req.user, updateUserDto);
   }
 
+  @ApiCookieAuth()
+  @UseGuards(AuthGuard)
   @Delete()
   @HttpCode(204)
   async delete(@Req() req: AuthenticatedRequest) {
