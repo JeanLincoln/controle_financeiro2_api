@@ -30,6 +30,8 @@ describe("LoginUseCase", () => {
     );
   });
 
+  const TWO_DAYS_IN_MS = 2 * 24 * 60 * 60 * 1000;
+
   it("should be able to login", async () => {
     jest.spyOn(exceptionAdapter, "forbidden");
     jest
@@ -62,7 +64,7 @@ describe("LoginUseCase", () => {
       calledWith: [
         { id: USER_MOCK.id.toString() },
         {
-          expiresIn: "2 days",
+          expiresIn: TWO_DAYS_IN_MS,
           subject: USER_MOCK.id.toString(),
           issuer: "controle-financeiro",
           audience: "users"
