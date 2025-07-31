@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { TransactionRepository } from "@domain/repositories/transaction.repository";
 import { handleUTCTime } from "../../../utils/time/handleUTCTime";
-import { MILLISECONDS_IN_A_DAY } from "../../../utils/time/milliseconds";
 
 export interface TransactionGraphDataPoint {
   date: string;
@@ -39,37 +38,6 @@ export class TransactionGraphUseCase {
     };
   }
 
-  // private getTotalAmount(graphData: TransactionGraphDataPoint[]) {
-  //   return graphData.reduce(
-  //     (sum: number, point: TransactionGraphDataPoint) =>
-  //       sum + point.totalAmount,
-  //     0
-  //   );
-  // }
-
-  // private getTotalTransactions(graphData: TransactionGraphDataPoint[]) {
-  //   return graphData.reduce(
-  //     (sum: number, point: TransactionGraphDataPoint) =>
-  //       sum + point.transactionCount,
-  //     0
-  //   );
-  // }
-
-  private getAveragePerDay(
-    startDate: Date,
-    endDate: Date,
-    totalAmount: number
-  ): number {
-    const daysDifference =
-      Math.ceil(
-        (endDate.getTime() - startDate.getTime()) / MILLISECONDS_IN_A_DAY
-      ) + 1;
-
-    const average = daysDifference > 0 ? totalAmount / daysDifference : 0;
-
-    return Math.round(average * 100) / 100;
-  }
-
   async execute(
     userId: number,
     filters: TransactionGraphFilters
@@ -84,14 +52,6 @@ export class TransactionGraphUseCase {
       userId,
       { startDate: formattedStartDate, endDate: formattedEndDate }
     );
-
-    // const totalAmount = this.getTotalAmount(graphData);
-    // const totalTransactions = this.getTotalTransactions(graphData);
-    // const averagePerDay = this.getAveragePerDay(
-    //   formattedStartDate,
-    //   formattedEndDate,
-    //   totalAmount
-    // );
 
     return {
       data: graphData
