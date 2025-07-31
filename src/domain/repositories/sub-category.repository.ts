@@ -33,7 +33,8 @@ export type SubCategoriesFindOptionsToRepositoryParams =
 interface RankedSubCategory
   extends Omit<BaseSubCategory, "createdAt" | "updatedAt"> {
   ranking: number;
-  totalAmount: number;
+  type: TransactionType;
+  amount: number;
 }
 
 export type SubCategoryRanking = RankedSubCategory[];

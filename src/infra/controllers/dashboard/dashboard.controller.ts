@@ -67,12 +67,11 @@ export class DashboardController {
   @Get("transaction-graph")
   async getTransactionGraph(
     @Req() req: AuthenticatedRequest,
-    @Query() { startDate, endDate, type }: TransactionGraphQueryDto
+    @Query() { startDate, endDate }: TransactionGraphQueryDto
   ) {
     return this.transactionGraphUseCase.execute(req.user.id, {
       startDate,
-      endDate,
-      type
+      endDate
     });
   }
 }

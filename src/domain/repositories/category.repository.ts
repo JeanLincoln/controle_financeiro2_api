@@ -51,7 +51,8 @@ export type CategoryFindOptionsToRepositoryParams = RepositoryPaginationParams &
 
 interface RankedCategory extends Omit<BaseCategory, "createdAt" | "updatedAt"> {
   ranking: number;
-  totalAmount: number;
+  type: TransactionType;
+  amount: number;
 }
 
 export type CategoryRanking = RankedCategory[];

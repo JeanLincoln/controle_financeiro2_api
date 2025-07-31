@@ -46,7 +46,8 @@ export type OriginFindOptionsToRepositoryParams = RepositoryPaginationParams &
 
 interface RankedOrigin extends Omit<BaseOrigin, "createdAt" | "updatedAt"> {
   ranking: number;
-  totalAmount: number;
+  type: TransactionType;
+  amount: number;
 }
 
 export type OriginRanking = RankedOrigin[];

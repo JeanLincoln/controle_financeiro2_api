@@ -131,6 +131,7 @@ export class TypeOrmOriginRepository implements OriginRepository {
       .addGroupBy("origin.description")
       .addGroupBy("origin.color")
       .addGroupBy("origin.icon")
+      .addGroupBy("transaction.type")
       .orderBy("SUM(transaction.amount)", "DESC")
       .limit(TOP_FIVE_ORIGINS)
       .select([
@@ -139,7 +140,8 @@ export class TypeOrmOriginRepository implements OriginRepository {
         "origin.description as description",
         "origin.color as color",
         "origin.icon as icon",
-        "SUM(transaction.amount) as total_amount"
+        "transaction.type as type",
+        "SUM(transaction.amount) as amount"
       ])
       .addSelect(
         `ROW_NUMBER() OVER (ORDER BY SUM(transaction.amount) DESC)`,

@@ -141,6 +141,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
       .addGroupBy("category.name")
       .addGroupBy("category.icon")
       .addGroupBy("category.color")
+      .addGroupBy("transaction.type")
       .orderBy("SUM(transaction.amount)", "DESC")
       .limit(TOP_FIVE_CATEGORIES)
       .select([
@@ -148,7 +149,8 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
         "category.name as name",
         "category.icon as icon",
         "category.color as color",
-        "SUM(transaction.amount) as total_amount"
+        "transaction.type as type",
+        "SUM(transaction.amount) as amount"
       ])
       .addSelect(
         `ROW_NUMBER() OVER (ORDER BY SUM(transaction.amount) DESC)`,

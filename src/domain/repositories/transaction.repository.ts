@@ -82,15 +82,14 @@ export type TransactionRanking = RankedTransaction[];
 
 export interface TransactionGraphDataPoint {
   date: string;
-  type: TransactionType;
-  totalAmount: number;
-  transactionCount: number;
+  income: number;
+  expense: number;
+  balance: number;
 }
 
 export interface TransactionGraphFilters {
   startDate: Date;
   endDate: Date;
-  type?: TransactionType;
 }
 
 export abstract class TransactionRepository {
