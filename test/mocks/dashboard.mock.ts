@@ -270,39 +270,28 @@ export const CreateFormattedMockDate = (
 
 export const TRANSACTION_GRAPH_FILTERS = {
   startDate: CreateFormattedMockDate(new Date(2025, 0, 1)),
-  endDate: CreateFormattedMockDate(new Date(2025, 0, 1), 23, 59, 59),
-  type: TransactionType.EXPENSE
+  endDate: CreateFormattedMockDate(new Date(2025, 0, 1), 23, 59, 59)
 };
 
 export const TRANSACTION_GRAPH_DATA_MOCK = [
   {
     date: "2025-01-01",
-    type: TransactionType.EXPENSE,
-    totalAmount: 100.5,
-    transactionCount: 2
+    income: 200.2,
+    expense: 100.5,
+    balance: 99.7
   },
   {
-    date: "2025-01-02",
-    type: TransactionType.EXPENSE,
-    totalAmount: 200.75,
-    transactionCount: 3
+    date: "2025-02-01",
+    income: 300.2,
+    expense: 400.5,
+    balance: -100.3
   }
 ];
 
 export const TRANSACTION_GRAPH_RETURN_MOCK = {
-  data: TRANSACTION_GRAPH_DATA_MOCK,
-  summary: {
-    totalAmount: 301.25,
-    totalTransactions: 5,
-    averagePerDay: 150.63
-  }
+  data: TRANSACTION_GRAPH_DATA_MOCK
 };
 
 export const TRANSACTION_GRAPH_EMPTY_RETURN_MOCK = {
-  data: [],
-  summary: {
-    totalAmount: 0,
-    totalTransactions: 0,
-    averagePerDay: 0
-  }
+  data: []
 };

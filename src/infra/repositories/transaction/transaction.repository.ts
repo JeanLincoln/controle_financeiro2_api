@@ -287,25 +287,29 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
         endDate: filters.endDate
       });
 
-    if (filters.type) {
-      query.andWhere("transaction.type = :type", { type: filters.type });
-    }
-
     const result = await query
-      .select("TO_CHAR(transaction.transactionDate, 'MM-YYYY')", "date")
-      .addSelect("SUM(transaction.amount)", "totalAmount")
-      .addSelect("COUNT(transaction.id)", "transactionCount")
-      .addSelect("transaction.type", "type")
-      .groupBy("transaction.type")
-      .addGroupBy("TO_CHAR(transaction.transactionDate, 'MM-YYYY')")
-      .orderBy("TO_CHAR(transaction.transactionDate, 'MM-YYYY')", "ASC")
+      .select("TO_CHAR(transaction.transactionDate, 'YYYY-MM-DD')", "date")
+      .addSelect(
+        "SUM(CASE WHEN transaction.type = 'INCOME' THEN transaction.amount ELSE 0 END)",
+        "income"
+      )
+      .addSelect(
+        "SUM(CASE WHEN transaction.type = 'EXPENSE' THEN transaction.amount ELSE 0 END)",
+        "expense"
+      )
+      .addSelect(
+        "SUM(CASE WHEN transaction.type = 'INCOME' THEN transaction.amount ELSE 0 END) - SUM(CASE WHEN transaction.type = 'EXPENSE' THEN transaction.amount ELSE 0 END)",
+        "balance"
+      )
+      .groupBy("TO_CHAR(transaction.transactionDate, 'YYYY-MM-DD')")
+      .orderBy("TO_CHAR(transaction.transactionDate, 'YYYY-MM-DD')", "ASC")
       .getRawMany();
 
     return result.map((row: TransactionGraphDataPoint) => ({
       date: row.date,
-      type: row.type,
-      totalAmount: Number(row.totalAmount) || 0,
-      transactionCount: Number(row.transactionCount) || 0
+      income: row.income,
+      expense: row.expense,
+      balance: row.balance
     }));
   }
 }

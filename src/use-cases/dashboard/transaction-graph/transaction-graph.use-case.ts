@@ -1,28 +1,22 @@
 import { Injectable } from "@nestjs/common";
 import { TransactionRepository } from "@domain/repositories/transaction.repository";
-import { TransactionType } from "@domain/entities/transaction.entity";
 import { handleUTCTime } from "../../../utils/time/handleUTCTime";
 import { MILLISECONDS_IN_A_DAY } from "../../../utils/time/milliseconds";
 
 export interface TransactionGraphDataPoint {
   date: string;
-  totalAmount: number;
-  transactionCount: number;
+  expense: number;
+  income: number;
+  balance: number;
 }
 
 export interface TransactionGraphData {
   data: TransactionGraphDataPoint[];
-  summary: {
-    totalAmount: number;
-    totalTransactions: number;
-    averagePerDay: number;
-  };
 }
 
 export interface TransactionGraphFilters {
   startDate: Date;
   endDate: Date;
-  type?: TransactionType;
 }
 
 interface FormatDatesReturn {
@@ -45,21 +39,21 @@ export class TransactionGraphUseCase {
     };
   }
 
-  private getTotalAmount(graphData: TransactionGraphDataPoint[]) {
-    return graphData.reduce(
-      (sum: number, point: TransactionGraphDataPoint) =>
-        sum + point.totalAmount,
-      0
-    );
-  }
+  // private getTotalAmount(graphData: TransactionGraphDataPoint[]) {
+  //   return graphData.reduce(
+  //     (sum: number, point: TransactionGraphDataPoint) =>
+  //       sum + point.totalAmount,
+  //     0
+  //   );
+  // }
 
-  private getTotalTransactions(graphData: TransactionGraphDataPoint[]) {
-    return graphData.reduce(
-      (sum: number, point: TransactionGraphDataPoint) =>
-        sum + point.transactionCount,
-      0
-    );
-  }
+  // private getTotalTransactions(graphData: TransactionGraphDataPoint[]) {
+  //   return graphData.reduce(
+  //     (sum: number, point: TransactionGraphDataPoint) =>
+  //       sum + point.transactionCount,
+  //     0
+  //   );
+  // }
 
   private getAveragePerDay(
     startDate: Date,
@@ -80,7 +74,7 @@ export class TransactionGraphUseCase {
     userId: number,
     filters: TransactionGraphFilters
   ): Promise<TransactionGraphData> {
-    const { startDate, endDate, type } = filters;
+    const { startDate, endDate } = filters;
     const { formattedEndDate, formattedStartDate } = this.formatDates(
       startDate,
       endDate
@@ -88,24 +82,19 @@ export class TransactionGraphUseCase {
 
     const graphData = await this.transactionRepository.getTransactionGraphData(
       userId,
-      { startDate: formattedStartDate, endDate: formattedEndDate, type }
+      { startDate: formattedStartDate, endDate: formattedEndDate }
     );
 
-    const totalAmount = this.getTotalAmount(graphData);
-    const totalTransactions = this.getTotalTransactions(graphData);
-    const averagePerDay = this.getAveragePerDay(
-      formattedStartDate,
-      formattedEndDate,
-      totalAmount
-    );
+    // const totalAmount = this.getTotalAmount(graphData);
+    // const totalTransactions = this.getTotalTransactions(graphData);
+    // const averagePerDay = this.getAveragePerDay(
+    //   formattedStartDate,
+    //   formattedEndDate,
+    //   totalAmount
+    // );
 
     return {
-      data: graphData,
-      summary: {
-        totalAmount,
-        totalTransactions,
-        averagePerDay
-      }
+      data: graphData
     };
   }
 }

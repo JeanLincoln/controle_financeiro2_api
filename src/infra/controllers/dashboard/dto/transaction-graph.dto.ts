@@ -1,7 +1,6 @@
-import { TransactionType } from "@domain/entities/transaction.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
-import { IsDate, IsEnum, IsOptional } from "class-validator";
+import { IsDate } from "class-validator";
 
 export class TransactionGraphQueryDto {
   @ApiProperty({
@@ -21,14 +20,4 @@ export class TransactionGraphQueryDto {
   @IsDate()
   @Type(() => Date)
   endDate: Date;
-
-  @ApiProperty({
-    enum: TransactionType,
-    description: "Filter by transaction type",
-    required: false,
-    example: TransactionType.EXPENSE
-  })
-  @IsOptional()
-  @IsEnum(TransactionType)
-  type?: TransactionType;
 }
