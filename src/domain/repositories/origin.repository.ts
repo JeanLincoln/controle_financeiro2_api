@@ -26,15 +26,21 @@ export enum OriginsSortableFieldsEnum {
   updatedAt = "updatedAt"
 }
 
+export type OriginFindAllFilters = {
+  name?: string;
+};
+
 export interface OriginsSearchField {
   search?: string;
 }
 
 export type OriginFindAllToUseCase = CommonPaginationParams &
-  SortParams<OriginsSortableFieldsEnum>;
+  SortParams<OriginsSortableFieldsEnum> &
+  OriginFindAllFilters;
 
 export type OriginFindAllToRepositoryParams = RepositoryPaginationParams &
-  SortParams<OriginsSortableFieldsEnum>;
+  SortParams<OriginsSortableFieldsEnum> &
+  OriginFindAllFilters;
 
 export type OriginOptionsToUseCaseParams = CommonPaginationParams &
   SortOrderParam &

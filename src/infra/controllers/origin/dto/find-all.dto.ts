@@ -5,6 +5,8 @@ import {
   SortableOrderDto
 } from "@infra/commons/decorators/dto-decorators/sort-dto.decorator";
 import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsOptional, IsString } from "class-validator";
 
 export class FindAllOriginDto extends PaginationQueryDto {
   @SortableFieldDto({
@@ -16,4 +18,15 @@ export class FindAllOriginDto extends PaginationQueryDto {
 
   @SortableOrderDto()
   sortOrder: SortOrderEnum;
+
+  @ApiPropertyOptional({
+    description: "Filter origins that  match this name (case-insensitive).",
+    example: "Supermarket",
+    required: false,
+    type: String,
+    format: "string"
+  })
+  @IsString()
+  @IsOptional()
+  name?: string;
 }

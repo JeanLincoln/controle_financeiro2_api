@@ -23,13 +23,12 @@ export class TypeOrmOriginRepository implements OriginRepository {
 
   async findAll(
     userId: number,
-    { skip, take, sortBy, sortOrder }: OriginFindAllToRepositoryParams
+    { name, skip, take, sortBy, sortOrder }: OriginFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Origin>> {
     const [origins, total] = await this.originRepository.findAndCount({
-      where: { user: { id: userId } },
-      relations: ["user"],
-      select: {
-        user: USER_WITHOUT_PASSWORD_SELECT
+      where: {
+        user: { id: userId },
+        ...(name && { name: ILike(`%${name}%`) })
       },
       skip,
       take,
