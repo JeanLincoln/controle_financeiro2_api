@@ -8,7 +8,7 @@ import {
   type OriginRanking
 } from "@domain/repositories/origin.repository";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ILike, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
@@ -25,15 +25,22 @@ export class TypeOrmOriginRepository implements OriginRepository {
     userId: number,
     { name, skip, take, sortBy, sortOrder }: OriginFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Origin>> {
-    const [origins, total] = await this.originRepository.findAndCount({
-      where: {
-        user: { id: userId },
-        ...(name && { name: ILike(`%${name}%`) })
-      },
-      skip,
-      take,
-      order: sortQuery(sortBy, sortOrder)
-    });
+    const queryBuilder = this.originRepository
+      .createQueryBuilder("origin")
+      .where("origin.user_id = :userId", { userId });
+
+    if (name) {
+      queryBuilder.andWhere(
+        "(unaccent(lower(origin.name)) ILIKE unaccent(lower(:name)) OR unaccent(lower(origin.description)) ILIKE unaccent(lower(:name)))",
+        { name: `%${name}%` }
+      );
+    }
+
+    const [origins, total] = await queryBuilder
+      .skip(skip)
+      .take(take)
+      .orderBy(sortQuery(sortBy, sortOrder))
+      .getManyAndCount();
 
     return {
       data: origins,
@@ -45,16 +52,23 @@ export class TypeOrmOriginRepository implements OriginRepository {
     userId: number,
     { skip, take, sortOrder, search }: OriginFindOptionsToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<OriginOption>> {
-    const [origins, total] = await this.originRepository.findAndCount({
-      where: {
-        user: { id: userId },
-        ...(search && { name: ILike(`%${search}%`) })
-      },
-      select: ["id", "name"],
-      skip,
-      take,
-      order: sortQuery("name", sortOrder)
-    });
+    const queryBuilder = this.originRepository
+      .createQueryBuilder("origin")
+      .select(["origin.id", "origin.name"])
+      .where("origin.userId = :userId", { userId });
+
+    if (search) {
+      queryBuilder.andWhere(
+        "unaccent(lower(origin.name)) ILIKE unaccent(lower(:search))",
+        { search: `%${search}%` }
+      );
+    }
+
+    const [origins, total] = await queryBuilder
+      .skip(skip)
+      .take(take)
+      .orderBy(sortQuery("name", sortOrder))
+      .getManyAndCount();
 
     return {
       data: origins,

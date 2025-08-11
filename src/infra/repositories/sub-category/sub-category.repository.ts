@@ -7,7 +7,7 @@ import {
   type SubCategoryRanking
 } from "@domain/repositories/sub-category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ILike, In, Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
@@ -53,17 +53,23 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
       search
     }: SubCategoriesFindOptionsToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<SubCategoryOption>> {
-    const [subCategories, total] =
-      await this.subCategoryRepository.findAndCount({
-        where: {
-          category: { id: categoryId, user: { id: userId } },
-          ...(search && { name: ILike(`%${search}%`) })
-        },
-        select: ["id", "name"],
-        skip,
-        take,
-        order: sortQuery("name", sortOrder)
-      });
+    const queryBuilder = this.subCategoryRepository
+      .createQueryBuilder("subCategory")
+      .select(["subCategory.id", "subCategory.name"])
+      .where("subCategory.userId = :userId", { userId });
+
+    if (search) {
+      queryBuilder.andWhere(
+        "unaccent(lower(subCategory.name)) ILIKE unaccent(lower(:search))",
+        { search: `%${search}%` }
+      );
+    }
+
+    const [subCategories, total] = await queryBuilder
+      .skip(skip)
+      .take(take)
+      .orderBy(sortQuery("name", sortOrder))
+      .getManyAndCount();
 
     return {
       data: subCategories,

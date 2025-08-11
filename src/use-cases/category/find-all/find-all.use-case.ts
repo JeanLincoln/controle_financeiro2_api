@@ -18,13 +18,14 @@ export class FindAllCategoryUseCase {
     userId: number,
     queryParams: CategoryFindAllToUseCase
   ): Promise<PaginatedResult<Category> | void> {
-    const { page, limit, sortBy, sortOrder } = queryParams;
+    const { page, limit, sortBy, sortOrder, name } = queryParams;
 
     const { paginationParams, repositoryParams, createPaginationResult } =
       await this.paginationUseCase.execute(page, limit);
 
     const paginatedCategories = await this.categoryRepository.findAll(userId, {
       ...repositoryParams,
+      name,
       sortBy,
       sortOrder
     });

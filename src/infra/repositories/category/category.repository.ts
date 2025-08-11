@@ -9,7 +9,7 @@ import {
   type CategoryRanking
 } from "@domain/repositories/category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, In, ILike } from "typeorm";
+import { Repository, In } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
@@ -24,14 +24,24 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
 
   async findAll(
     userId: number,
-    { skip, take, sortBy, sortOrder }: CategoryFindAllToRepositoryParams
+    { skip, take, sortBy, sortOrder, name }: CategoryFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Category>> {
-    const [categories, total] = await this.categoryRepository.findAndCount({
-      where: { user: { id: userId } },
-      skip,
-      take,
-      order: sortQuery(sortBy, sortOrder)
-    });
+    const queryBuilder = this.categoryRepository
+      .createQueryBuilder("category")
+      .where("category.user_id = :userId", { userId });
+
+    if (name) {
+      queryBuilder.andWhere(
+        "(unaccent(lower(category.name)) ILIKE unaccent(lower(:name)) OR unaccent(lower(category.description)) ILIKE unaccent(lower(:name)))",
+        { name: `%${name}%` }
+      );
+    }
+
+    const [categories, total] = await queryBuilder
+      .skip(skip)
+      .take(take)
+      .orderBy(sortQuery(sortBy, sortOrder))
+      .getManyAndCount();
 
     return {
       data: categories,
@@ -43,16 +53,23 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     userId: number,
     { skip, take, sortOrder, search }: CategoryFindOptionsToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<CategoryOption>> {
-    const [categories, total] = await this.categoryRepository.findAndCount({
-      where: {
-        user: { id: userId },
-        ...(search && { name: ILike(`%${search}%`) })
-      },
-      select: ["id", "name"],
-      skip,
-      take,
-      order: sortQuery("name", sortOrder)
-    });
+    const queryBuilder = this.categoryRepository
+      .createQueryBuilder("category")
+      .select(["category.id", "category.name"])
+      .where("category.userId = :userId", { userId });
+
+    if (search) {
+      queryBuilder.andWhere(
+        "unaccent(lower(category.name)) ILIKE unaccent(lower(:search))",
+        { search: `%${search}%` }
+      );
+    }
+
+    const [categories, total] = await queryBuilder
+      .skip(skip)
+      .take(take)
+      .orderBy(sortQuery("name", sortOrder))
+      .getManyAndCount();
 
     return {
       data: categories,
