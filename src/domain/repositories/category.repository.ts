@@ -31,15 +31,20 @@ export enum CategoriesSortableFieldsEnum {
   updatedAt = "updatedAt"
 }
 
+export type CategoryFindAllFilters = {
+  name?: string;
+};
 export interface CategoriesSearchField {
   search?: string;
 }
 
 export type CategoryFindAllToUseCase = CommonPaginationParams &
-  SortParams<CategoriesSortableFieldsEnum>;
+  SortParams<CategoriesSortableFieldsEnum> &
+  CategoryFindAllFilters;
 
 export type CategoryFindAllToRepositoryParams = RepositoryPaginationParams &
-  SortParams<CategoriesSortableFieldsEnum>;
+  SortParams<CategoriesSortableFieldsEnum> &
+  CategoryFindAllFilters;
 
 export type CategoryOptionsToUseCaseParams = CommonPaginationParams &
   SortOrderParam &

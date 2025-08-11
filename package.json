@@ -95,7 +95,7 @@
       "prettier --config .prettierrc.json --write",
       "eslint . --ignore-pattern 'dist/*' --ignore-pattern 'node_modules/*'",
       "bash -c tsc --noEmit",
-      "pnpm test"
+      "pnpm test src/**/*.spec.ts"
     ]
   }
 }

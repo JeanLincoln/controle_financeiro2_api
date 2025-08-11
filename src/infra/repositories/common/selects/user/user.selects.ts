@@ -14,3 +14,13 @@ export const USER_WITHOUT_PASSWORD_SELECT: Record<
   createdAt: true,
   updatedAt: true
 };
+
+export const USER_WITHOUT_PASSWORD_SELECT_STRING = [
+  "user.id",
+  "user.firstName",
+  "user.lastName",
+  "user.email",
+  "user.birthDate",
+  "user.createdAt",
+  "user.updatedAt"
+];
