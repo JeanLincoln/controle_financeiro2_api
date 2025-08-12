@@ -26,22 +26,40 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     userId: number,
     { skip, take, sortBy, sortOrder, name }: CategoryFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Category>> {
-    const queryBuilder = this.categoryRepository
+    const categoryIdsQueryBuilder = this.categoryRepository
       .createQueryBuilder("category")
       .where("category.user_id = :userId", { userId });
 
     if (name) {
-      queryBuilder.andWhere(
+      categoryIdsQueryBuilder.andWhere(
         "(unaccent(lower(category.name)) ILIKE unaccent(lower(:name)) OR unaccent(lower(category.description)) ILIKE unaccent(lower(:name)))",
         { name: `%${name}%` }
       );
     }
 
-    const [categories, total] = await queryBuilder
+    const [categoryIds, total] = await categoryIdsQueryBuilder
       .skip(skip)
       .take(take)
-      .orderBy(sortQuery(sortBy, sortOrder))
+      .select("category.id")
       .getManyAndCount();
+
+    const categories = await this.categoryRepository.find({
+      where: { id: In(categoryIds.map((category) => category.id)) },
+      relations: ["subCategories"],
+      order: sortQuery(sortBy, sortOrder),
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        color: true,
+        icon: true,
+        createdAt: true,
+        updatedAt: true,
+        subCategories: {
+          name: true
+        }
+      }
+    });
 
     return {
       data: categories,
@@ -56,7 +74,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     const queryBuilder = this.categoryRepository
       .createQueryBuilder("category")
       .select(["category.id", "category.name"])
-      .where("category.userId = :userId", { userId });
+      .where("category.user_id = :userId", { userId });
 
     if (search) {
       queryBuilder.andWhere(
