@@ -22,7 +22,6 @@ import { UpdateCategoryUseCase } from "@use-cases/category/update/update.use-cas
 import { DeleteCategoryUseCase } from "@use-cases/category/delete/delete.use-case";
 import { DeleteCategoryParamDto } from "./dto/delete.dto";
 import { FindCategoryByIdParamDto } from "./dto/find-by-id.dto";
-import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 import { CategoryValidationGuard } from "@infra/commons/guards/category/category-validation.guard";
 import { Category } from "@domain/entities/category.entity";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
@@ -68,7 +67,6 @@ export class CategoryController {
     return this.optionsCategoryUseCase.execute(req.user.id, queryParams);
   }
 
-  @ExcludeFields("user")
   @UseGuards(CategoryValidationGuard)
   @Get(":categoryId")
   async findById(

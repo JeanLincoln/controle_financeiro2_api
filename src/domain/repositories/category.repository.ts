@@ -21,6 +21,10 @@ export type CreateOrUpdateAllCategoryProps = Omit<
   "id" | "createdAt" | "updatedAt"
 >;
 
+export type CreateCategoryReturn = {
+  id: number;
+};
+
 export type CategoryOption = Pick<BaseCategory, "id" | "name">;
 
 export enum CategoriesSortableFieldsEnum {
@@ -76,7 +80,7 @@ export abstract class CategoryRepository {
   abstract create(
     user: User,
     category: CreateOrUpdateAllCategoryProps
-  ): Promise<void>;
+  ): Promise<CreateCategoryReturn | void>;
   abstract update(
     id: number,
     userId: number,

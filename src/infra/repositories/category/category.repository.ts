@@ -6,7 +6,8 @@ import {
   CategoryFindAllToRepositoryParams,
   CategoryFindOptionsToRepositoryParams,
   CategoryOption,
-  type CategoryRanking
+  type CategoryRanking,
+  type CreateCategoryReturn
 } from "@domain/repositories/category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
@@ -48,15 +49,11 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
       relations: ["subCategories"],
       order: sortQuery(sortBy, sortOrder),
       select: {
-        id: true,
-        name: true,
-        description: true,
-        color: true,
-        icon: true,
-        createdAt: true,
-        updatedAt: true,
         subCategories: {
-          name: true
+          id: true,
+          name: true,
+          icon: true,
+          color: true
         }
       }
     });
@@ -100,6 +97,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
       where: { id },
       relations: ["user", "subCategories"],
       select: {
+        subCategories: true,
         user: USER_WITHOUT_PASSWORD_SELECT
       }
     });
@@ -108,7 +106,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
   async findByIds(ids: number[]): Promise<Category[]> {
     return this.categoryRepository.find({
       where: { id: In(ids) },
-      relations: ["user"],
+      relations: ["user", "subCategories"],
       select: {
         user: USER_WITHOUT_PASSWORD_SELECT
       }
@@ -118,7 +116,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
   async create(
     user: User,
     category: CreateOrUpdateAllCategoryProps
-  ): Promise<void> {
+  ): Promise<CreateCategoryReturn | void> {
     const categoryInstance = this.categoryRepository.create({
       ...category,
       user: user,
@@ -126,6 +124,8 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
       updatedAt: new Date()
     });
     await this.categoryRepository.save(categoryInstance);
+
+    return { id: categoryInstance.id };
   }
 
   async update(
