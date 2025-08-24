@@ -6,7 +6,8 @@ import {
   CategoryFindAllToRepositoryParams,
   CategoryFindOptionsToRepositoryParams,
   CategoryOption,
-  type CategoryRanking
+  type CategoryRanking,
+  type CreateCategoryReturn
 } from "@domain/repositories/category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";
@@ -26,22 +27,36 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     userId: number,
     { skip, take, sortBy, sortOrder, name }: CategoryFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Category>> {
-    const queryBuilder = this.categoryRepository
+    const categoryIdsQueryBuilder = this.categoryRepository
       .createQueryBuilder("category")
       .where("category.user_id = :userId", { userId });
 
     if (name) {
-      queryBuilder.andWhere(
+      categoryIdsQueryBuilder.andWhere(
         "(unaccent(lower(category.name)) ILIKE unaccent(lower(:name)) OR unaccent(lower(category.description)) ILIKE unaccent(lower(:name)))",
         { name: `%${name}%` }
       );
     }
 
-    const [categories, total] = await queryBuilder
+    const [categoryIds, total] = await categoryIdsQueryBuilder
       .skip(skip)
       .take(take)
-      .orderBy(sortQuery(sortBy, sortOrder))
+      .select("category.id")
       .getManyAndCount();
+
+    const categories = await this.categoryRepository.find({
+      where: { id: In(categoryIds.map((category) => category.id)) },
+      relations: ["subCategories"],
+      order: sortQuery(sortBy, sortOrder),
+      select: {
+        subCategories: {
+          id: true,
+          name: true,
+          icon: true,
+          color: true
+        }
+      }
+    });
 
     return {
       data: categories,
@@ -56,7 +71,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     const queryBuilder = this.categoryRepository
       .createQueryBuilder("category")
       .select(["category.id", "category.name"])
-      .where("category.userId = :userId", { userId });
+      .where("category.user_id = :userId", { userId });
 
     if (search) {
       queryBuilder.andWhere(
@@ -82,6 +97,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
       where: { id },
       relations: ["user", "subCategories"],
       select: {
+        subCategories: true,
         user: USER_WITHOUT_PASSWORD_SELECT
       }
     });
@@ -90,7 +106,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
   async findByIds(ids: number[]): Promise<Category[]> {
     return this.categoryRepository.find({
       where: { id: In(ids) },
-      relations: ["user"],
+      relations: ["user", "subCategories"],
       select: {
         user: USER_WITHOUT_PASSWORD_SELECT
       }
@@ -100,7 +116,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
   async create(
     user: User,
     category: CreateOrUpdateAllCategoryProps
-  ): Promise<void> {
+  ): Promise<CreateCategoryReturn | void> {
     const categoryInstance = this.categoryRepository.create({
       ...category,
       user: user,
@@ -108,6 +124,8 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
       updatedAt: new Date()
     });
     await this.categoryRepository.save(categoryInstance);
+
+    return { id: categoryInstance.id };
   }
 
   async update(
