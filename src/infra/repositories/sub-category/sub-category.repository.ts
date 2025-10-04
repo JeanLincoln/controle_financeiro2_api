@@ -10,7 +10,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
-import { sortQuery } from "../common/queries/sort.query";
 import { getLastAndCurrentDates } from "src/utils/time/get-last-and-current-dates";
 import { TransactionType } from "@domain/entities/transaction.entity";
 
@@ -45,18 +44,19 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
 
   async options(
     userId: number,
-    categoryId: number,
     {
       skip,
       take,
       sortOrder,
-      search
+      search,
+      categoriesIds
     }: SubCategoriesFindOptionsToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<SubCategoryOption>> {
     const queryBuilder = this.subCategoryRepository
       .createQueryBuilder("subCategory")
+      .innerJoin("subCategory.category", "category")
       .select(["subCategory.id", "subCategory.name"])
-      .where("subCategory.userId = :userId", { userId });
+      .where("category.user_Id = :userId", { userId });
 
     if (search) {
       queryBuilder.andWhere(
@@ -65,10 +65,22 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
       );
     }
 
+    if (categoriesIds && Array.isArray(categoriesIds)) {
+      queryBuilder.andWhere("subCategory.categoryId IN (:...categoriesIds)", {
+        categoriesIds
+      });
+    }
+
+    if (categoriesIds && !Array.isArray(categoriesIds)) {
+      queryBuilder.andWhere("subCategory.categoryId = :categoriesIds", {
+        categoriesIds
+      });
+    }
+
     const [subCategories, total] = await queryBuilder
       .skip(skip)
       .take(take)
-      .orderBy(sortQuery("name", sortOrder))
+      .orderBy("subCategory.name", sortOrder)
       .getManyAndCount();
 
     return {

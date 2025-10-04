@@ -21,6 +21,7 @@ export type SubCategoryOption = Pick<SubCategory, "id" | "name">;
 
 export interface SubCategoriesSearchField {
   search?: string;
+  categoriesIds?: number[];
 }
 
 export type SubCategoryOptionsToUseCaseParams = CommonPaginationParams &
@@ -43,7 +44,6 @@ export abstract class SubCategoryRepository {
   abstract findAllByCategory(categoryId: number): Promise<SubCategory[]>;
   abstract options(
     userId: number,
-    categoryId: number,
     paginationParams: SubCategoriesFindOptionsToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<SubCategoryOption>>;
   abstract findById(id: number): Promise<SubCategory | null>;

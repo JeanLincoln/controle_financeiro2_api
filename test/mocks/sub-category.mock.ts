@@ -17,6 +17,10 @@ import {
   PaginatedResult,
   PaginationMeta
 } from "@domain/entities/common/pagination.entity";
+import {
+  OPTIONS_PAGINATION_AND_SORT_PARAMS_MOCK,
+  OPTIONS_PAGINATION_TO_REPOSITORY_PARAMS_MOCK
+} from "./pagination.mock";
 
 export const CREATE_SUB_CATEGORY_MOCK: CreateOrUpdateAllSubCategoryProps = {
   name: "Sub Category",
@@ -83,6 +87,18 @@ export const PAGINATED_SUB_CATEGORIES_OPTIONS_MOCK: PaginatedResult<SubCategoryO
     data: SUB_CATEGORIES_OPTIONS_MOCK,
     pagination: SUB_CATEGORY_PAGINATION_META_MOCK
   };
+
+export const SUB_CATEGORIES_OPTIONS_PARAMS_MOCK = {
+  ...OPTIONS_PAGINATION_AND_SORT_PARAMS_MOCK,
+  search: "",
+  categoriesIds: USER_1_CATEGORIES_MOCK.map((category) => category.id)
+};
+
+export const SUB_CATEGORIES_OPTIONS_TO_REPOSITORY_PARAMS_MOCK = {
+  ...OPTIONS_PAGINATION_TO_REPOSITORY_PARAMS_MOCK,
+  search: "",
+  categoriesIds: USER_1_CATEGORIES_MOCK.map((category) => category.id)
+};
 
 export const PARAM_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK = {
   user: USER_MOCK,
