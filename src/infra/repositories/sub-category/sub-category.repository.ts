@@ -65,14 +65,8 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
       );
     }
 
-    if (categoriesIds && Array.isArray(categoriesIds)) {
+    if (categoriesIds && categoriesIds.length > 0) {
       queryBuilder.andWhere("subCategory.categoryId IN (:...categoriesIds)", {
-        categoriesIds
-      });
-    }
-
-    if (categoriesIds && !Array.isArray(categoriesIds)) {
-      queryBuilder.andWhere("subCategory.categoryId = :categoriesIds", {
         categoriesIds
       });
     }

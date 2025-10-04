@@ -15,6 +15,13 @@ export const NumberArrayValidations =
     required = false
   }: NumberArrayValidationsProps) =>
   (target: object, propertyKey: string) => {
+    Transform(({ value }: { value: number[] | number | string | string[] }) => {
+      if (!value) return [];
+
+      return Array.isArray(value)
+        ? value.map((item) => Number(item))
+        : [Number(value)];
+    })(target, propertyKey);
     ApiProperty({
       required,
       description: description || "An array of numbers.",
@@ -25,13 +32,4 @@ export const NumberArrayValidations =
     IsArray()(target, propertyKey);
     IsNumber({}, { each: true })(target, propertyKey);
     Min(1, { each: true })(target, propertyKey);
-    Transform(({ value }: { value: number[] | number }) => {
-      const valueIsAnArray = Array.isArray(value);
-
-      if (!valueIsAnArray && !!value) return [Number(value)];
-
-      return valueIsAnArray && !!value.length
-        ? value.map((item) => Number(item))
-        : [];
-    })(target, propertyKey);
   };
