@@ -55,7 +55,7 @@ export class TypeOrmOriginRepository implements OriginRepository {
     const queryBuilder = this.originRepository
       .createQueryBuilder("origin")
       .select(["origin.id", "origin.name"])
-      .where("origin.userId = :userId", { userId });
+      .where("origin.user_id = :userId", { userId });
 
     if (search) {
       queryBuilder.andWhere(

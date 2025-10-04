@@ -16,19 +16,19 @@ export class OptionsSubCategoryUseCase {
 
   async execute(
     userId: number,
-    categoryId: number,
     queryParams: SubCategoryOptionsToUseCaseParams
   ): Promise<PaginatedResult<SubCategoryOption>> {
-    const { sortOrder, limit, page, search } = queryParams;
+    const { sortOrder, limit, page, search, categoriesIds } = queryParams;
 
     const { paginationParams, repositoryParams, createPaginationResult } =
       await this.paginationUseCase.execute(page, limit);
 
     const paginatedSubCategoriesOptions =
-      await this.subCategoryRepository.options(userId, categoryId, {
+      await this.subCategoryRepository.options(userId, {
         ...repositoryParams,
         sortOrder,
-        search
+        search,
+        categoriesIds
       });
 
     const { data: subCategoriesOptions, total } = paginatedSubCategoriesOptions;

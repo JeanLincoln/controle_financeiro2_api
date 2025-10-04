@@ -14,7 +14,14 @@ async function bootstrap(): Promise<void> {
     allowedHeaders: "Content-Type, Accept, Authorization"
   });
   SwaggerConfig.config(app);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true
+      }
+    })
+  );
 
   app.useGlobalInterceptors(new LoggingInterceptor());
 

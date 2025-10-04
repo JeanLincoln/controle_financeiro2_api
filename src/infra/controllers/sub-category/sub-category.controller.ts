@@ -33,10 +33,7 @@ import { CategoryValidationGuard } from "@infra/commons/guards/category/category
 import { ParamCategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
 import { SubCategoryValidationGuard } from "@infra/commons/guards/sub-category/sub-category-validation.guard";
 import { ParamSubCategoryAuthenticatedRequest } from "@use-cases/sub-category/find-and-validate/find-and-validate.use-case";
-import {
-  OptionsSubCategoryQueryDto,
-  OptionsSubCategoryParamDto
-} from "./dto/options.dto";
+import { OptionsSubCategoryQueryDto } from "./dto/options.dto";
 import { SubCategoryOption } from "@domain/repositories/sub-category.repository";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { OptionsSubCategoryUseCase } from "@use-cases/sub-category/options/options.use-case";
@@ -62,17 +59,12 @@ export class SubCategoryController {
     return this.createSubCategoryUseCase.execute(req, createSubCategoryDto);
   }
 
-  @Get(":categoryId/options")
+  @Get("options")
   async options(
     @Req() req: ParamCategoryAuthenticatedRequest,
-    @Param() _: OptionsSubCategoryParamDto,
     @Query() queryParams: OptionsSubCategoryQueryDto
   ): Promise<PaginatedResult<SubCategoryOption>> {
-    return this.optionsSubCategoryUseCase.execute(
-      req.user.id,
-      req.category.id,
-      queryParams
-    );
+    return this.optionsSubCategoryUseCase.execute(req.user.id, queryParams);
   }
 
   @Get(":categoryId")

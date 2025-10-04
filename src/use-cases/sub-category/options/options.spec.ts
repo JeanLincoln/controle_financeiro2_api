@@ -1,16 +1,13 @@
 import { USER_MOCK } from "@test/mocks/user.mock";
 
 import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
-import {
-  OPTIONS_PAGINATION_AND_SORT_PARAMS_MOCK,
-  OPTIONS_PAGINATION_TO_REPOSITORY_PARAMS_MOCK,
-  PAGINATION_EMPTY_RESULT_MOCK
-} from "@test/mocks/pagination.mock";
+import { PAGINATION_EMPTY_RESULT_MOCK } from "@test/mocks/pagination.mock";
 import { OptionsSubCategoryUseCase } from "./options.use-case";
 import {
   PAGINATED_SUB_CATEGORIES_OPTIONS_MOCK,
   SUB_CATEGORIES_OPTIONS_MOCK,
-  SUB_CATEGORY_MOCK_1
+  SUB_CATEGORIES_OPTIONS_PARAMS_MOCK,
+  SUB_CATEGORIES_OPTIONS_TO_REPOSITORY_PARAMS_MOCK
 } from "@test/mocks/sub-category.mock";
 import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
 import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
@@ -38,8 +35,7 @@ describe("OptionsSubCategoryUseCase", () => {
 
     const result = await sut.execute(
       USER_MOCK.id,
-      SUB_CATEGORY_MOCK_1.id,
-      OPTIONS_PAGINATION_AND_SORT_PARAMS_MOCK
+      SUB_CATEGORIES_OPTIONS_PARAMS_MOCK
     );
 
     testUtils.resultExpectations(result, PAGINATED_SUB_CATEGORIES_OPTIONS_MOCK);
@@ -48,8 +44,7 @@ describe("OptionsSubCategoryUseCase", () => {
       mockFunction: subCategoryRepository.options,
       calledWith: [
         USER_MOCK.id,
-        SUB_CATEGORY_MOCK_1.id,
-        OPTIONS_PAGINATION_TO_REPOSITORY_PARAMS_MOCK
+        SUB_CATEGORIES_OPTIONS_TO_REPOSITORY_PARAMS_MOCK
       ]
     });
   });
@@ -61,8 +56,7 @@ describe("OptionsSubCategoryUseCase", () => {
 
     const result = await sut.execute(
       USER_MOCK.id,
-      SUB_CATEGORY_MOCK_1.id,
-      OPTIONS_PAGINATION_AND_SORT_PARAMS_MOCK
+      SUB_CATEGORIES_OPTIONS_PARAMS_MOCK
     );
 
     testUtils.resultExpectations(result, PAGINATION_EMPTY_RESULT_MOCK);
@@ -71,8 +65,7 @@ describe("OptionsSubCategoryUseCase", () => {
       mockFunction: subCategoryRepository.options,
       calledWith: [
         USER_MOCK.id,
-        SUB_CATEGORY_MOCK_1.id,
-        OPTIONS_PAGINATION_TO_REPOSITORY_PARAMS_MOCK
+        SUB_CATEGORIES_OPTIONS_TO_REPOSITORY_PARAMS_MOCK
       ]
     });
   });

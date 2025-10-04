@@ -1,31 +1,22 @@
 import { SortOrderEnum } from "@domain/entities/common/sort.entity";
+import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
 import { SortableOrderDto } from "@infra/commons/decorators/dto-decorators/sort-dto.decorator";
 import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Min
-} from "class-validator";
-
-export class OptionsSubCategoryParamDto {
-  @ApiProperty({
-    description: "The category id",
-    example: 1
-  })
-  @IsNumber()
-  @Min(1)
-  @IsNotEmpty()
-  @Transform(({ value }) => Number(value))
-  categoryId: number;
-}
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsOptional, IsString } from "class-validator";
 
 export class OptionsSubCategoryQueryDto extends PaginationQueryDto {
   @SortableOrderDto(SortOrderEnum.ASC)
   sortOrder: SortOrderEnum;
+
+  @NumberArrayValidations({
+    description:
+      "Filter sub-categories options that belong to any of these categories. Provide an array of category IDs to filter by multiple categories.",
+    example: [1, 2, 3],
+    required: false
+  })
+  @IsOptional()
+  categoriesIds?: number[];
 
   @ApiPropertyOptional({
     description: "Searching field for sub-categories",
