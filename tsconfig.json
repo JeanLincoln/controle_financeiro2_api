@@ -22,7 +22,8 @@
       "@infra/*": ["src/infra/*"],
       "@use-cases/*": ["src/use-cases/*"],
       "@templates/*": ["src/templates/*"],
-      "@test/*": ["test/*"]
+      "@test/*": ["test/*"],
+      "@utils/*": ["src/utils/*"]
     }
   }
 }

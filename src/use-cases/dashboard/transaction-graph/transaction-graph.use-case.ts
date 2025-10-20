@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { TransactionRepository } from "@domain/repositories/transaction.repository";
-import { handleUTCTime } from "../../../utils/time/handleUTCTime";
+import { handleUTCTime } from "@utils/time/handleUTCTime";
 
 export interface TransactionGraphDataPoint {
   date: string;
@@ -34,7 +34,7 @@ export class TransactionGraphUseCase {
 
     return {
       formattedStartDate: convertedStartDate,
-      formattedEndDate: handleUTCTime(convertedEndDate)
+      formattedEndDate: handleUTCTime(convertedEndDate).decreased
     };
   }
 

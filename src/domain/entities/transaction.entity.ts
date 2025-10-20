@@ -13,6 +13,7 @@ import { Origin } from "./origin.entity";
 import { User } from "./user.entity";
 import { Category } from "./category.entity";
 import { SubCategory } from "./sub-category.entity";
+import { handleUTCTime } from "@utils/time/handleUTCTime";
 
 export enum TransactionType {
   INCOME = "INCOME",
@@ -58,7 +59,11 @@ export class Transaction {
 
   @Column({
     type: "date",
-    name: "transaction_date"
+    name: "transaction_date",
+    transformer: {
+      to: (value: Date) => handleUTCTime(value).increased,
+      from: (value: string) => value
+    }
   })
   transactionDate: Date;
 
