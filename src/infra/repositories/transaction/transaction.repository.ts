@@ -16,16 +16,7 @@ import {
 } from "@domain/repositories/transaction.repository";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import {
-  LessThanOrEqual,
-  MoreThanOrEqual,
-  Repository,
-  FindOptionsWhere,
-  ILike,
-  In,
-  And,
-  Between
-} from "typeorm";
+import { Repository, FindOptionsWhere, ILike, In, Between } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
@@ -197,10 +188,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.EXPENSE,
-        transactionDate: And(
-          MoreThanOrEqual(currentMonthStart),
-          LessThanOrEqual(currentMonthEnd)
-        )
+        transactionDate: Between(currentMonthStart, currentMonthEnd)
       },
       select: {
         amount: true
@@ -211,10 +199,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.INCOME,
-        transactionDate: And(
-          MoreThanOrEqual(currentMonthStart),
-          LessThanOrEqual(currentMonthEnd)
-        )
+        transactionDate: Between(currentMonthStart, currentMonthEnd)
       },
       select: {
         amount: true
@@ -225,10 +210,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.EXPENSE,
-        transactionDate: And(
-          MoreThanOrEqual(lastMonthStart),
-          LessThanOrEqual(lastMonthEnd)
-        )
+        transactionDate: Between(lastMonthStart, lastMonthEnd)
       },
       select: {
         amount: true
@@ -239,10 +221,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.INCOME,
-        transactionDate: And(
-          MoreThanOrEqual(lastMonthStart),
-          LessThanOrEqual(lastMonthEnd)
-        )
+        transactionDate: Between(lastMonthStart, lastMonthEnd)
       },
       select: {
         amount: true
