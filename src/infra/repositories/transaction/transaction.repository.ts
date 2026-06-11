@@ -278,7 +278,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
     userId: number,
     filters: TransactionGraphFilters
   ): Promise<TransactionGraphDataPoint[]> {
-    const query = this.transactionRepository
+    const result = await this.transactionRepository
       .createQueryBuilder("transaction")
       .where("transaction.userId = :userId", { userId })
       .andWhere("transaction.transactionDate >= :startDate", {
@@ -286,10 +286,12 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       })
       .andWhere("transaction.transactionDate <= :endDate", {
         endDate: filters.endDate
-      });
-
-    const result = await query
+      })
       .select("TO_CHAR(transaction.transactionDate, 'YYYY-MM-DD')", "date")
+      .addSelect(
+        "TO_CHAR(transaction.transactionDate, 'YYYY-MM')",
+        "balance_date"
+      )
       .addSelect(
         "SUM(CASE WHEN transaction.type = 'INCOME' THEN transaction.amount ELSE 0 END)",
         "income"
@@ -299,10 +301,12 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
         "expense"
       )
       .addSelect(
-        "SUM(CASE WHEN transaction.type = 'INCOME' THEN transaction.amount ELSE 0 END) - SUM(CASE WHEN transaction.type = 'EXPENSE' THEN transaction.amount ELSE 0 END)",
+        "SUM(SUM(CASE WHEN transaction.type = 'INCOME' THEN transaction.amount WHEN transaction.type = 'EXPENSE' THEN -transaction.amount ELSE 0 END)) OVER (PARTITION BY TO_CHAR(transaction.transactionDate, 'YYYY-MM'))",
         "balance"
       )
-      .groupBy("TO_CHAR(transaction.transactionDate, 'YYYY-MM-DD')")
+      .groupBy(
+        "TO_CHAR(transaction.transactionDate, 'YYYY-MM-DD'), TO_CHAR(transaction.transactionDate, 'YYYY-MM')"
+      )
       .orderBy("TO_CHAR(transaction.transactionDate, 'YYYY-MM-DD')", "ASC")
       .getRawMany();
 
@@ -310,7 +314,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       date: row.date,
       income: row.income,
       expense: row.expense,
-      balance: row.balance
+      balance: row.balance || 0
     }));
   }
 }

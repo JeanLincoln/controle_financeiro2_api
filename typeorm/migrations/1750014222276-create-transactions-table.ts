@@ -53,7 +53,7 @@ export class CreateTransactionsTable1750014222276
           },
           {
             name: "transaction_date",
-            type: "date"
+            type: "timestamp"
           },
           {
             name: "user_id",
