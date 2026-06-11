@@ -5,5 +5,8 @@ export const handleUTCTime = (date: Date) => {
   const timezoneOffset = parsedDate.getTimezoneOffset();
   const dateTime = parsedDate.getTime();
 
-  return new Date(dateTime - timezoneOffset * MILLISECONDS_IN_A_MINUTE);
+  return {
+    increased: new Date(dateTime + timezoneOffset * MILLISECONDS_IN_A_MINUTE),
+    decreased: new Date(dateTime - timezoneOffset * MILLISECONDS_IN_A_MINUTE)
+  };
 };

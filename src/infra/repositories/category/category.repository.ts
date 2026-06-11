@@ -6,8 +6,8 @@ import {
   CategoryFindAllToRepositoryParams,
   CategoryFindOptionsToRepositoryParams,
   CategoryOption,
-  type CategoryRanking,
-  type CreateCategoryReturn
+  CategoryRanking,
+  CreateCategoryReturn
 } from "@domain/repositories/category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository, In } from "typeorm";

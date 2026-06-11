@@ -42,14 +42,16 @@ export class CreateTransactionDto {
   amount: number;
 
   @ApiProperty({
-    description:
-      "Filter transactions that start from this date (inclusive). Format: YYYY-MM-DD",
+    description: "Date this Transaction occurred. Format: YYYY-MM-DD",
     example: "2025-01-01",
     required: false,
     type: String,
     format: "date"
   })
-  @Transform(({ value }) => (value ? new Date(value) : value))
+  @Transform(({ value }) => {
+    if (!(value instanceof Date)) return new Date(value);
+    return value;
+  })
   @IsDate()
   transactionDate: Date;
 

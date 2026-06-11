@@ -16,19 +16,12 @@ import {
 } from "@domain/repositories/transaction.repository";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import {
-  LessThanOrEqual,
-  MoreThanOrEqual,
-  Repository,
-  FindOptionsWhere,
-  ILike,
-  In,
-  And
-} from "typeorm";
+import { Repository, FindOptionsWhere, ILike, In, Between } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { sortQuery } from "../common/queries/sort.query";
 import { getLastAndCurrentDates } from "src/utils/time/get-last-and-current-dates";
+import { formatStartAndEndDates } from "src/utils/time/format-start-and-end-dates";
 
 @Injectable()
 export class TypeOrmTransactionRepository implements TransactionRepository {
@@ -76,17 +69,34 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       subCategoriesIds
     }: TransactionFindAllToRepositoryParams
   ): Promise<RepositoryToPaginationReturn<Transaction>> {
+    const formattedCreatedAt = formatStartAndEndDates(createdAt);
+    const formattedUpdatedAt = formatStartAndEndDates(updatedAt);
+    const formattedTransactionDate = formatStartAndEndDates(transactionDate);
+
     const whereClause: FindOptionsWhere<Transaction> = {
       user: { id: userId },
-      ...(transactionDate && {
-        transactionDate: MoreThanOrEqual(transactionDate)
+      ...(formattedTransactionDate && {
+        transactionDate: Between(
+          formattedTransactionDate.startDate,
+          formattedTransactionDate.endDate
+        )
       }),
       ...(name && { name: ILike(`%${name}%`) }),
       ...(description && { description: ILike(`%${description}%`) }),
       ...(type && { type }),
       ...(amount && { amount }),
-      ...(createdAt && { createdAt }),
-      ...(updatedAt && { updatedAt }),
+      ...(formattedCreatedAt && {
+        createdAt: Between(
+          formattedCreatedAt.startDate,
+          formattedCreatedAt.endDate
+        )
+      }),
+      ...(formattedUpdatedAt && {
+        updatedAt: Between(
+          formattedUpdatedAt.startDate,
+          formattedUpdatedAt.endDate
+        )
+      }),
       ...(originId && { origin: { id: originId } }),
       ...(categoriesIds && {
         categories: {
@@ -133,8 +143,11 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
   async findByIds(id: number[]): Promise<Transaction[] | null> {
     return this.transactionRepository.find({
       where: { id: In(id) },
-      relations: ["user"],
+      relations: ["user", "origin", "categories", "subCategories"],
       select: {
+        origin: true,
+        categories: true,
+        subCategories: true,
         user: USER_WITHOUT_PASSWORD_SELECT
       }
     });
@@ -175,10 +188,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.EXPENSE,
-        transactionDate: And(
-          MoreThanOrEqual(currentMonthStart),
-          LessThanOrEqual(currentMonthEnd)
-        )
+        transactionDate: Between(currentMonthStart, currentMonthEnd)
       },
       select: {
         amount: true
@@ -189,10 +199,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.INCOME,
-        transactionDate: And(
-          MoreThanOrEqual(currentMonthStart),
-          LessThanOrEqual(currentMonthEnd)
-        )
+        transactionDate: Between(currentMonthStart, currentMonthEnd)
       },
       select: {
         amount: true
@@ -203,10 +210,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.EXPENSE,
-        transactionDate: And(
-          MoreThanOrEqual(lastMonthStart),
-          LessThanOrEqual(lastMonthEnd)
-        )
+        transactionDate: Between(lastMonthStart, lastMonthEnd)
       },
       select: {
         amount: true
@@ -217,10 +221,7 @@ export class TypeOrmTransactionRepository implements TransactionRepository {
       where: {
         user: { id: userId },
         type: TransactionType.INCOME,
-        transactionDate: And(
-          MoreThanOrEqual(lastMonthStart),
-          LessThanOrEqual(lastMonthEnd)
-        )
+        transactionDate: Between(lastMonthStart, lastMonthEnd)
       },
       select: {
         amount: true

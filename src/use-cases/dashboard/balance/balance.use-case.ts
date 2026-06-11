@@ -48,119 +48,23 @@ type HandleCurrentBalanceProps = CurrentMonthTransactions &
 export class BalanceUseCase {
   constructor(private readonly transactionRepository: TransactionRepository) {}
 
-  private handleLastMonthTransactions({
-    lastMonthExpenses,
-    lastMonthIncomes
-  }: LastMonthTransactions) {
-    const lastMonthTotalExpensesAmount = lastMonthExpenses[0].reduce(
-      (acc, transaction) => acc + Number(transaction.amount),
-      0
-    );
+  async execute(userId: number): Promise<CurrentBalance> {
+    const {
+      currentMonthExpenses,
+      currentMonthIncomes,
+      lastMonthExpenses,
+      lastMonthIncomes
+    } = await this.transactionRepository.getCurrentBalance(userId);
 
-    const lastMonthTotalIncomesAmount = lastMonthIncomes[0].reduce(
-      (acc, transaction) => acc + Number(transaction.amount),
-      0
-    );
-
-    const lastMonthTotalBalance =
-      lastMonthTotalIncomesAmount - lastMonthTotalExpensesAmount;
-    const lastMonthTotalTransactions =
-      lastMonthExpenses[1] + lastMonthIncomes[1];
-
-    return {
-      lastMonthTotalExpensesAmount,
-      lastMonthTotalIncomesAmount,
-      lastMonthTotalBalance,
-      lastMonthTotalTransactions
-    };
+    return this.#handleCurrentBalance({
+      currentMonthExpenses,
+      currentMonthIncomes,
+      lastMonthExpenses,
+      lastMonthIncomes
+    });
   }
 
-  private handleCurrentMonthTransactions({
-    currentMonthExpenses,
-    currentMonthIncomes
-  }: CurrentMonthTransactions) {
-    const currentMonthTotalExpensesAmount = currentMonthExpenses[0].reduce(
-      (acc, transaction) => acc + Number(transaction.amount),
-      0
-    );
-
-    const currentMonthTotalIncomesAmount = currentMonthIncomes[0].reduce(
-      (acc, transaction) => acc + Number(transaction.amount),
-      0
-    );
-
-    const currentMonthTotalBalance =
-      currentMonthTotalIncomesAmount - currentMonthTotalExpensesAmount;
-    const currentMonthTotalTransactions =
-      currentMonthExpenses[1] + currentMonthIncomes[1];
-
-    return {
-      currentMonthTotalExpensesAmount,
-      currentMonthTotalIncomesAmount,
-      currentMonthTotalBalance,
-      currentMonthTotalTransactions
-    };
-  }
-
-  private calculatePercentageVariation(
-    current: number,
-    previous: number
-  ): number | null {
-    const monthsHasNoTransactions = current === 0 && previous === 0;
-    const infiniteGrowth = previous === 0 && current > 0;
-    const totalDrop = previous > 0 && current === 0;
-
-    if (monthsHasNoTransactions || infiniteGrowth || totalDrop) return null;
-
-    const percentage = ((current - previous) / Math.abs(previous)) * 100;
-
-    return Number(percentage.toFixed(2));
-  }
-
-  private handleCurrentAndLastVariations({
-    currentMonthTotalExpensesAmount,
-    currentMonthTotalIncomesAmount,
-    lastMonthTotalExpensesAmount,
-    lastMonthTotalIncomesAmount
-  }: HandleCurrentAndLastVariationsProps) {
-    const expensesVariation =
-      currentMonthTotalExpensesAmount - lastMonthTotalExpensesAmount;
-    const incomesVariation =
-      currentMonthTotalIncomesAmount - lastMonthTotalIncomesAmount;
-
-    const expensesPercentageVariation = this.calculatePercentageVariation(
-      currentMonthTotalExpensesAmount,
-      lastMonthTotalExpensesAmount
-    );
-
-    const incomesPercentageVariation = this.calculatePercentageVariation(
-      currentMonthTotalIncomesAmount,
-      lastMonthTotalIncomesAmount
-    );
-
-    const currentBalance =
-      currentMonthTotalIncomesAmount - currentMonthTotalExpensesAmount;
-    const lastBalance =
-      lastMonthTotalIncomesAmount - lastMonthTotalExpensesAmount;
-
-    const balanceVariation = currentBalance - lastBalance;
-
-    const balancePercentageVariation = this.calculatePercentageVariation(
-      currentBalance,
-      lastBalance
-    );
-
-    return {
-      expensesVariation,
-      incomesVariation,
-      balanceVariation,
-      expensesPercentageVariation,
-      incomesPercentageVariation,
-      balancePercentageVariation
-    };
-  }
-
-  private handleCurrentBalance({
+  #handleCurrentBalance({
     lastMonthExpenses,
     lastMonthIncomes,
     currentMonthExpenses,
@@ -171,7 +75,7 @@ export class BalanceUseCase {
       lastMonthTotalBalance,
       lastMonthTotalExpensesAmount,
       lastMonthTotalIncomesAmount
-    } = this.handleLastMonthTransactions({
+    } = this.#handleLastMonthTransactions({
       lastMonthExpenses,
       lastMonthIncomes
     });
@@ -181,7 +85,7 @@ export class BalanceUseCase {
       currentMonthTotalBalance,
       currentMonthTotalExpensesAmount,
       currentMonthTotalIncomesAmount
-    } = this.handleCurrentMonthTransactions({
+    } = this.#handleCurrentMonthTransactions({
       currentMonthExpenses,
       currentMonthIncomes
     });
@@ -193,7 +97,7 @@ export class BalanceUseCase {
       incomesPercentageVariation,
       expensesPercentageVariation,
       balancePercentageVariation
-    } = this.handleCurrentAndLastVariations({
+    } = this.#handleCurrentAndLastVariations({
       currentMonthTotalExpensesAmount,
       currentMonthTotalIncomesAmount,
       lastMonthTotalExpensesAmount,
@@ -230,19 +134,115 @@ export class BalanceUseCase {
     };
   }
 
-  async execute(userId: number): Promise<CurrentBalance> {
-    const {
-      currentMonthExpenses,
-      currentMonthIncomes,
-      lastMonthExpenses,
-      lastMonthIncomes
-    } = await this.transactionRepository.getCurrentBalance(userId);
+  #handleLastMonthTransactions({
+    lastMonthExpenses,
+    lastMonthIncomes
+  }: LastMonthTransactions) {
+    const lastMonthTotalExpensesAmount = lastMonthExpenses[0].reduce(
+      (acc, transaction) => acc + Number(transaction.amount),
+      0
+    );
 
-    return this.handleCurrentBalance({
-      currentMonthExpenses,
-      currentMonthIncomes,
-      lastMonthExpenses,
-      lastMonthIncomes
-    });
+    const lastMonthTotalIncomesAmount = lastMonthIncomes[0].reduce(
+      (acc, transaction) => acc + Number(transaction.amount),
+      0
+    );
+
+    const lastMonthTotalBalance =
+      lastMonthTotalIncomesAmount - lastMonthTotalExpensesAmount;
+    const lastMonthTotalTransactions =
+      lastMonthExpenses[1] + lastMonthIncomes[1];
+
+    return {
+      lastMonthTotalExpensesAmount,
+      lastMonthTotalIncomesAmount,
+      lastMonthTotalBalance,
+      lastMonthTotalTransactions
+    };
+  }
+
+  #handleCurrentMonthTransactions({
+    currentMonthExpenses,
+    currentMonthIncomes
+  }: CurrentMonthTransactions) {
+    const currentMonthTotalExpensesAmount = currentMonthExpenses[0].reduce(
+      (acc, transaction) => acc + Number(transaction.amount),
+      0
+    );
+
+    const currentMonthTotalIncomesAmount = currentMonthIncomes[0].reduce(
+      (acc, transaction) => acc + Number(transaction.amount),
+      0
+    );
+
+    const currentMonthTotalBalance =
+      currentMonthTotalIncomesAmount - currentMonthTotalExpensesAmount;
+    const currentMonthTotalTransactions =
+      currentMonthExpenses[1] + currentMonthIncomes[1];
+
+    return {
+      currentMonthTotalExpensesAmount,
+      currentMonthTotalIncomesAmount,
+      currentMonthTotalBalance,
+      currentMonthTotalTransactions
+    };
+  }
+
+  #calculatePercentageVariation(
+    current: number,
+    previous: number
+  ): number | null {
+    const monthsHasNoTransactions = current === 0 && previous === 0;
+    const infiniteGrowth = previous === 0 && current > 0;
+    const totalDrop = previous > 0 && current === 0;
+
+    if (monthsHasNoTransactions || infiniteGrowth || totalDrop) return null;
+
+    const percentage = ((current - previous) / Math.abs(previous)) * 100;
+
+    return Number(percentage.toFixed(2));
+  }
+
+  #handleCurrentAndLastVariations({
+    currentMonthTotalExpensesAmount,
+    currentMonthTotalIncomesAmount,
+    lastMonthTotalExpensesAmount,
+    lastMonthTotalIncomesAmount
+  }: HandleCurrentAndLastVariationsProps) {
+    const expensesVariation =
+      currentMonthTotalExpensesAmount - lastMonthTotalExpensesAmount;
+    const incomesVariation =
+      currentMonthTotalIncomesAmount - lastMonthTotalIncomesAmount;
+
+    const expensesPercentageVariation = this.#calculatePercentageVariation(
+      currentMonthTotalExpensesAmount,
+      lastMonthTotalExpensesAmount
+    );
+
+    const incomesPercentageVariation = this.#calculatePercentageVariation(
+      currentMonthTotalIncomesAmount,
+      lastMonthTotalIncomesAmount
+    );
+
+    const currentBalance =
+      currentMonthTotalIncomesAmount - currentMonthTotalExpensesAmount;
+    const lastBalance =
+      lastMonthTotalIncomesAmount - lastMonthTotalExpensesAmount;
+
+    const balanceVariation = currentBalance - lastBalance;
+
+    const balancePercentageVariation = this.#calculatePercentageVariation(
+      currentBalance,
+      lastBalance
+    );
+
+    return {
+      expensesVariation,
+      incomesVariation,
+      balanceVariation,
+      expensesPercentageVariation,
+      incomesPercentageVariation,
+      balancePercentageVariation
+    };
   }
 }
