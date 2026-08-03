@@ -89,14 +89,15 @@ export class TypeOrmOriginRepository implements OriginRepository {
   async create(
     userId: number,
     origin: CreateOrUpdateAllOriginProps
-  ): Promise<void> {
+  ): Promise<Origin> {
     const originInstance = this.originRepository.create({
       ...origin,
       user: { id: userId },
       createdAt: new Date(),
       updatedAt: new Date()
     });
-    await this.originRepository.save(originInstance);
+
+    return this.originRepository.save(originInstance);
   }
 
   async update(

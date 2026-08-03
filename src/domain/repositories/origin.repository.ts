@@ -71,7 +71,7 @@ export abstract class OriginRepository {
   abstract create(
     userId: number,
     origin: CreateOrUpdateAllOriginProps
-  ): Promise<void>;
+  ): Promise<Origin>;
   abstract update(
     id: number,
     userId: number,

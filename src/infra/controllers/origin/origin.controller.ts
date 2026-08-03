@@ -51,7 +51,7 @@ export class OriginController {
   async create(
     @Req() req: BodyOriginAuthenticatedRequest,
     @Body() body: CreateOriginBodyDto
-  ) {
+  ): Promise<Origin> {
     return this.createOriginUseCase.execute(req.user.id, body);
   }
 
