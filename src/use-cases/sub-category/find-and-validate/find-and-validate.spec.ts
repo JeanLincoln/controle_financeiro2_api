@@ -30,6 +30,7 @@ describe("FindAndValidateSubCategoryUseCase", () => {
 
     jest.spyOn(exceptionsAdapter, "notFound");
     jest.spyOn(exceptionsAdapter, "forbidden");
+    jest.spyOn(exceptionsAdapter, "internalServerError");
     jest.spyOn(sut, "isParamSubCategoryRequest");
     jest.spyOn(sut, "isQuerySubCategoriesRequest");
     jest.spyOn(sut, "isBodySubCategoriesRequest");
@@ -360,6 +361,40 @@ describe("FindAndValidateSubCategoryUseCase", () => {
           message:
             "You are not allowed to access one or more of these sub-categories"
         }
+      ]
+    });
+  });
+
+  it("should return false when param sub-category validation returns no sub-category", async () => {
+    jest.spyOn(subCategoryRepository, "findByIds").mockResolvedValue(null);
+
+    const result = await sut.execute(
+      PARAM_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.resultExpectations(result, false);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.internalServerError,
+      calledWith: [
+        { message: "There was an error while fetching the sub-category." }
+      ]
+    });
+  });
+
+  it("should return false when query sub-categories validation returns no sub-categories", async () => {
+    jest.spyOn(subCategoryRepository, "findByIds").mockResolvedValue(null);
+
+    const result = await sut.execute(
+      QUERY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK
+    );
+
+    testUtils.resultExpectations(result, false);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.internalServerError,
+      calledWith: [
+        { message: "There was an error while fetching the sub-category." }
       ]
     });
   });

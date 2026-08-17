@@ -133,4 +133,28 @@ describe("UpdateCategoryUseCase", () => {
       times: 1
     });
   });
+
+  it("should not be able to update a category if user does not exist", async () => {
+    jest.spyOn(userRepository, "findById").mockResolvedValue(null);
+    jest.spyOn(categoryRepository, "findById");
+    jest.spyOn(exceptionsAdapter, "notFound");
+    jest.spyOn(exceptionsAdapter, "forbidden");
+
+    const result = await sut.execute(
+      USER_MOCK.id,
+      USER_1_CATEGORIES_MOCK[0].id,
+      CREATE_OR_UPDATE_CATEGORY_MOCK
+    );
+
+    testUtils.resultExpectations(result, undefined);
+    testUtils.notCalledExpectations([
+      exceptionsAdapter.forbidden,
+      categoryRepository.findById
+    ]);
+    testUtils.timesCalledExpectations({
+      mockFunction: exceptionsAdapter.notFound,
+      calledWith: [{ message: "User not found" }],
+      times: 1
+    });
+  });
 });

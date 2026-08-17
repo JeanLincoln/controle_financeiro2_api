@@ -5,9 +5,9 @@
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
-  "collectCoverageFrom": ["**/*.(t|j)s"],
+  "collectCoverageFrom": ["src/use-cases/**/*.use-case.ts"],
   "setupFiles": ["<rootDir>/test/setup.ts"],
-  "coverageDirectory": "../coverage",
+  "coverageDirectory": "./coverage",
   "testEnvironment": "node",
   "moduleNameMapper": {
     "@test/(.*)$": ["<rootDir>/test/$1"],
@@ -16,5 +16,13 @@
     "@infra/(.*)$": ["<rootDir>/src/infra/$1"],
     "@templates/(.*)$": ["<rootDir>/src/templates/$1"],
     "@utils/(.*)$": ["<rootDir>/src/utils/$1"]
+  },
+  "coverageThreshold": {
+    "global": {
+      "branches": 100,
+      "functions": 100,
+      "lines": 100,
+      "statements": 100
+    }
   }
 }

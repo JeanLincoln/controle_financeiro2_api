@@ -1,31 +1,49 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
+import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { SubCategory } from "@domain/entities/sub-category.entity";
-import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
+import {
+  SubCategoryRepository,
+  SubCategoryFindAllToUseCase
+} from "@domain/repositories/sub-category.repository";
 import { Injectable } from "@nestjs/common";
-import { ParamCategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
+import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
 
 @Injectable()
 export class FindAllSubCategoryUseCase {
   constructor(
     private readonly subCategoryRepository: SubCategoryRepository,
-    private readonly exceptionAdapter: ExceptionsAdapter
+    private readonly exceptionAdapter: ExceptionsAdapter,
+    private readonly paginationUseCase: PaginationUseCase
   ) {}
 
   async execute(
-    request: ParamCategoryAuthenticatedRequest
-  ): Promise<SubCategory[] | void> {
-    const { params } = request;
-    const categoryId = Number(params.categoryId);
+    userId: number,
+    queryParams: SubCategoryFindAllToUseCase
+  ): Promise<PaginatedResult<SubCategory> | void> {
+    const { limit, page, sortBy, sortOrder, name, categoriesIds } = queryParams;
 
-    const subCategories =
-      await this.subCategoryRepository.findAllByCategory(categoryId);
+    const { paginationParams, repositoryParams, createPaginationResult } =
+      await this.paginationUseCase.execute(page, limit);
 
-    if (!subCategories) {
+    const paginatedSubCategories = await this.subCategoryRepository.findAll(
+      userId,
+      {
+        ...repositoryParams,
+        sortBy,
+        sortOrder,
+        name,
+        categoriesIds
+      }
+    );
+
+    if (!paginatedSubCategories) {
       return this.exceptionAdapter.notFound({
         message: "Something went wrong while fetching sub-categories"
       });
     }
 
-    return subCategories;
+    const { data: subCategories, total } = paginatedSubCategories;
+
+    return createPaginationResult(subCategories, paginationParams, total);
   }
 }

@@ -30,6 +30,7 @@ describe("FindAndValidateCategoryUseCase", () => {
 
     jest.spyOn(exceptionsAdapter, "notFound");
     jest.spyOn(exceptionsAdapter, "forbidden");
+    jest.spyOn(exceptionsAdapter, "internalServerError");
     jest.spyOn(sut, "isParamCategoryRequest");
     jest.spyOn(sut, "isQueryCategoriesRequest");
     jest.spyOn(sut, "isBodyCategoriesRequest");
@@ -345,6 +346,36 @@ describe("FindAndValidateCategoryUseCase", () => {
           message:
             "You are not allowed to access one or more of these categories"
         }
+      ]
+    });
+  });
+
+  it("should return false when param category validation returns no category", async () => {
+    jest.spyOn(categoryRepository, "findByIds").mockResolvedValue(null);
+
+    const result = await sut.execute(PARAM_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
+
+    testUtils.resultExpectations(result, false);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.internalServerError,
+      calledWith: [
+        { message: "There was an error while fetching the category." }
+      ]
+    });
+  });
+
+  it("should return false when query categories validation returns no categories", async () => {
+    jest.spyOn(categoryRepository, "findByIds").mockResolvedValue(null);
+
+    const result = await sut.execute(QUERY_CATEGORY_AUTHENTICATED_REQUEST_MOCK);
+
+    testUtils.resultExpectations(result, false);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.internalServerError,
+      calledWith: [
+        { message: "There was an error while fetching the category." }
       ]
     });
   });

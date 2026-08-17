@@ -110,4 +110,32 @@ describe("LoginUseCase", () => {
       calledWith: [{ message: "Invalid credentials" }]
     });
   });
+
+  it("should not be able to login if password is invalid", async () => {
+    jest.spyOn(exceptionAdapter, "wrongCredentials");
+    jest
+      .spyOn(userRepository, "findUserWithAllProps")
+      .mockResolvedValue(USER_MOCK);
+    jest.spyOn(cryptographyAdapter, "compare").mockResolvedValue(false);
+    jest.spyOn(jwtAdapter, "generateToken");
+
+    const RES_MOCK = generateResponseMock();
+
+    const result = await sut.execute(
+      LOGIN_PARAMS.email,
+      LOGIN_PARAMS.password,
+      RES_MOCK
+    );
+
+    testUtils.resultExpectations(result, undefined);
+    testUtils.notCalledExpectations([
+      jwtAdapter.generateToken,
+      RES_MOCK.cookie
+    ]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionAdapter.wrongCredentials,
+      calledWith: []
+    });
+  });
 });

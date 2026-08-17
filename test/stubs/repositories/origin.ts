@@ -1,7 +1,6 @@
 import { Origin } from "@domain/entities/origin.entity";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { OriginRepository } from "@domain/repositories/origin.repository";
-import { ORIGIN_MOCK } from "@test/mocks/origin.mock";
 
 export class OriginRepositoryStub implements OriginRepository {
   async findAll(): Promise<RepositoryToPaginationReturn<Origin>> {
@@ -16,8 +15,8 @@ export class OriginRepositoryStub implements OriginRepository {
     return null;
   }
 
-  async create(): Promise<Origin> {
-    return ORIGIN_MOCK;
+  async create(): Promise<void> {
+    return;
   }
 
   async update(): Promise<void> {

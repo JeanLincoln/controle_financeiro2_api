@@ -212,6 +212,7 @@ export class FindAndValidateCategoryUseCase {
     this.exceptionsAdapter.internalServerError({
       message: "Invalid request type for category validation"
     });
+
     return false;
   }
 }

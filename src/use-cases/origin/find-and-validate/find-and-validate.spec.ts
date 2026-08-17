@@ -25,6 +25,7 @@ describe("FindAndValidateOriginUseCase", () => {
 
     jest.spyOn(exceptionsAdapter, "notFound");
     jest.spyOn(exceptionsAdapter, "forbidden");
+    jest.spyOn(exceptionsAdapter, "internalServerError");
     jest.spyOn(sut, "isParamOriginRequest");
     jest.spyOn(sut, "isQueryOriginRequest");
     jest.spyOn(sut, "isBodyOriginRequest");
@@ -244,6 +245,32 @@ describe("FindAndValidateOriginUseCase", () => {
           message: "You are not allowed to access this origin"
         }
       ]
+    });
+  });
+
+  it("should return false when param origin validation returns no origin", async () => {
+    jest.spyOn(originRepository, "findById").mockResolvedValue(null);
+
+    const result = await sut.execute(PARAM_ORIGIN_AUTHENTICATED_REQUEST_MOCK);
+
+    testUtils.resultExpectations(result, false);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.internalServerError,
+      calledWith: [{ message: "There was an error while fetching the origin." }]
+    });
+  });
+
+  it("should return false when query origin validation returns no origin", async () => {
+    jest.spyOn(originRepository, "findById").mockResolvedValue(null);
+
+    const result = await sut.execute(QUERY_ORIGIN_AUTHENTICATED_REQUEST_MOCK);
+
+    testUtils.resultExpectations(result, false);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.internalServerError,
+      calledWith: [{ message: "There was an error while fetching the origin." }]
     });
   });
 });

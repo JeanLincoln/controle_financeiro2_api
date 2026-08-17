@@ -11,7 +11,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
 import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
-import { sortQuery } from "../common/queries/sort.query";
 import { TransactionType } from "@domain/entities/transaction.entity";
 import { getLastAndCurrentDates } from "src/utils/time/get-last-and-current-dates";
 
@@ -39,7 +38,7 @@ export class TypeOrmOriginRepository implements OriginRepository {
     const [origins, total] = await queryBuilder
       .skip(skip)
       .take(take)
-      .orderBy(sortQuery(sortBy, sortOrder))
+      .orderBy(`origin.${sortBy}`, sortOrder)
       .getManyAndCount();
 
     return {
@@ -67,7 +66,7 @@ export class TypeOrmOriginRepository implements OriginRepository {
     const [origins, total] = await queryBuilder
       .skip(skip)
       .take(take)
-      .orderBy(sortQuery("name", sortOrder))
+      .orderBy("name", sortOrder)
       .getManyAndCount();
 
     return {
@@ -89,15 +88,14 @@ export class TypeOrmOriginRepository implements OriginRepository {
   async create(
     userId: number,
     origin: CreateOrUpdateAllOriginProps
-  ): Promise<Origin> {
+  ): Promise<void> {
     const originInstance = this.originRepository.create({
       ...origin,
       user: { id: userId },
       createdAt: new Date(),
       updatedAt: new Date()
     });
-
-    return this.originRepository.save(originInstance);
+    await this.originRepository.save(originInstance);
   }
 
   async update(

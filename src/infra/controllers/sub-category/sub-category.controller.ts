@@ -27,7 +27,7 @@ import {
 import { UpdateSubCategoryUseCase } from "@use-cases/sub-category/update/update.use-case";
 import { DeleteSubCategoryParamDto } from "./dto/delete.dto";
 import { FindSubCategoryByIdParamDto } from "./dto/find-by-id.dto";
-import { FindAllSubCategoryParams } from "./dto/find-all.dto";
+import { FindAllSubCategoryQueryDto } from "./dto/find-all.dto";
 import { ExcludeFields } from "@infra/commons/decorators/fields-to-exclude.decorator";
 import { CategoryValidationGuard } from "@infra/commons/guards/category/category-validation.guard";
 import { ParamCategoryAuthenticatedRequest } from "@use-cases/category/find-and-validate/find-and-validate.use-case";
@@ -37,6 +37,7 @@ import { OptionsSubCategoryQueryDto } from "./dto/options.dto";
 import { SubCategoryOption } from "@domain/repositories/sub-category.repository";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { OptionsSubCategoryUseCase } from "@use-cases/sub-category/options/options.use-case";
+import type { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
 
 @ApiCookieAuth()
 @UseGuards(AuthGuard, CategoryValidationGuard)
@@ -49,6 +50,14 @@ export class SubCategoryController {
     private readonly updateSubCategoryUseCase: UpdateSubCategoryUseCase,
     private readonly optionsSubCategoryUseCase: OptionsSubCategoryUseCase
   ) {}
+
+  @Get()
+  async findAll(
+    @Req() req: AuthenticatedRequest,
+    @Query() queryParams: FindAllSubCategoryQueryDto
+  ) {
+    return this.findAllSubCategoryUseCase.execute(req.user.id, queryParams);
+  }
 
   @Post(":categoryId")
   async create(
@@ -65,14 +74,6 @@ export class SubCategoryController {
     @Query() queryParams: OptionsSubCategoryQueryDto
   ): Promise<PaginatedResult<SubCategoryOption>> {
     return this.optionsSubCategoryUseCase.execute(req.user.id, queryParams);
-  }
-
-  @Get(":categoryId")
-  async findAll(
-    @Req() req: ParamCategoryAuthenticatedRequest,
-    @Param() _: FindAllSubCategoryParams
-  ) {
-    return this.findAllSubCategoryUseCase.execute(req);
   }
 
   @UseGuards(SubCategoryValidationGuard)

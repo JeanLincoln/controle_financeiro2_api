@@ -1,3 +1,5 @@
+import type { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
+import type { SubCategory } from "@domain/entities/sub-category.entity";
 import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
 
 export class SubCategoryRepositoryStub implements SubCategoryRepository {
@@ -34,5 +36,12 @@ export class SubCategoryRepositoryStub implements SubCategoryRepository {
 
   async getCurrentMonthTopFiveSubCategories() {
     return Promise.resolve([]);
+  }
+
+  async findAll(): Promise<RepositoryToPaginationReturn<SubCategory>> {
+    return Promise.resolve({
+      data: [],
+      total: 0
+    });
   }
 }

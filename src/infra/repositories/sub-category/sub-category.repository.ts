@@ -4,7 +4,8 @@ import {
   CreateOrUpdateAllSubCategoryProps,
   SubCategoryOption,
   SubCategoriesFindOptionsToRepositoryParams,
-  type SubCategoryRanking
+  SubCategoryRanking,
+  SubCategoryFindAllToRepositoryParams
 } from "@domain/repositories/sub-category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
@@ -32,14 +33,42 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
     await this.subCategoryRepository.save(subCategoryInstance);
   }
 
-  async findAllByCategory(categoryId: number): Promise<SubCategory[]> {
-    return await this.subCategoryRepository.find({
-      where: {
-        category: {
-          id: categoryId
-        }
-      }
-    });
+  async findAll(
+    userId: number,
+    {
+      categoriesIds,
+      name,
+      skip,
+      take,
+      sortBy,
+      sortOrder
+    }: SubCategoryFindAllToRepositoryParams
+  ): Promise<RepositoryToPaginationReturn<SubCategory>> {
+    const queryBuilder = this.subCategoryRepository
+      .createQueryBuilder("subCategory")
+      .innerJoin("subCategory.category", "category")
+      .where("category.user_Id = :userId", { userId })
+      .andWhere("subCategory.categoryId IN (:...categoriesIds)", {
+        categoriesIds
+      });
+
+    if (name) {
+      queryBuilder.andWhere(
+        "(unaccent(lower(subCategory.name)) ILIKE unaccent(lower(:name)) OR unaccent(lower(subCategory.description)) ILIKE unaccent(lower(:name)))",
+        { name: `%${name}%` }
+      );
+    }
+
+    const [subCategories, total] = await queryBuilder
+      .skip(skip)
+      .take(take)
+      .orderBy(`subCategory.${sortBy}`, sortOrder)
+      .getManyAndCount();
+
+    return {
+      data: subCategories,
+      total
+    };
   }
 
   async options(
