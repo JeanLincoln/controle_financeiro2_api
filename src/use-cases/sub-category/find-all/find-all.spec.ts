@@ -96,7 +96,7 @@ describe("FindAllSubCategoryUseCase", () => {
     });
   });
 
-  it("should return notFound when repository fails to fetch sub-categories", async () => {
+  it("should return internalServerError when repository fails to fetch sub-categories", async () => {
     jest
       .spyOn(subCategoryRepository, "findAll")
       .mockRejectedValue(new Error("mock error!"));
