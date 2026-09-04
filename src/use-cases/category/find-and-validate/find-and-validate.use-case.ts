@@ -1,8 +1,8 @@
+import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { Category } from "@domain/entities/category.entity";
+import { CategoryRepository } from "@domain/repositories/category.repository";
 import { Injectable } from "@nestjs/common";
 import { AuthenticatedRequest } from "@use-cases/auth/route-auth/route-auth.use-case";
-import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import { CategoryRepository } from "@domain/repositories/category.repository";
 
 export interface ParamCategoryAuthenticatedRequest
   extends AuthenticatedRequest {
@@ -152,7 +152,7 @@ export class FindAndValidateCategoryUseCase {
     if (!categories) {
       this.exceptionsAdapter.notFound({
         message:
-          "There was an error while fetching categories, please try again"
+          "There was an error while fetching categories, please try again."
       });
       return;
     }

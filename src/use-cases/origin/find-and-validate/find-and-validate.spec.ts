@@ -1,5 +1,4 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { OriginRepository } from "@domain/repositories/origin.repository";
 import {
   BODY_ORIGIN_AUTHENTICATED_REQUEST_MOCK,
@@ -9,9 +8,10 @@ import {
   USER_1_ORIGINS_MOCK,
   USER_2_ORIGINS_MOCK
 } from "@test/mocks/origin.mock";
-import { FindAndValidateOriginUseCase } from "./find-and-validate.use-case";
 import { USER_MOCK } from "@test/mocks/user.mock";
+import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { OriginRepositoryStub } from "@test/stubs/repositories/origin";
+import { FindAndValidateOriginUseCase } from "./find-and-validate.use-case";
 
 describe("FindAndValidateOriginUseCase", () => {
   let sut: FindAndValidateOriginUseCase;
@@ -256,8 +256,8 @@ describe("FindAndValidateOriginUseCase", () => {
     testUtils.resultExpectations(result, false);
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: exceptionsAdapter.internalServerError,
-      calledWith: [{ message: "There was an error while fetching the origin." }]
+      mockFunction: exceptionsAdapter.notFound,
+      calledWith: [{ message: "This origin was not found, please try again" }]
     });
   });
 
@@ -269,8 +269,8 @@ describe("FindAndValidateOriginUseCase", () => {
     testUtils.resultExpectations(result, false);
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: exceptionsAdapter.internalServerError,
-      calledWith: [{ message: "There was an error while fetching the origin." }]
+      mockFunction: exceptionsAdapter.notFound,
+      calledWith: [{ message: "This origin was not found, please try again" }]
     });
   });
 });

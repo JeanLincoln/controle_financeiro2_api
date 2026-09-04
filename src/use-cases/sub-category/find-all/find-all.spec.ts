@@ -1,15 +1,17 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import { FindAllSubCategoryUseCase } from "./find-all.use-case";
+import { SortOrderEnum } from "@domain/entities/common/sort.entity";
+import {
+  SubCategoriesSortableFieldsEnum,
+  SubCategoryRepository
+} from "@domain/repositories/sub-category.repository";
+import { USER_1_CATEGORIES_MOCK } from "@test/mocks/category.mock";
+import { PAGINATION_EMPTY_RESULT_MOCK } from "@test/mocks/pagination.mock";
+import { USER_1_SUB_CATEGORIES_MOCK } from "@test/mocks/sub-category.mock";
+import { USER_MOCK } from "@test/mocks/user.mock";
 import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
-import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
-import { USER_1_SUB_CATEGORIES_MOCK } from "@test/mocks/sub-category.mock";
-import { USER_1_CATEGORIES_MOCK } from "@test/mocks/category.mock";
 import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
-import { SortOrderEnum } from "@domain/entities/common/sort.entity";
-import { SubCategoriesSortableFieldsEnum } from "@domain/repositories/sub-category.repository";
-import { USER_MOCK } from "@test/mocks/user.mock";
-import { PAGINATION_EMPTY_RESULT_MOCK } from "@test/mocks/pagination.mock";
+import { FindAllSubCategoryUseCase } from "./find-all.use-case";
 
 describe("FindAllSubCategoryUseCase", () => {
   let sut: FindAllSubCategoryUseCase;
@@ -28,6 +30,7 @@ describe("FindAllSubCategoryUseCase", () => {
     );
 
     jest.spyOn(exceptionAdapter, "notFound");
+    jest.spyOn(exceptionAdapter, "internalServerError");
   });
 
   const SUB_CATEGORIES_PAGINATION_AND_SORT_PARAMS_MOCK = {
@@ -96,7 +99,7 @@ describe("FindAllSubCategoryUseCase", () => {
   it("should return notFound when repository fails to fetch sub-categories", async () => {
     jest
       .spyOn(subCategoryRepository, "findAll")
-      .mockResolvedValue(null as never);
+      .mockRejectedValue(new Error("mock error!"));
 
     const result = await sut.execute(
       USER_MOCK.id,
@@ -106,7 +109,7 @@ describe("FindAllSubCategoryUseCase", () => {
     testUtils.resultExpectations(result, undefined);
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: exceptionAdapter.notFound,
+      mockFunction: exceptionAdapter.internalServerError,
       calledWith: [
         { message: "Something went wrong while fetching sub-categories" }
       ]

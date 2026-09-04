@@ -1,9 +1,5 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
-import { FindAndValidateSubCategoryUseCase } from "./find-and-validate.use-case";
-import { USER_MOCK } from "@test/mocks/user.mock";
 import { SubCategoryRepository } from "@domain/repositories/sub-category.repository";
-import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
 import {
   BODY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   EMPTY_BODY_SUB_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
@@ -14,6 +10,10 @@ import {
   USER_1_SUB_CATEGORIES_MOCK,
   USER_2_SUB_CATEGORIES_MOCK
 } from "@test/mocks/sub-category.mock";
+import { USER_MOCK } from "@test/mocks/user.mock";
+import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
+import { SubCategoryRepositoryStub } from "@test/stubs/repositories/sub-category.stub";
+import { FindAndValidateSubCategoryUseCase } from "./find-and-validate.use-case";
 
 describe("FindAndValidateSubCategoryUseCase", () => {
   let sut: FindAndValidateSubCategoryUseCase;
@@ -375,9 +375,11 @@ describe("FindAndValidateSubCategoryUseCase", () => {
     testUtils.resultExpectations(result, false);
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: exceptionsAdapter.internalServerError,
+      mockFunction: exceptionsAdapter.notFound,
       calledWith: [
-        { message: "There was an error while fetching the sub-category." }
+        {
+          message: "The sub-category(ies) was/were not found, please try again"
+        }
       ]
     });
   });
@@ -392,9 +394,11 @@ describe("FindAndValidateSubCategoryUseCase", () => {
     testUtils.resultExpectations(result, false);
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: exceptionsAdapter.internalServerError,
+      mockFunction: exceptionsAdapter.notFound,
       calledWith: [
-        { message: "There was an error while fetching the sub-category." }
+        {
+          message: "The sub-category(ies) was/were not found, please try again"
+        }
       ]
     });
   });

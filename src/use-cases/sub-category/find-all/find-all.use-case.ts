@@ -2,8 +2,8 @@ import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
 import { PaginatedResult } from "@domain/entities/common/pagination.entity";
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import {
-  SubCategoryRepository,
-  SubCategoryFindAllToUseCase
+  SubCategoryFindAllToUseCase,
+  SubCategoryRepository
 } from "@domain/repositories/sub-category.repository";
 import { Injectable } from "@nestjs/common";
 import { PaginationUseCase } from "@use-cases/common/pagination/pagination.use-case";
@@ -25,25 +25,25 @@ export class FindAllSubCategoryUseCase {
     const { paginationParams, repositoryParams, createPaginationResult } =
       await this.paginationUseCase.execute(page, limit);
 
-    const paginatedSubCategories = await this.subCategoryRepository.findAll(
-      userId,
-      {
-        ...repositoryParams,
-        sortBy,
-        sortOrder,
-        name,
-        categoriesIds
-      }
-    );
+    try {
+      const paginatedSubCategories = await this.subCategoryRepository.findAll(
+        userId,
+        {
+          ...repositoryParams,
+          sortBy,
+          sortOrder,
+          name,
+          categoriesIds
+        }
+      );
 
-    if (!paginatedSubCategories) {
-      return this.exceptionAdapter.notFound({
+      const { data: subCategories, total } = paginatedSubCategories;
+
+      return createPaginationResult(subCategories, paginationParams, total);
+    } catch {
+      return this.exceptionAdapter.internalServerError({
         message: "Something went wrong while fetching sub-categories"
       });
     }
-
-    const { data: subCategories, total } = paginatedSubCategories;
-
-    return createPaginationResult(subCategories, paginationParams, total);
   }
 }

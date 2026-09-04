@@ -1,14 +1,14 @@
-import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
-import { CreateSubCategoryParams } from "./create.dto";
+import { SortOrderEnum } from "@domain/entities/common/sort.entity";
+import { SubCategoriesSortableFieldsEnum } from "@domain/repositories/sub-category.repository";
+import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
 import {
   SortableFieldDto,
   SortableOrderDto
 } from "@infra/commons/decorators/dto-decorators/sort-dto.decorator";
-import { SubCategoriesSortableFieldsEnum } from "@domain/repositories/sub-category.repository";
-import { SortOrderEnum } from "@domain/entities/common/sort.entity";
+import { PaginationQueryDto } from "@infra/commons/dto/pagination.dto";
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsOptional, IsString } from "class-validator";
-import { NumberArrayValidations } from "@infra/commons/decorators/dto-decorators/array-validations.decorator";
+import { ArrayMinSize, IsOptional, IsString } from "class-validator";
+import { CreateSubCategoryParams } from "./create.dto";
 
 export class FindAllSubCategoryParams extends CreateSubCategoryParams {}
 
@@ -41,5 +41,6 @@ export class FindAllSubCategoryQueryDto extends PaginationQueryDto {
     example: [1, 2, 3],
     required: true
   })
+  @ArrayMinSize(1, { message: "At least one category ID is required" })
   categoriesIds: number[];
 }

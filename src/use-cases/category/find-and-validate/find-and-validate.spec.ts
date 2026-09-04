@@ -1,7 +1,5 @@
 import { ExceptionsAdapter } from "@domain/adapters/exceptions.adapter";
-import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
 import { CategoryRepository } from "@domain/repositories/category.repository";
-import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
 import {
   BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
   EMPTY_BODY_CATEGORY_AUTHENTICATED_REQUEST_MOCK,
@@ -12,8 +10,10 @@ import {
   USER_1_CATEGORIES_MOCK,
   USER_2_CATEGORIES_MOCK
 } from "@test/mocks/category.mock";
-import { FindAndValidateCategoryUseCase } from "./find-and-validate.use-case";
 import { USER_MOCK } from "@test/mocks/user.mock";
+import { ExceptionsAdapterStub } from "@test/stubs/adapters/exceptions.stub";
+import { CategoryRepositoryStub } from "@test/stubs/repositories/category.stub";
+import { FindAndValidateCategoryUseCase } from "./find-and-validate.use-case";
 
 describe("FindAndValidateCategoryUseCase", () => {
   let sut: FindAndValidateCategoryUseCase;
@@ -295,7 +295,7 @@ describe("FindAndValidateCategoryUseCase", () => {
       calledWith: [
         {
           message:
-            "There was an error while fetching categories, please try again"
+            "There was an error while fetching categories, please try again."
         }
       ]
     });
@@ -358,9 +358,12 @@ describe("FindAndValidateCategoryUseCase", () => {
     testUtils.resultExpectations(result, false);
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: exceptionsAdapter.internalServerError,
+      mockFunction: exceptionsAdapter.notFound,
       calledWith: [
-        { message: "There was an error while fetching the category." }
+        {
+          message:
+            "There was an error while fetching categories, please try again."
+        }
       ]
     });
   });
@@ -373,9 +376,12 @@ describe("FindAndValidateCategoryUseCase", () => {
     testUtils.resultExpectations(result, false);
     testUtils.timesCalledExpectations({
       times: 1,
-      mockFunction: exceptionsAdapter.internalServerError,
+      mockFunction: exceptionsAdapter.notFound,
       calledWith: [
-        { message: "There was an error while fetching the category." }
+        {
+          message:
+            "There was an error while fetching categories, please try again."
+        }
       ]
     });
   });

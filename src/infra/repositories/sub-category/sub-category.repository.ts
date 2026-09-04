@@ -1,18 +1,18 @@
+import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { SubCategory } from "@domain/entities/sub-category.entity";
+import { TransactionType } from "@domain/entities/transaction.entity";
 import {
-  SubCategoryRepository,
   CreateOrUpdateAllSubCategoryProps,
-  SubCategoryOption,
   SubCategoriesFindOptionsToRepositoryParams,
+  SubCategoryFindAllToRepositoryParams,
+  SubCategoryOption,
   SubCategoryRanking,
-  SubCategoryFindAllToRepositoryParams
+  SubCategoryRepository
 } from "@domain/repositories/sub-category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
+import { getLastAndCurrentDates } from "src/utils/time/get-last-and-current-dates";
 import { In, Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
-import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
-import { getLastAndCurrentDates } from "src/utils/time/get-last-and-current-dates";
-import { TransactionType } from "@domain/entities/transaction.entity";
 
 export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
   constructor(
@@ -47,7 +47,7 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
     const queryBuilder = this.subCategoryRepository
       .createQueryBuilder("subCategory")
       .innerJoin("subCategory.category", "category")
-      .where("category.user_Id = :userId", { userId })
+      .where("category.user_id = :userId", { userId })
       .andWhere("subCategory.categoryId IN (:...categoriesIds)", {
         categoriesIds
       });
@@ -85,7 +85,7 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
       .createQueryBuilder("subCategory")
       .innerJoin("subCategory.category", "category")
       .select(["subCategory.id", "subCategory.name"])
-      .where("category.user_Id = :userId", { userId });
+      .where("category.user_id = :userId", { userId });
 
     if (search) {
       queryBuilder.andWhere(
