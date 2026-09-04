@@ -1,17 +1,18 @@
+import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
 import { SubCategory } from "@domain/entities/sub-category.entity";
+import { TransactionType } from "@domain/entities/transaction.entity";
 import {
-  SubCategoryRepository,
   CreateOrUpdateAllSubCategoryProps,
-  SubCategoryOption,
   SubCategoriesFindOptionsToRepositoryParams,
-  type SubCategoryRanking
+  SubCategoryFindAllToRepositoryParams,
+  SubCategoryOption,
+  SubCategoryRanking,
+  SubCategoryRepository
 } from "@domain/repositories/sub-category.repository";
 import { InjectRepository } from "@nestjs/typeorm";
+import { getLastAndCurrentDates } from "src/utils/time/get-last-and-current-dates";
 import { In, Repository } from "typeorm";
 import { USER_WITHOUT_PASSWORD_SELECT } from "../common/selects/user/user.selects";
-import { RepositoryToPaginationReturn } from "@domain/entities/common/pagination.entity";
-import { getLastAndCurrentDates } from "src/utils/time/get-last-and-current-dates";
-import { TransactionType } from "@domain/entities/transaction.entity";
 
 export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
   constructor(
@@ -32,14 +33,42 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
     await this.subCategoryRepository.save(subCategoryInstance);
   }
 
-  async findAllByCategory(categoryId: number): Promise<SubCategory[]> {
-    return await this.subCategoryRepository.find({
-      where: {
-        category: {
-          id: categoryId
-        }
-      }
-    });
+  async findAll(
+    userId: number,
+    {
+      categoriesIds,
+      name,
+      skip,
+      take,
+      sortBy,
+      sortOrder
+    }: SubCategoryFindAllToRepositoryParams
+  ): Promise<RepositoryToPaginationReturn<SubCategory>> {
+    const queryBuilder = this.subCategoryRepository
+      .createQueryBuilder("subCategory")
+      .innerJoin("subCategory.category", "category")
+      .where("category.user_id = :userId", { userId })
+      .andWhere("subCategory.categoryId IN (:...categoriesIds)", {
+        categoriesIds
+      });
+
+    if (name) {
+      queryBuilder.andWhere(
+        "(unaccent(lower(subCategory.name)) ILIKE unaccent(lower(:name)) OR unaccent(lower(subCategory.description)) ILIKE unaccent(lower(:name)))",
+        { name: `%${name}%` }
+      );
+    }
+
+    const [subCategories, total] = await queryBuilder
+      .skip(skip)
+      .take(take)
+      .orderBy(`subCategory.${sortBy}`, sortOrder)
+      .getManyAndCount();
+
+    return {
+      data: subCategories,
+      total
+    };
   }
 
   async options(
@@ -56,7 +85,7 @@ export class TypeOrmSubCategoryRepository implements SubCategoryRepository {
       .createQueryBuilder("subCategory")
       .innerJoin("subCategory.category", "category")
       .select(["subCategory.id", "subCategory.name"])
-      .where("category.user_Id = :userId", { userId });
+      .where("category.user_id = :userId", { userId });
 
     if (search) {
       queryBuilder.andWhere(

@@ -3,7 +3,10 @@ import {
   RepositoryPaginationParams,
   RepositoryToPaginationReturn
 } from "@domain/entities/common/pagination.entity";
-import { SortOrderParam } from "@domain/entities/common/sort.entity";
+import {
+  SortOrderParam,
+  SortParams
+} from "@domain/entities/common/sort.entity";
 import { SubCategory } from "@domain/entities/sub-category.entity";
 import { TransactionType } from "@domain/entities/transaction.entity";
 
@@ -19,10 +22,29 @@ export type CreateOrUpdateAllSubCategoryProps = Omit<
 
 export type SubCategoryOption = Pick<SubCategory, "id" | "name">;
 
+export enum SubCategoriesSortableFieldsEnum {
+  name = "name",
+  description = "description",
+  createdAt = "createdAt",
+  updatedAt = "updatedAt"
+}
+
+export type SubCategoryFindAllFilters = {
+  categoriesIds: number[];
+  name?: string;
+};
 export interface SubCategoriesSearchField {
   search?: string;
   categoriesIds?: number[];
 }
+
+export type SubCategoryFindAllToUseCase = CommonPaginationParams &
+  SortParams<SubCategoriesSortableFieldsEnum> &
+  SubCategoryFindAllFilters;
+
+export type SubCategoryFindAllToRepositoryParams = RepositoryPaginationParams &
+  SortParams<SubCategoriesSortableFieldsEnum> &
+  SubCategoryFindAllFilters;
 
 export type SubCategoryOptionsToUseCaseParams = CommonPaginationParams &
   SortOrderParam &
@@ -41,7 +63,10 @@ interface RankedSubCategory
 export type SubCategoryRanking = RankedSubCategory[];
 
 export abstract class SubCategoryRepository {
-  abstract findAllByCategory(categoryId: number): Promise<SubCategory[]>;
+  abstract findAll(
+    userId: number,
+    params: SubCategoryFindAllToRepositoryParams
+  ): Promise<RepositoryToPaginationReturn<SubCategory>>;
   abstract options(
     userId: number,
     paginationParams: SubCategoriesFindOptionsToRepositoryParams

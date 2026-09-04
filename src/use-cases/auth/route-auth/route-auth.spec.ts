@@ -73,6 +73,29 @@ describe("RouteAuthUseCase", () => {
     });
   });
 
+  it("should return false when cookie exists but authorization token is missing", async () => {
+    jest.spyOn(userRepository, "findUserWithAllProps");
+    jest.spyOn(jwtAdapter, "verifyToken");
+    jest.spyOn(exceptionAdapter, "forbidden");
+    jest.spyOn(exceptionAdapter, "unauthorized");
+
+    const result = await sut.execute({
+      headers: { cookie: "Session=abc123" }
+    } as typeof AUTHENTICATED_REQUEST_MOCK);
+
+    testUtils.resultExpectations(result, false);
+    testUtils.notCalledExpectations([
+      exceptionAdapter.forbidden,
+      userRepository.findUserWithAllProps,
+      jwtAdapter.verifyToken
+    ]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionAdapter.unauthorized,
+      calledWith: [{ message: "Unauthorized" }]
+    });
+  });
+
   it("should return false and throw an error if the token is invalid", async () => {
     jest.spyOn(userRepository, "findUserWithAllProps");
     jest.spyOn(jwtAdapter, "verifyToken").mockResolvedValue(undefined);

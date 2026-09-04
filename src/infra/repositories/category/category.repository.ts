@@ -83,7 +83,7 @@ export class TypeOrmCategoryRepository implements CategoryRepository {
     const [categories, total] = await queryBuilder
       .skip(skip)
       .take(take)
-      .orderBy(sortQuery("name", sortOrder))
+      .orderBy("name", sortOrder)
       .getManyAndCount();
 
     return {

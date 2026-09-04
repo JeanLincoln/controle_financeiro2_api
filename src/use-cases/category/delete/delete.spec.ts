@@ -129,4 +129,27 @@ describe("DeleteCategoryUseCase", () => {
       calledWith: [{ message: "You are not allowed to delete this category" }]
     });
   });
+
+  it("should not be able to delete category when user does not exist", async () => {
+    jest.spyOn(userRepository, "findById").mockResolvedValue(null);
+    jest.spyOn(categoryRepository, "findById");
+    jest.spyOn(categoryRepository, "delete");
+
+    const result = await sut.execute(
+      USER_MOCK.id,
+      USER_1_CATEGORIES_MOCK[0].id
+    );
+
+    testUtils.resultExpectations(result, undefined);
+    testUtils.notCalledExpectations([
+      exceptionsAdapter.forbidden,
+      categoryRepository.findById,
+      categoryRepository.delete
+    ]);
+    testUtils.timesCalledExpectations({
+      times: 1,
+      mockFunction: exceptionsAdapter.notFound,
+      calledWith: [{ message: "User not found" }]
+    });
+  });
 });
