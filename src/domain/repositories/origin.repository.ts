@@ -77,6 +77,7 @@ export abstract class OriginRepository {
     userId: number,
     origin: CreateOrUpdateAllOriginProps
   ): Promise<void>;
+  abstract hasTransactions(id: number): Promise<boolean>;
   abstract delete(id: number): Promise<void>;
   abstract getCurrentMonthTopFiveOrigins(
     userId: number,
