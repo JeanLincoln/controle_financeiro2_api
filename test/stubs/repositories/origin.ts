@@ -23,7 +23,7 @@ export class OriginRepositoryStub implements OriginRepository {
     return;
   }
 
-  async hasTransactions(): Promise<boolean> {
+  async hasTransactions(id: number): Promise<boolean> {
     return false;
   }
 
