@@ -110,6 +110,14 @@ export class TypeOrmOriginRepository implements OriginRepository {
     });
   }
 
+  async hasTransactions(id: number): Promise<boolean> {
+    return this.originRepository
+      .createQueryBuilder("origin")
+      .innerJoin("origin.transactions", "transaction")
+      .where("origin.id = :id", { id })
+      .getExists();
+  }
+
   async delete(id: number): Promise<void> {
     await this.originRepository.delete(id);
   }

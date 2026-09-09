@@ -23,6 +23,10 @@ export class OriginRepositoryStub implements OriginRepository {
     return;
   }
 
+  async hasTransactions(id: number): Promise<boolean> {
+    return false;
+  }
+
   async delete(): Promise<void> {
     return;
   }

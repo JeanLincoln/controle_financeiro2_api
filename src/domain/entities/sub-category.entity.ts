@@ -66,7 +66,9 @@ export class SubCategory {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => Category, (category) => category.subCategories)
+  @ManyToOne(() => Category, (category) => category.subCategories, {
+    onDelete: "CASCADE"
+  })
   @JoinColumn({ name: "category_id" })
   category: Category;
 

@@ -87,7 +87,9 @@ export class Transaction {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @ManyToOne(() => Origin, (origin) => origin.transactions)
+  @ManyToOne(() => Origin, (origin) => origin.transactions, {
+    onDelete: "NO ACTION"
+  })
   @JoinColumn({ name: "origin_id" })
   origin: Origin;
 
