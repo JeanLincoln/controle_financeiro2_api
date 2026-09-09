@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import { IsNotEmpty, IsNumber, Min } from "class-validator";
+import { IsNotEmpty, IsNumber, IsOptional, Min } from "class-validator";
 import { IsString } from "class-validator";
 
 export class CreateSubCategoryParams {
@@ -26,10 +26,11 @@ export class CreateSubCategoryBodyDto {
 
   @ApiProperty({
     description: "The description of the sub category",
-    example: "Sub Category 1 description"
+    example: "Sub Category 1 description",
+    required: false
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   description: string;
 
   @ApiProperty({

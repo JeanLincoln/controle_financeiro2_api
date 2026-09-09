@@ -35,7 +35,8 @@ export class Transaction {
 
   @Column({
     type: "varchar",
-    length: 255
+    length: 255,
+    nullable: true
   })
   description: string;
 
