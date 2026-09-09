@@ -7,7 +7,7 @@ export class CreateCategoryDto {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ example: "Food description" })
+  @ApiProperty({ example: "Food description", required: false })
   @IsString()
   @IsOptional()
   description: string;
