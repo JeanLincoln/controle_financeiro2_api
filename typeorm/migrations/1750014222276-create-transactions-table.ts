@@ -89,7 +89,7 @@ export class CreateTransactionsTable1750014222276
         columnNames: ["origin_id"],
         referencedColumnNames: ["id"],
         referencedTableName: "origins",
-        onDelete: "NO ACTION"
+        onDelete: "CASCADE"
       })
     );
 
