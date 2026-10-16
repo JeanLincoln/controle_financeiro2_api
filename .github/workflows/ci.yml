@@ -24,6 +24,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Validate deploy scripts
+        run: bash -n ops/deploy/prepare-release.sh
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
         with:
