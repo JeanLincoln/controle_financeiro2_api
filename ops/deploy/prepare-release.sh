@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 APP_REPO="/opt/controle-financeiro-api"
 DEPLOY_ROOT="/opt/controle-financeiro-deploy"
-RELEASES_DIR="$DEPLOY_ROOT/releases"
+STAGING_DIR="$DEPLOY_ROOT/staging"
 
 DEPLOY_SHA="${1:-}"
 
@@ -18,7 +18,7 @@ if [[ ! "$DEPLOY_SHA" =~ ^[0-9a-fA-F]{40}$ ]]; then
   exit 1
 fi
 
-RELEASE_DIR="$RELEASES_DIR/$DEPLOY_SHA"
+RELEASE_DIR="$STAGING_DIR/$DEPLOY_SHA"
 
 log "Preparando release ${DEPLOY_SHA:0:12}"
 
