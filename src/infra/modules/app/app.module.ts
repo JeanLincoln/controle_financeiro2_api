@@ -9,6 +9,7 @@ import { CryptographyModule } from "../cryptography/cryptography.module";
 import { DashboardModule } from "../dashboard/dashboard.module";
 import { DatabaseModule } from "../database/database.module";
 import { ExceptionsModule } from "../exceptions/exceptions.module";
+import { HealthModule } from "../health/health.module";
 import { OriginModule } from "../origin/origin.module";
 import { SubCategoryModule } from "../sub-category/sub-category.module";
 import { TransactionModule } from "../transaction/transaction.module";
@@ -39,6 +40,7 @@ import { UserModule } from "../user/user.module";
     DatabaseModule,
     CryptographyModule,
     ExceptionsModule,
+    HealthModule,
     JwtModule,
     AuthModule,
     UserModule,
