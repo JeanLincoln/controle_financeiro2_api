@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { SeederOptions } from "typeorm-extension";
 
@@ -19,9 +20,11 @@ const options: DataSourceOptions & SeederOptions = {
     ),
     rejectUnauthorized: true
   },
-  entities: ["./src/domain/entities/*.entity.ts"],
-  migrations: ["./typeorm/migrations/*.ts"],
-  seeds: ["./typeorm/seed/*.seed.ts"],
+
+  entities: [join(__dirname, "../src/domain/entities/*.entity.{ts,js}")],
+  migrations: [join(__dirname, "migrations/*.{ts,js}")],
+  seeds: [join(__dirname, "seed/*.seed.{ts,js}")],
+
   synchronize: false
 };
 

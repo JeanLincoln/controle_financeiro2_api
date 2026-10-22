@@ -15,7 +15,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/infra/config/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "lint:check": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "test": "jest",
@@ -24,7 +24,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prepare": "husky",
+    "prepare": "node .husky/install.mjs",
     "lint-staged": "lint-staged",
     "docker:up": "docker compose up --build -d",
     "typeorm:ts": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
@@ -33,7 +33,10 @@
     "migration:up": "pnpm typeorm:ts migration:run -d ./typeorm/data-source.ts",
     "migration:down": "pnpm typeorm:ts migration:revert -d ./typeorm/data-source.ts",
     "seed:create": "pnpm typeorm:ts:extension seed:create --name ./typeorm/seed/new.seed.ts",
-    "seed:run": "pnpm typeorm:ts:extension seed:run -d ./typeorm/data-source.ts"
+    "seed:run": "pnpm typeorm:ts:extension seed:run -d ./typeorm/data-source.ts",
+    "migration:up:prod": "node ./node_modules/typeorm/cli.js migration:run -d ./dist/typeorm/data-source.js",
+    "migration:down:prod": "node ./node_modules/typeorm/cli.js migration:revert -d ./dist/typeorm/data-source.js",
+    "migration:show:prod": "node ./node_modules/typeorm/cli.js migration:show -d ./dist/typeorm/data-source.js"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.0.2",
@@ -50,6 +53,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "date-fns": "^4.1.0",
+    "dotenv": "^18.0.8",
     "nodemailer": "^7.0.3",
     "pg": "^8.16.0",
     "pug": "^3.0.3",
