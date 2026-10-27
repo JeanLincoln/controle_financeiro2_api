@@ -59,6 +59,62 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
+  PublishArtifact:
+    name: Publish backend artifact to S3
+    needs: CI
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Download approved backend build
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-dist-${{ github.sha }}
+          path: dist
+
+      - name: Validate and package build
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          test -f dist/src/infra/config/main.js
+
+          tar -czf dist.tar.gz -C dist .
+
+          sha256sum dist.tar.gz > dist.tar.gz.sha256
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          role-to-assume: ${{ secrets.AWS_ARTIFACT_PUBLISHER_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+          mask-aws-account-id: true
+
+      - name: Upload artifact to S3
+        shell: bash
+        env:
+          ARTIFACT_BUCKET: ${{ secrets.AWS_BACKEND_ARTIFACTS_BUCKET }}
+        run: |
+          set -Eeuo pipefail
+
+          test -n "$ARTIFACT_BUCKET"
+
+          S3_PREFIX="s3://${ARTIFACT_BUCKET}/backend/releases/${GITHUB_SHA}"
+
+          aws s3 cp dist.tar.gz \
+            "${S3_PREFIX}/dist.tar.gz" \
+            --only-show-errors
+
+          aws s3 cp dist.tar.gz.sha256 \
+            "${S3_PREFIX}/dist.tar.gz.sha256" \
+            --only-show-errors
+
   Deploy:
     needs: CI
 
