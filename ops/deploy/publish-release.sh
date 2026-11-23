@@ -2,64 +2,11 @@
 
 set -Eeuo pipefail
 
+# shellcheck source=ops/deploy/lib/common.sh
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib/common.sh"
+
 CANDIDATE=""
 ARTIFACT_DIR=""
-
-fail() {
-  echo "ERRO: $1" >&2
-  exit 1
-}
-
-log() {
-  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] $1"
-}
-
-is_regular_file() {
-  local path="$1"
-  [[ -f "$path" && ! -L "$path" ]]
-}
-
-is_real_directory() {
-  local path="$1"
-  [[ -d "$path" && ! -L "$path" ]]
-}
-
-is_path_available() {
-  local path="$1"
-  [[ ! -e "$path" && ! -L "$path" ]]
-}
-
-is_nonempty_file() {
-  local path="$1"
-  [[ -f "$path" && -s "$path" && ! -L "$path" ]]
-}
-
-is_owned_by_root() {
-  local owner_uid
-
-  owner_uid="$(stat -c '%u' -- "$1")" || return 1
-
-  [[ "$owner_uid" == "0" ]]
-}
-
-is_root_controlled_directory() {
-  local path="$1"
-  local mode
-
-  is_real_directory "$path" || return 1
-
-  [[ "$(stat -c '%u:%g' -- "$path")" == "0:0" ]] ||
-    return 1
-
-  mode="$(stat -c '%a' -- "$path")" || return 1
-
-  (( (8#$mode & 022) == 0 ))
-}
-
-validate_root(){
-  [[ "$EUID" -eq 0 ]] ||
-    fail "Este launcher exige root."
-}
 
 validate_artifact_bucket_file() {
   local FILE_MODE
@@ -79,11 +26,6 @@ validate_artifact_bucket_file() {
 
   [[ "$ARTIFACT_BUCKET" =~ ^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$ ]] ||
     fail "Nome do bucket inválido."
-}
-
-validate_sha() {
-  [[ "$DEPLOY_SHA" =~ ^[0-9a-f]{40}$ ]] ||
-    fail "Informe um SHA Git válido."
 }
 
 validate_staging_and_release() {
@@ -127,13 +69,6 @@ validate_staging_sha(){
     fail "O staging não corresponde ao SHA solicitado."
 }
 
-validate_commit_ancestor(){
-  runuser -u controle-deploy -- \
-    git -C "$SOURCE" \
-    merge-base --is-ancestor "$DEPLOY_SHA" origin/main ||
-    fail "Commit não pertence ao histórico conhecido da main."
-}
-
 validate_directory_entry_types() {
   local directory="$1"
   local unexpected_file
@@ -150,17 +85,31 @@ validate_directory_entry_types() {
     fail "Tipo de arquivo não permitido: $unexpected_file"
 }
 
-lock_publication(){
+lock_publication() {
+  local lock_file="$DEPLOY_ROOT/.publish.lock"
+
   command -v flock >/dev/null ||
     fail "flock não está disponível."
 
-  exec 9>"$DEPLOY_ROOT/.publish.lock"
+  is_root_controlled_directory "$DEPLOY_ROOT" ||
+    fail "Diretório de deploy possui permissões inseguras."
+
+  [[ ! -L "$lock_file" ]] ||
+    fail "Arquivo de lock não pode ser um symlink."
+
+  if [[ -e "$lock_file" ]]; then
+    is_regular_file "$lock_file" ||
+      fail "Arquivo de lock inválido."
+
+    is_owned_by_root "$lock_file" ||
+      fail "Arquivo de lock não pertence ao root."
+  fi
+
+  exec 9>"$lock_file" ||
+    fail "Não foi possível abrir o arquivo de lock."
 
   flock -n 9 ||
     fail "Outra publicação está em andamento."
-
-  [[ ! -e "$DESTINATION" && ! -L "$DESTINATION" ]] ||
-    fail "Release já existe."
 }
 
 cleanup_candidate() {
@@ -465,7 +414,7 @@ main() {
 
   validate_root
   trap cleanup_on_exit EXIT
-  validate_sha
+  validate_sha "$DEPLOY_SHA"
 
   SOURCE="$STAGING_ROOT/$DEPLOY_SHA"
   DESTINATION="$RELEASES_ROOT/$DEPLOY_SHA"
@@ -478,7 +427,8 @@ main() {
     fail "Não foi possível obter o SHA do staging."
 
   validate_staging_sha
-  validate_commit_ancestor
+
+  validate_commit_ancestor "controle-deploy" "$SOURCE" "$DEPLOY_SHA" "origin/main"
 
   lock_publication
 

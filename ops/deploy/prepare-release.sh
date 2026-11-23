@@ -2,77 +2,85 @@
 
 set -Eeuo pipefail
 
-APP_REPO="/opt/controle-financeiro-api"
-DEPLOY_ROOT="/opt/controle-financeiro-deploy"
-STAGING_DIR="$DEPLOY_ROOT/staging"
+# shellcheck source=ops/deploy/lib/common.sh
+source "$(dirname -- "${BASH_SOURCE[0]}")/lib/common.sh"
 
-DEPLOY_SHA="${1:-}"
 
-log() {
-  echo
-  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] $1"
-}
+ensure_worktree() {
+  local worktrees
+  local actual_sha
 
-if [[ ! "$DEPLOY_SHA" =~ ^[0-9a-fA-F]{40}$ ]]; then
-  echo "Erro: informe um commit SHA Git válido com 40 caracteres."
-  exit 1
-fi
+  log "Validando worktree..."
 
-RELEASE_DIR="$STAGING_DIR/$DEPLOY_SHA"
+  worktrees="$(git -C "$APP_REPO" worktree list --porcelain)" ||
+    fail "Não foi possível consultar os worktrees."
 
-log "Preparando release ${DEPLOY_SHA:0:12}"
+  if grep -Fxq "worktree $RELEASE_DIR" <<< "$worktrees"; then
+    is_real_directory "$RELEASE_DIR" ||
+      fail "Worktree registrado não é um diretório válido."
 
-log "Buscando referências da main"
+    actual_sha="$(git -C "$RELEASE_DIR" rev-parse HEAD)" ||
+      fail "Não foi possível consultar o commit do worktree."
 
-git -C "$APP_REPO" fetch origin main
+    [[ "$actual_sha" == "$DEPLOY_SHA" ]] ||
+      fail "Worktree aponta para outro commit."
 
-log "Validando commit"
-
-git -C "$APP_REPO" cat-file -e "${DEPLOY_SHA}^{commit}"
-
-if ! git -C "$APP_REPO" merge-base --is-ancestor \
-  "$DEPLOY_SHA" origin/main
-then
-  echo "Erro: commit não pertence ao histórico da origin/main."
-  exit 1
-fi
-
-log "Validando worktree"
-
-if git -C "$APP_REPO" worktree list --porcelain \
-  | grep -Fxq "worktree $RELEASE_DIR"
-then
-  log "Worktree já existe."
-else
-  if [[ -e "$RELEASE_DIR" ]]; then
-    echo "Erro: $RELEASE_DIR existe mas não está registrado como worktree."
-    exit 1
+    log "Worktree existente e válido."
+    return 0
   fi
 
-  git -C "$APP_REPO" \
-    worktree add \
+  is_path_available "$RELEASE_DIR" ||
+    fail "Diretório existe, mas não está registrado como worktree."
+
+  git -C "$APP_REPO" worktree add \
     --detach \
     "$RELEASE_DIR" \
-    "$DEPLOY_SHA"
-fi
+    "$DEPLOY_SHA" ||
+    fail "Falha ao criar o worktree."
 
-log "Instalando dependências"
+  log "Worktree criado com sucesso."
+}
 
-cd "$RELEASE_DIR"
+install_dependencies(){
+  log "Instalando dependências de produção..."
 
-pnpm install --frozen-lockfile
+  cd "$RELEASE_DIR"
 
-log "Gerando build"
+  NODE_ENV=production pnpm install \
+    --prod \
+    --frozen-lockfile \
+    --network-concurrency=4
 
-pnpm build
+  is_real_directory "$RELEASE_DIR/node_modules" ||
+    fail "Diretório node_modules não foi criado corretamente."
 
-MAIN_FILE="$RELEASE_DIR/dist/src/infra/config/main.js"
+  log "Dependências instaladas!"
+}
 
-if [[ ! -f "$MAIN_FILE" ]]; then
-  echo "Erro: build não gerou $MAIN_FILE"
-  exit 1
-fi
+main(){
+  local DEPLOY_SHA="${1:-}"
+  local APP_REPO="/opt/controle-financeiro-api"
+  local DEPLOY_ROOT="/opt/controle-financeiro-deploy"
+  local STAGING_DIR="$DEPLOY_ROOT/staging"
 
-log "Release ${DEPLOY_SHA:0:12} preparada com sucesso."
+  validate_sha "$DEPLOY_SHA"
 
-echo "RELEASE_DIR=$RELEASE_DIR"
+  RELEASE_DIR="$STAGING_DIR/$DEPLOY_SHA"
+
+  log "Preparando release ${DEPLOY_SHA:0:12}"
+  log "Buscando referências da main..."
+  git -C "$APP_REPO" fetch origin main
+  log "Validando commit..."
+  git -C "$APP_REPO" cat-file -e "${DEPLOY_SHA}^{commit}"
+
+  validate_commit_ancestor "controle-deploy" "$APP_REPO" "$DEPLOY_SHA" "origin/main"
+
+  ensure_worktree
+  install_dependencies
+
+  log "Release ${DEPLOY_SHA:0:12} preparada com sucesso."
+
+  echo "RELEASE_DIR=$RELEASE_DIR"
+}
+
+main "$@"
